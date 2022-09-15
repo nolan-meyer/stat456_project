@@ -1,0 +1,75 @@
+---
+title: "FP1"
+author: "Nolan Meyer"
+date: "9/13/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+```
+
+```{r}
+library(readxl)
+library(ggplot2)
+library(tidyverse)
+```
+
+## Potential Research Questions:
+
+1. Who benefits the most from the loan forgiveness (gender, race, class)?
+
+2. How has the cost of tuition tracked in comparison to inflation rates, cost of living, and post-college income?
+
+3. What majors provide most financial security and “easiest” opportunities to pay off debt? Which majors require students to take out most money relative to cost of attendance?
+
+
+## Data sets:
+
+
+### First Data Set
+
+- **Data source**: National Center for Education Statistics, [https://nces.ed.gov/programs/digest/d21/tables/dt21_330.10.asp?current=yes]()
+- **Data description**: This data set includes the "average undergraduate tuition, fees, room, and board rates charged for full-time students in degree-granting post secondary institutions, by level and control of institution: Selected years, 1963-64 through 2020-21". While I did simplify the data source down a bit, it contains great detail of these amounts by each level of variable measured.
+- **Data limitations**: The data is pretty recent, however some limitations include the data format and lack of other variables. It took a long time to import this data given how it was formatted originally (see link). I had to manually extract only the most necessary, general information and reformat it for use in R. Secondly, while it provides great information on this subject, it lacks other information like inflation rates which we will have to gather from another source for comparison.
+- **Show the variable names. Describe the most useful / interesting ones**. Variables: Year, Type (Public/Private), Length (2yr/4yr), and Amount (average cost of undergraduate tuition, fees, room, and board)
+- **Visualize one interesting variable**.
+
+```{r}
+tuition_cost <- read_excel("tabn330.10.xls", sheet = "Sheet1")
+head(tuition_cost)
+
+tuition_cost %>% 
+  ggplot(aes(x = Year, y = Amount, color = Length)) +
+  geom_line() +
+  facet_wrap(~Type) +
+  theme_classic() +
+  labs(title = "Average undergraduate cost of fees, room, and board rates in current USD", x = "", y = "")
+```
+
+**Variables to join by**: We could probably connect the year variable across this data set and an inflation data set to compare how tuition has tracked in relation over time.
+
+
+
+### Second Data Set
+
+- **Data source**: National Center for Education Statistics [https://nces.ed.gov/datalab/powerstats/121-national-postsecondary-student-aid-study-2016-undergraduates/averages-medians-percents]()
+- ***Data description**: - this data table includes the "cumulative amount borrowed for undergrad (average) by Race/ethnicity and gender". This data was collected in the 2016 addition of the National Postsecondary Student Aid Study.
+- **Data limitations**: This data is interesting but is only collected ~every 4 years, meaning we can't get a super detailed view of how these values change over time, only a macro level view at certain intervals. WE also don't have the most recent data.
+- **Show the variable names. Describe the most useful / interesting ones**. Variables: Race, gender, Amount (Average cumulative amount borrowed for undergrad).
+- **Visualize one interesting variable.**
+
+```{r}
+Cum_amt_borrowed_2016 <- read_excel("PowerStats_AveragesMediansPercents_20220914_231112.xlsx", sheet = "Sheet1")
+head(Cum_amt_borrowed_2016)
+
+Cum_amt_borrowed_2016 %>% 
+  ggplot(aes(x = Race, y = Amount, fill = Gender)) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(x = "", y = "", fill = "", title = "Average amount borrowed for undergrad in 2016 (USD) by race and gender")
+```
+
+**Variables to join by**: We could probably connect the race or gender variables across this data set and a majors/field of study data set to compare if these amounts are being driven by major choices.
