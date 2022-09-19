@@ -1,0 +1,19 @@
+---
+title: "Data Science Tutorial: Intro to Animations in R"
+author: "Nolan & Anton"
+date: "9/19/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Animations can be very powerful tools when used effectively, allowing you to see progression over time, iterate through plots, and help you tell a better story with the data. This guide will give an overview of packages, techniques, and tips for creating animated plots in R. 
+
+
+In this guide you will learn:
+-
+-
+-
+
