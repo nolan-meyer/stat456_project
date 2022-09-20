@@ -180,7 +180,7 @@ pre code {
 <ul>
 <li>Necessary packages for creating animated plots</li>
 <li>How to turn static plots into animations</li>
-<li>What each argument in the functions do</li>
+<li>Components of gganimate and what each function does</li>
 <li>Ways to edit, improve, and save your animations</li>
 </ul>
 <div id="getting-started" class="section level1">
@@ -233,11 +233,70 @@ library(gapminder)</code></pre>
 </div>
 <div id="creating-animations" class="section level1">
 <h1>Creating Animations</h1>
-<p>To use gganimate there are some key terms and functions to be familiar with.</p>
+<p>Within gganimate there are 6 key components that can be altered within an animation.</p>
 <ul>
 <li>Transitions &amp; transition states</li>
-<li></li>
+<li>Views</li>
+<li>Shadows</li>
+<li>Easing</li>
+<li>Enter and Exit</li>
+<li>Rendering</li>
 </ul>
+<p>We will walk through each of these in detail and build upon them to create some cool visualizations.</p>
+<div id="transitions-transition-states" class="section level2">
+<h2>Transitions &amp; transition states</h2>
+<p>Transitions control how the data gets displayed in your animation. Do you want your data to populate over time by year, by category, or another filter? This is determined by the transition function you select. The list of transition functions is shown below, along with their functionality.</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Functionality</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">transition_components</td>
+<td align="left">Transition individual components through their own lifecycle</td>
+</tr>
+<tr class="even">
+<td align="left">transition_events</td>
+<td align="left">Transition individual events in and out</td>
+</tr>
+<tr class="odd">
+<td align="left">transition_filter</td>
+<td align="left">Transition between different filters</td>
+</tr>
+<tr class="even">
+<td align="left">transition_layers</td>
+<td align="left">Build up a plot, layer by layer</td>
+</tr>
+<tr class="odd">
+<td align="left">transition_manual</td>
+<td align="left">Create an animation by specifying the frame membership directly</td>
+</tr>
+<tr class="even">
+<td align="left">transition_null</td>
+<td align="left">Keep all data constant across the animation</td>
+</tr>
+<tr class="odd">
+<td align="left">transition_reveal</td>
+<td align="left">Reveal data along a given dimension</td>
+</tr>
+<tr class="even">
+<td align="left">transition_states</td>
+<td align="left">Transition between several distinct stages of the data</td>
+</tr>
+<tr class="odd">
+<td align="left">transition_time</td>
+<td align="left">Transition through distinct states in time</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 

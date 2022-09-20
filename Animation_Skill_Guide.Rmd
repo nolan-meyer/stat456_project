@@ -15,7 +15,7 @@ In this guide you will learn:
 
 - Necessary packages for creating animated plots
 - How to turn static plots into animations
-- What each argument in the functions do
+- Components of gganimate and what each function does
 - Ways to edit, improve, and save your animations
 
 
@@ -64,6 +64,7 @@ head(gapminder)
 Before we can animate a plot, we must first make a regular one in ggplot. Create a plot using some of the 6 variables in the data set.
 
 Here's an example:
+
 ```{r}
 gapminder %>% 
   ggplot(aes(x = gdpPercap, y = lifeExp)) +
@@ -77,7 +78,33 @@ Now we're ready for animations.
 
 # Creating Animations
 
-To use gganimate there are some key terms and functions to be familiar with.
+Within gganimate there are 6 key components that can be altered within an animation.
 
 - Transitions & transition states
-- 
+- Views
+- Shadows
+- Easing
+- Enter and Exit
+- Rendering
+
+We will walk through each of these in detail and build upon them to create some cool visualizations.
+
+
+
+## Transitions & transition states
+
+Transitions control how the data gets displayed in your animation. Do you want your data to populate over time by year, by category, or another filter? This is determined by the transition function you select. The list of transition functions is shown below, along with their functionality.
+
+| Name        | Functionality |
+|:-----------|:-----------|
+| transition_components | Transition individual components through their own lifecycle |
+| transition_events | Transition individual events in and out |
+| transition_filter | Transition between different filters |
+| transition_layers | Build up a plot, layer by layer |
+| transition_manual | Create an animation by specifying the frame membership directly |
+| transition_null | Keep all data constant across the animation |
+| transition_reveal| Reveal data along a given dimension | 
+| transition_states | Transition between several distinct stages of the data |
+| transition_time | Transition through distinct states in time |
+
+
