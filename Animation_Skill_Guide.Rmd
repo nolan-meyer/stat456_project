@@ -20,6 +20,8 @@ In this guide you will learn:
 
 
 
+# Getting Started
+
 ## Packages
 
 To create animations, there are some R packages you will need to install & load first. The main packages we will be using are:
@@ -27,13 +29,17 @@ To create animations, there are some R packages you will need to install & load 
 1. gganimate
 2. ggplot2
 3. plotly
+4. gapminder
 
 You will likely need to install the following packages if you haven't worked with animations before:
 
 ```{r, eval=F}
 install.packages("gganimate")
 install.packages("plotly")
+install.packages("gapminder")
 ```
+
+Then load the necessary packages:
 
 ```{r}
 library(ggplot2)
@@ -41,4 +47,15 @@ library(gganimate)
 library(plotly)
 ```
 
+
+## Data
+
+To create animated plots we must first have some tidy data to work with. We'll start with an example data set to get familiar with some of the features before trying it on unique data.
+
+A great example data set for animations is gapminder, which contains data on worldwide economic, health, and other public information. Load the data set and preview it below:
+
+```{r}
+library(gapminder)
+head(gapminder)
+```
 

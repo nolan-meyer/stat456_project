@@ -183,6 +183,8 @@ pre code {
 <li>What each argument in the functions do</li>
 <li>Ways to edit, improve, and save your animations</li>
 </ul>
+<div id="getting-started" class="section level1">
+<h1>Getting Started</h1>
 <div id="packages" class="section level2">
 <h2>Packages</h2>
 <p>To create animations, there are some R packages you will need to install &amp; load first. The main packages we will be using are:</p>
@@ -190,13 +192,33 @@ pre code {
 <li>gganimate</li>
 <li>ggplot2</li>
 <li>plotly</li>
+<li>gapminder</li>
 </ol>
 <p>You will likely need to install the following packages if you haven’t worked with animations before:</p>
 <pre class="r"><code>install.packages(&quot;gganimate&quot;)
-install.packages(&quot;plotly&quot;)</code></pre>
+install.packages(&quot;plotly&quot;)
+install.packages(&quot;gapminder&quot;)</code></pre>
+<p>Then load the necessary packages:</p>
 <pre class="r"><code>library(ggplot2)
 library(gganimate)
 library(plotly)</code></pre>
+</div>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>To create animated plots we must first have some tidy data to work with. We’ll start with an example data set to get familiar with some of the features before trying it on unique data.</p>
+<p>A great example data set for animations is gapminder, which contains data on worldwide economic, health, and other public information. Load the data set and preview it below:</p>
+<pre class="r"><code>library(gapminder)
+head(gapminder)</code></pre>
+<pre><code>## # A tibble: 6 × 6
+##   country     continent  year lifeExp      pop gdpPercap
+##   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1 Afghanistan Asia       1952    28.8  8425333      779.
+## 2 Afghanistan Asia       1957    30.3  9240934      821.
+## 3 Afghanistan Asia       1962    32.0 10267083      853.
+## 4 Afghanistan Asia       1967    34.0 11537966      836.
+## 5 Afghanistan Asia       1972    36.1 13079460      740.
+## 6 Afghanistan Asia       1977    38.4 14880372      786.</code></pre>
+</div>
 </div>
 
 
