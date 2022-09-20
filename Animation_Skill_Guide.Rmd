@@ -2,22 +2,43 @@
 title: "Data Science Tutorial: Intro to Animations in R"
 author: "Nolan & Anton"
 date: "9/19/2022"
-output: 
-  html_document:
-    toc: true
-    toc_float: true
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```
 
 Animations can be very powerful tools when used effectively, allowing you to see progression over time, iterate through plots, and help you tell a better story with the data. This guide will give an overview of packages, techniques, and tips for creating animated plots in R. 
 
 In this guide you will learn:
 
-- 
-- 
-- 
+- Necessary packages for creating animated plots
+- How to turn static plots into animations
+- What each argument in the functions do
+- Ways to edit, improve, and save your animations
 
-## Section 1
+
+
+## Packages
+
+To create animations, there are some R packages you will need to install & load first. The main packages we will be using are:
+
+1. gganimate
+2. ggplot2
+3. plotly
+
+You will likely need to install the following packages if you haven't worked with animations before:
+
+```{r, eval=F}
+install.packages("gganimate")
+install.packages("plotly")
+```
+
+```{r}
+library(ggplot2)
+library(gganimate)
+library(plotly)
+```
+
+
