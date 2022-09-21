@@ -2,7 +2,10 @@
 title: "Data Science Tutorial: Intro to Animations in R"
 author: "Nolan & Anton"
 date: "9/19/2022"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -289,7 +292,7 @@ gapminder %>%
 
 ### Transition_time()
 
-As the name implies, this function allows you to transition through distinct states in time, like year.
+As the name implies, this function allows you to transition through distinct states in time, like year. This is a better option for point data, whereas transition_reveal() is better for line data.
 
 To see it in action, add **transition_time()** to your plot above, with year as the argument, and adding the correct label for this function.
 
@@ -304,3 +307,9 @@ gapminder %>%
 ```
 
 
+
+### Transiton_layers()
+
+
+
+### Transition_components()
