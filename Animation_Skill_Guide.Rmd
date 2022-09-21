@@ -106,18 +106,17 @@ We will walk through each of these in detail and build upon them to create some 
 
 ### Basics
 
-Transitions control how the data gets displayed in your animation. Do you want your data to populate over time by year, by category, or another filter? This is determined by the transition function you select. The list of transition functions is shown below, along with their functionality.
+Transitions control how the data gets displayed in your animation. Do you want your data to populate over time by year, by category, or another filter? This is determined by the transition function you select. The list of common transition functions is shown below, along with their functionality.
 
 | Name        | Functionality |
 |:-----------|:-----------|
-| transition_components | Transition individual components through their own lifecycle |
-| transition_events | Transition individual events in and out |
-| transition_filter | Transition between different filters |
-| transition_layers | Build up a plot, layer by layer |
-| transition_manual | Create an animation by specifying the frame membership directly |
 | transition_reveal| Reveal data along a given dimension | 
+| transition_filter | Transition between different filters |
 | transition_states | Transition between several distinct stages of the data |
 | transition_time | Transition through distinct states in time |
+| transition_layers | Build up a plot, layer by layer |
+| transition_components | Transition individual components through their own lifecycle |
+
 
 
 Transition functions are simply added to your regular ggplot statements following a "+". 
@@ -150,14 +149,16 @@ We can add this information in the **labs()** part of our ggplot statement, spec
 
 |Name |	Label variable(s) |
 |:---------|:---------|
-| transition_components |	frame_time |
-| transition_events	| frame_time |
-| transition_filter	| previous_filter, closest_filter, next_filter |
-| transition_layer	| previous_layer, closest_layer, next_layer, nlayers |
-| transition_manual	| previous_frame, current_frame, next_frame |
 | transition_reveal	| frame_along |
+| transition_filter	| previous_filter, closest_filter, next_filter |
 | transition_states	| previous_state, closest_state, next_state |
 | transition_time	| frame_time |
+| transition_layers	| previous_layer, closest_layer, next_layer, nlayers |
+| transition_components |	frame_time |
+
+
+
+
 
 In this case, lets add **title = "Week: {frame_along}"** to our label.
 
@@ -178,6 +179,12 @@ popularity %>%
 Now, perhaps we wanted to iterate through the different search terms, rather than seeing them all at once. In this case, we can use transition_filter(). This transition allows you to animate trough a range of filtering conditions -- in this case Search Term.
 
 Using the same plot as before, change transition_reveal() to **transition_filter()**. Then, add in the following arguments: transition_length, filter_length, and the filter conditions. These conditions should be the Search Term equal to each of your terms. Also, update the title label to the corresponding variable -- "{closest_filter}". See below for reference:
+
+
+
+<<<<<<<<<<<<<<<------!!!!!!!!!**TALK ABOUT FUNCTION ARGUMENTS**!!!!!!-------->>>>>>>>>>>>>>>
+
+
 
 ```{r, eval=F}
 popularity %>% 
@@ -260,18 +267,15 @@ We will explore the other shadow functions later in other plots.
 
 
 
+### New Data
 
-
-
-### Transition_time()
-
-A great example data set for animations is gapminder, which contains data on worldwide economic, health, and other public information. Load the data set and preview it below:
+Some transition functions work better on different types of data. To showcase the other functions, we will switch to the gapminder data set. This is a great example data set for animations, and it contains data on worldwide economic, health, and other public information. Load the data set and preview it below:
 
 ```{r}
 head(gapminder)
 ```
 
-Create a plot using some of the 6 variables in the data set. Here's an example:
+We will start again by creating a plot using some of the 6 variables in the data set. Here's an example:
 
 ```{r}
 gapminder %>% 
@@ -282,12 +286,18 @@ gapminder %>%
   theme_classic()
 ```
 
-***Transition_time()**
+
+### Transition_time()
+
+As the name implies, this function allows you to transition through distinct states in time, like year.
+
+To see it in action, add **transition_time()** to your plot above, with year as the argument, and adding the correct label for this function.
 
 ```{r, eval=F}
 gapminder %>% 
-  ggplot(aes(x = gdpPercap, y = lifeExp)) +
-  geom_point() +
+  ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
+  geom_point(alpha = 0.75, show.legend = FALSE) +
+  scale_color_viridis_d() +
   labs(x = "GDP per capita", y = "Life expectancy", title = "Year: {frame_time}") +
   theme_classic() +
   transition_time(year)
