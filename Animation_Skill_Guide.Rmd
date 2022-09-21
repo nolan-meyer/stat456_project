@@ -28,25 +28,22 @@ To create animations, there are some R packages you will need to install & load 
 
 1. gganimate
 2. ggplot2
-3. dplyr
-4. plotly
-5. gapminder
+3. tidyverse
+4. gapminder
 
 You will likely need to install the following packages if you haven't worked with animations before:
 
 ```{r, eval=F}
 install.packages("gganimate")
-install.packages("plotly")
 install.packages("gapminder")
 ```
 
 Then load the necessary packages:
 
 ```{r}
-library(ggplot2)
-library(dplyr)
 library(gganimate)
-library(plotly)
+library(ggplot2)
+library(tidyverse)
 library(gapminder)
 ```
 
@@ -134,7 +131,25 @@ gapminder %>%
   transition_time(year)
 ```
 
-One last thing we should make sure to add to our animation is how the animation is transitioning. While we know the animation is changing by year, our viewer may not realize or understand that. With some transition functions this may or may not be easily  inferable, so it's good practice to include this information on the plot. We can add this information in the **labs()** part of our ggplot creation, specifying one of the corresponding transition states related to the transition function we are using (see below).
+
+### Try it out
+
+Head over to (Google Search Trends)[https://trends.google.com/trends/?geo=US] and search up a term that interests you. You should get a graph of the popularity of the search term over time. Click "add comparison" at the top and add at least two more terms (so you have 3 or more total).
+
+One you have a graph of multiple terms, download this as a .csv file to your computer.
+
+**Note:** Once you have your .csv downloaded, click on it in the bottom right "Files" pane and click "View File". The .csv file will open in another tab. Delete the first two rows so that "Week" and the terms you searched are now at the top. Click "Save", and now your .csv is ready for importing.
+
+```{r}
+popularity <- read_csv("/Users/nolan/MACALESTER/Stat 456/multiTimeline.csv")
+head(popularity)
+```
+
+
+
+### Labels
+
+Another thing we should make sure to add to our animation is how the animation is transitioning. While we know the animation is changing by year, our viewer may not realize or understand that. With some transition functions this may or may not be easily  inferable, so it's good practice to include this information on the plot. We can add this information in the **labs()** part of our ggplot statement, specifying one of the corresponding transition variables related to the transition function we are using (see below).
 
 |Name |	Label variable(s) |
 |:---------|:---------|
