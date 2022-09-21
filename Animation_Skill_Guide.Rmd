@@ -89,11 +89,11 @@ Now we're ready for animations.
 
 # Creating Animations
 
-Within gganimate, the main concept is the use of **transition functions**, along with some other components that can be altered to create an animation. The main topics we will cover are:
+Within gganimate, the main concept is the use of **transition functions** to create an animation. Other components of an animation the we will cover along with these functions are:
 
-- Transition functions
-- Views
+- Labels
 - Shadows
+- Views
 - Easing
 - Enter and Exit
 - Rendering
@@ -125,7 +125,9 @@ Transition functions are simply added to your regular ggplot statements followin
 
 ### Transition_reveal()
 
-Lets try using transition_reveal() first. The transition will reveal the data along a given dimension -- in this case time. This can be a good option when you have line charts or time-series data. Add **transition_reveal()** to your plot, with the Week variable as the first argument.
+Lets try using transition_reveal() first. This transition will reveal the data along a given dimension -- in this case time. This can be a good option when you have line charts or time-series data. 
+
+Add **transition_reveal()** to your plot, with the Week variable as the first argument.
 
 ```{r, eval=F}
 popularity %>% 
@@ -142,7 +144,9 @@ You should now see your plot animated in the viewer in the bottom right panel of
 
 ### Labels
 
-Another thing we should make sure to add to our animation is how the animation is transitioning. While we know the animation is changing by week, our viewer may not realize or understand that. With some transition functions this may or may not be easily  inferable, so it's good practice to include this information on the plot. We can add this information in the **labs()** part of our ggplot statement, specifying one of the corresponding transition variables related to the transition function we are using (see below).
+Another thing we should make sure to add to our animation is how the animation is transitioning. While we know the animation is changing by week, our viewer may not realize or understand that. With some transition functions this may or may not be easily  inferable, so it's good practice to include this information on the plot. 
+
+We can add this information in the **labs()** part of our ggplot statement, specifying one of the corresponding transition variables related to the transition function we are using (see below).
 
 |Name |	Label variable(s) |
 |:---------|:---------|
@@ -170,27 +174,65 @@ popularity %>%
 
 ### Transition_states()
 
+Another transition function is transition_states(). This function allows you to animate between several distinct stages of the data, whether that be before/during/after an event, by time segment, or another relevant partition.
+
+Before we use this, lets focus our data down to a smaller section of time for one category. Filter your data to include only one term for the most recent 4-6 weeks of data, like so:
+
 ```{r}
-popularity %>% 
+recent_term <- popularity %>% 
   filter(Week > "2022-08-01",
-         `Search Term` == "Premier League") %>% 
+         `Search Term` == "Premier League")
+```
+
+Now, create a bar chart of this data, with Week on the x-axis and Popularity on the y-axis. Coloring by Popularity can also make this plot more visually appealing, but is not necessary.
+
+```{r}
+recent_term %>% 
   ggplot(aes(x = Week, y = Popularity, fill = Popularity)) +
   geom_col() +
   scale_fill_distiller(palette = "Greens", direction = 1) +
   theme_classic()
 ```
 
-```{r}
-popularity %>% 
-  filter(Week > "2022-08-01",
-         `Search Term` == "Premier League") %>% 
+From here, we can add in the **transition_states()** function, as we have distinct stages (weeks) of data. Use the Week variable as the first argument in the transition function, and don't forget to add a label for the transition! In this case you have a few options for the label, if you want to display the previous, current, on next state respectively.
+
+```{r, eval=F}
+recent_term %>% 
   ggplot(aes(x = Week, y = Popularity, fill = Popularity)) +
   geom_col() +
   scale_fill_distiller(palette = "Greens", direction = 1) +
   theme_classic() +
   labs(title = "Week: {closest_state}") +
-  transition_states(Week, wrap = F)
+  transition_states(Week, wrap = FALSE)
 ```
+
+
+### Shadows
+
+The previous animation you made was pretty neat, but it only really provided useful comparison for successive weeks, and not across the whole time span. Wouldn't it be great if there was a way to keep the previous values displayed during the animation? Well, there is -- with shadows!
+
+Shadows allow you to show previous data during the course of an animation. The three shadow functions are:
+
+- shadow_mark()
+- shadow_trail()
+- shadow_wake()
+
+Each offer different ways of representing past data in an animation, as their names suggest. 
+
+Try adding **shadow_mark** to the previous bar chart animation and see what it does.
+
+```{r, eval=F}
+recent_term %>% 
+  ggplot(aes(x = Week, y = Popularity, fill = Popularity)) +
+  geom_col() +
+  scale_fill_distiller(palette = "Greens", direction = 1) +
+  theme_classic() +
+  labs(title = "Week: {closest_state}") +
+  transition_states(Week, wrap = FALSE) +
+  shadow_mark()
+```
+
+Now we can see the previous bars throughout the animation, which makes comparison across weeks a bit easier.
 
 
 ### Transition_time()
