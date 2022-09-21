@@ -50,89 +50,7 @@ library(gapminder)
 
 ## Data
 
-To create animated plots we must first have some tidy data to work with. We'll start with an example data set to get familiar with some of the features before trying it on unique data.
-
-A great example data set for animations is gapminder, which contains data on worldwide economic, health, and other public information. Load the data set and preview it below:
-
-```{r}
-head(gapminder)
-```
-
-Before we can animate a plot, we must first make a regular one in ggplot. Create a plot using some of the 6 variables in the data set.
-
-Here's an example:
-
-```{r}
-gapminder %>% 
-  ggplot(aes(x = gdpPercap, y = lifeExp)) +
-  geom_point() +
-  labs(x = "GDP per capita", y = "Life expectancy") +
-  theme_classic()
-```
-
-Now we're ready for animations.
-
-
-# Creating Animations
-
-Within gganimate there are 6 key components that can be altered within an animation.
-
-- Transitions & transition states
-- Views
-- Shadows
-- Easing
-- Enter and Exit
-- Rendering
-
-We will walk through each of these in detail and build upon them to create some cool visualizations.
-
-
-
-## Transitions & transition states
-
-### Basics
-
-Transitions control how the data gets displayed in your animation. Do you want your data to populate over time by year, by category, or another filter? This is determined by the transition function you select. The list of transition functions is shown below, along with their functionality.
-
-| Name        | Functionality |
-|:-----------|:-----------|
-| transition_components | Transition individual components through their own lifecycle |
-| transition_events | Transition individual events in and out |
-| transition_filter | Transition between different filters |
-| transition_layers | Build up a plot, layer by layer |
-| transition_manual | Create an animation by specifying the frame membership directly |
-| transition_reveal| Reveal data along a given dimension | 
-| transition_states | Transition between several distinct stages of the data |
-| transition_time | Transition through distinct states in time |
-
-
-Transition functions are simply added to your regular ggplot statements following a "+". Lets try using transition_time() first. The transition length will correspond to the actual time difference between the data. This can be a good option when you have yearly data. Add **transition_time()** to your plot, with the year variable as the argument.
-
-```{r, eval=F}
-gapminder %>% 
-  ggplot(aes(x = gdpPercap, y = lifeExp)) +
-  geom_point() +
-  labs(x = "GDP per capita", y = "Life expectancy") +
-  theme_classic() +
-  transition_time(year)
-```
-
-You should now see your plot animated in the viewer in the bottom right panel of your screen!
-
-While the points are moving, it may be hard to follow them as they are close together and all look the same. Add some color and/or size to your plot so we can see the animation better.
-
-```{r, eval=F}
-gapminder %>% 
-  ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
-  geom_point(alpha = 0.75, show.legend = FALSE) +
-  scale_color_viridis_d() +
-  labs(x = "GDP per capita", y = "Life expectancy") +
-  theme_classic() +
-  transition_time(year)
-```
-
-
-### Try it out
+To create animated plots we must first have some tidy data to work with. We'll start with an unique data set to get familiar with some of the basic features and then later explore some example data.
 
 Head over to (Google Search Trends)[https://trends.google.com/trends/?geo=US] and search up a term that interests you. You should get a graph of the popularity of the search term over time. Click "add comparison" at the top and add at least two more terms (so you have 3 or more total).
 
@@ -154,7 +72,7 @@ popularity <- popularity %>%
                values_to = "Popularity")
 ```
 
-Now plot the popularity over time:
+Now make a line plot the popularity over time:
 
 ```{r}
 popularity %>% 
@@ -165,9 +83,51 @@ popularity %>%
   theme(legend.position = "top")
 ```
 
-From here, try out some other transition functions like **transition_reveal()** or others.
+Now we're ready for animations.
 
-```{r, eval = F}
+
+
+# Creating Animations
+
+Within gganimate, the main concept is the use of **transition functions**, along with some other components that can be altered to create an animation. The main topics we will cover are:
+
+- Transition functions
+- Views
+- Shadows
+- Easing
+- Enter and Exit
+- Rendering
+
+We will walk through each of these in detail and build upon them to create some cool visualizations.
+
+
+
+## Transition functions
+
+### Basics
+
+Transitions control how the data gets displayed in your animation. Do you want your data to populate over time by year, by category, or another filter? This is determined by the transition function you select. The list of transition functions is shown below, along with their functionality.
+
+| Name        | Functionality |
+|:-----------|:-----------|
+| transition_components | Transition individual components through their own lifecycle |
+| transition_events | Transition individual events in and out |
+| transition_filter | Transition between different filters |
+| transition_layers | Build up a plot, layer by layer |
+| transition_manual | Create an animation by specifying the frame membership directly |
+| transition_reveal| Reveal data along a given dimension | 
+| transition_states | Transition between several distinct stages of the data |
+| transition_time | Transition through distinct states in time |
+
+
+Transition functions are simply added to your regular ggplot statements following a "+". 
+
+
+### Transition_reveal()
+
+Lets try using transition_reveal() first. The transition will reveal the data along a given dimension -- in this case time. This can be a good option when you have line charts or time-series data. Add **transition_reveal()** to your plot, with the Week variable as the first argument.
+
+```{r, eval=F}
 popularity %>% 
   ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
   geom_line() +
@@ -177,11 +137,12 @@ popularity %>%
   transition_reveal(Week)
 ```
 
+You should now see your plot animated in the viewer in the bottom right panel of your screen!
 
 
 ### Labels
 
-Another thing we should make sure to add to our animation is how the animation is transitioning. While we know the animation is changing by year, our viewer may not realize or understand that. With some transition functions this may or may not be easily  inferable, so it's good practice to include this information on the plot. We can add this information in the **labs()** part of our ggplot statement, specifying one of the corresponding transition variables related to the transition function we are using (see below).
+Another thing we should make sure to add to our animation is how the animation is transitioning. While we know the animation is changing by week, our viewer may not realize or understand that. With some transition functions this may or may not be easily  inferable, so it's good practice to include this information on the plot. We can add this information in the **labs()** part of our ggplot statement, specifying one of the corresponding transition variables related to the transition function we are using (see below).
 
 |Name |	Label variable(s) |
 |:---------|:---------|
@@ -194,14 +155,72 @@ Another thing we should make sure to add to our animation is how the animation i
 | transition_states	| previous_state, closest_state, next_state |
 | transition_time	| frame_time |
 
-In this case, lets add **title = "Year: {frame_time}"** to our label.
+In this case, lets add **title = "Week: {frame_along}"** to our label.
 
 ```{r, eval=F}
+popularity %>% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = "Time", y = "Popularity", title = "Week: {frame_along}") +
+  theme_classic() +
+  theme(legend.position = "top") +
+  transition_reveal(Week)
+```
+
+
+### Transition_states()
+
+```{r}
+popularity %>% 
+  filter(Week > "2022-08-01",
+         `Search Term` == "Premier League") %>% 
+  ggplot(aes(x = Week, y = Popularity, fill = Popularity)) +
+  geom_col() +
+  scale_fill_distiller(palette = "Greens", direction = 1) +
+  theme_classic()
+```
+
+```{r}
+popularity %>% 
+  filter(Week > "2022-08-01",
+         `Search Term` == "Premier League") %>% 
+  ggplot(aes(x = Week, y = Popularity, fill = Popularity)) +
+  geom_col() +
+  scale_fill_distiller(palette = "Greens", direction = 1) +
+  theme_classic() +
+  labs(title = "Week: {closest_state}") +
+  transition_states(Week, wrap = F)
+```
+
+
+### Transition_time()
+
+A great example data set for animations is gapminder, which contains data on worldwide economic, health, and other public information. Load the data set and preview it below:
+
+```{r}
+head(gapminder)
+```
+
+Create a plot using some of the 6 variables in the data set. Here's an example:
+
+```{r}
 gapminder %>% 
   ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
   geom_point(alpha = 0.75, show.legend = FALSE) +
   scale_color_viridis_d() +
+  labs(x = "GDP per capita", y = "Life expectancy") +
+  theme_classic()
+```
+
+***Transition_time()**
+
+```{r, eval=F}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
   labs(x = "GDP per capita", y = "Life expectancy", title = "Year: {frame_time}") +
   theme_classic() +
   transition_time(year)
 ```
+
+
