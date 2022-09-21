@@ -145,6 +145,38 @@ popularity <- read_csv("/Users/nolan/MACALESTER/Stat 456/multiTimeline.csv")
 head(popularity)
 ```
 
+We want this data in tidy format, so lets **pivot_longer** our data.
+
+```{r}
+popularity <- popularity %>% 
+  pivot_longer(cols = `World cup`:`UEFA Champions League`,
+               names_to = "Search Term",
+               values_to = "Popularity")
+```
+
+Now plot the popularity over time:
+
+```{r}
+popularity %>% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = "Time", y = "Popularity") +
+  theme_classic() +
+  theme(legend.position = "top")
+```
+
+From here, try out some other transition functions like **transition_reveal()** or others.
+
+```{r, eval = F}
+popularity %>% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = "Time", y = "Popularity") +
+  theme_classic() +
+  theme(legend.position = "top") +
+  transition_reveal(Week)
+```
+
 
 
 ### Labels
