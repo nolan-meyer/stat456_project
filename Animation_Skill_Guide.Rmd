@@ -172,6 +172,28 @@ popularity %>%
 ```
 
 
+
+### Transition_filter()
+
+Now, perhaps we wanted to iterate through the different search terms, rather than seeing them all at once. In this case, we can use transition_filter(). This transition allows you to animate trough a range of filtering conditions -- in this case Search Term.
+
+Using the same plot as before, change transition_reveal() to **transition_filter()**. Then, add in the following arguments: transition_length, filter_length, and the filter conditions. These conditions should be the Search Term equal to each of your terms. Also, update the title label to the corresponding variable -- "{closest_filter}". See below for reference:
+
+```{r, eval=F}
+popularity %>% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = "Time", y = "Popularity", title = "{closest_filter}") +
+  theme_classic() +
+  theme(legend.position = "top") +
+  transition_filter(transition_length = 0.05,
+                    filter_length = 2,
+                    `Search Term` == "Premier League", `Search Term` == "UEFA Champions League", `Search Term` == "World cup")
+```
+
+When we run the plot we now get the animation transitioning through each of these filters, providing a different view of the same data.
+
+
 ### Transition_states()
 
 Another transition function is transition_states(). This function allows you to animate between several distinct stages of the data, whether that be before/during/after an event, by time segment, or another relevant partition.
@@ -233,6 +255,12 @@ recent_term %>%
 ```
 
 Now we can see the previous bars throughout the animation, which makes comparison across weeks a bit easier.
+
+We will explore the other shadow functions later in other plots.
+
+
+
+
 
 
 ### Transition_time()

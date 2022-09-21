@@ -369,6 +369,21 @@ head(popularity)</code></pre>
   theme(legend.position = &quot;top&quot;) +
   transition_reveal(Week)</code></pre>
 </div>
+<div id="transition_filter" class="section level3">
+<h3>Transition_filter()</h3>
+<p>Now, perhaps we wanted to iterate through the different search terms, rather than seeing them all at once. In this case, we can use transition_filter(). This transition allows you to animate trough a range of filtering conditions – in this case Search Term.</p>
+<p>Using the same plot as before, change transition_reveal() to <strong>transition_filter()</strong>. Then, add in the following arguments: transition_length, filter_length, and the filter conditions. These conditions should be the Search Term equal to each of your terms. Also, update the title label to the corresponding variable – “{closest_filter}”. See below for reference:</p>
+<pre class="r"><code>popularity %&gt;% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = &quot;Time&quot;, y = &quot;Popularity&quot;, title = &quot;{closest_filter}&quot;) +
+  theme_classic() +
+  theme(legend.position = &quot;top&quot;) +
+  transition_filter(transition_length = 0.05,
+                    filter_length = 2,
+                    `Search Term` == &quot;Premier League&quot;, `Search Term` == &quot;UEFA Champions League&quot;, `Search Term` == &quot;World cup&quot;)</code></pre>
+<p>When we run the plot we now get the animation transitioning through each of these filters, providing a different view of the same data.</p>
+</div>
 <div id="transition_states" class="section level3">
 <h3>Transition_states()</h3>
 <p>Another transition function is transition_states(). This function allows you to animate between several distinct stages of the data, whether that be before/during/after an event, by time segment, or another relevant partition.</p>
@@ -412,6 +427,7 @@ head(popularity)</code></pre>
   transition_states(Week, wrap = FALSE) +
   shadow_mark()</code></pre>
 <p>Now we can see the previous bars throughout the animation, which makes comparison across weeks a bit easier.</p>
+<p>We will explore the other shadow functions later in other plots.</p>
 </div>
 <div id="transition_time" class="section level3">
 <h3>Transition_time()</h3>
