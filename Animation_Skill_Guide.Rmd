@@ -93,6 +93,8 @@ We will walk through each of these in detail and build upon them to create some 
 
 ## Transitions & transition states
 
+### Basics
+
 Transitions control how the data gets displayed in your animation. Do you want your data to populate over time by year, by category, or another filter? This is determined by the transition function you select. The list of transition functions is shown below, along with their functionality.
 
 | Name        | Functionality |
@@ -102,9 +104,57 @@ Transitions control how the data gets displayed in your animation. Do you want y
 | transition_filter | Transition between different filters |
 | transition_layers | Build up a plot, layer by layer |
 | transition_manual | Create an animation by specifying the frame membership directly |
-| transition_null | Keep all data constant across the animation |
 | transition_reveal| Reveal data along a given dimension | 
 | transition_states | Transition between several distinct stages of the data |
 | transition_time | Transition through distinct states in time |
 
 
+Transition functions are simply added to your regular ggplot statements following a "+". Lets try using transition_time() first. The transition length will correspond to the actual time difference between the data. This can be a good option when you have yearly data. Add **transition_time()** to your plot, with the year variable as the argument.
+
+```{r, eval=F}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  labs(x = "GDP per capita", y = "Life expectancy") +
+  theme_classic() +
+  transition_time(year)
+```
+
+You should now see your plot animated in the viewer in the bottom right panel of your screen!
+
+While the points are moving, it may be hard to follow them as they are close together and all look the same. Add some color and/or size to your plot so we can see the animation better.
+
+```{r, eval=F}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
+  geom_point(alpha = 0.75, show.legend = FALSE) +
+  scale_color_viridis_d() +
+  labs(x = "GDP per capita", y = "Life expectancy") +
+  theme_classic() +
+  transition_time(year)
+```
+
+One last thing we should make sure to add to our animation is how the animation is transitioning. While we know the animation is changing by year, our viewer may not realize or understand that. With some transition functions this may or may not be easily  inferable, so it's good practice to include this information on the plot. We can add this information in the **labs()** part of our ggplot creation, specifying one of the corresponding transition states related to the transition function we are using (see below).
+
+|Name |	Label variable(s) |
+|:---------|:---------|
+| transition_components |	frame_time |
+| transition_events	| frame_time |
+| transition_filter	| previous_filter, closest_filter, next_filter |
+| transition_layer	| previous_layer, closest_layer, next_layer, nlayers |
+| transition_manual	| previous_frame, current_frame, next_frame |
+| transition_reveal	| frame_along |
+| transition_states	| previous_state, closest_state, next_state |
+| transition_time	| frame_time |
+
+In this case, lets add **title = "Year: {frame_time}"** to our label.
+
+```{r, eval=F}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
+  geom_point(alpha = 0.75, show.legend = FALSE) +
+  scale_color_viridis_d() +
+  labs(x = "GDP per capita", y = "Life expectancy", title = "Year: {frame_time}") +
+  theme_classic() +
+  transition_time(year)
+```
