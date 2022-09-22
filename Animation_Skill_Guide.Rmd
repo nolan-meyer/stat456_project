@@ -117,7 +117,6 @@ Transitions control how the data gets displayed in your animation. Do you want y
 | transition_states | Transition between several distinct stages of the data |
 | transition_time | Transition through distinct states in time |
 | transition_layers | Build up a plot, layer by layer |
-| transition_components | Transition individual components through their own lifecycle |
 
 
 Transition functions are simply added to your regular ggplot statements following a "+". 
@@ -159,9 +158,6 @@ We can add this information in the **labs()** part of our ggplot statement, spec
 | transition_states	| previous_state, closest_state, next_state |
 | transition_time	| frame_time |
 | transition_layers	| previous_layer, closest_layer, next_layer, nlayers |
-| transition_components |	frame_time |
-
-
 
 
 
@@ -396,12 +392,6 @@ gapminder %>%
 ```
 
 
-
-
-
-
-### Transition_components()
-
-
-
 ### Rendering
+
+Lastly, we want to be able to save and display our animations in a good format for viewing...
