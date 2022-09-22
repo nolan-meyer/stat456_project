@@ -1,7 +1,7 @@
 ---
 title: "Data Science Tutorial: Intro to Animations in R"
-author: "Nolan & Anton"
-date: "9/19/2022"
+author: "Nolan Meyer"
+date: "9/21/2022"
 output: 
   html_document:
     toc: true
@@ -158,7 +158,7 @@ You should now see your plot animated in the viewer in the bottom right panel of
 
 ### Labels
 
-Another thing we should make sure to add to our animation is how the animation is transitioning. While we know the animation is changing by week, our viewer may not realize or understand that. With some transition functions this may or may not be easily  inferable, so it's good practice to include this information on the plot. 
+Another thing we should make sure to add to our animation is how it is transitioning. While we know the animation is changing by week, our viewer may not realize or understand that. With some transition functions this may or may not be easily  inferable, so it's good practice to include this information on the plot. 
 
 We can add this information in the **labs()** part of our ggplot statement, specifying one of the corresponding transition variables related to the transition function we are using (see below).
 
@@ -184,8 +184,27 @@ popularity %>%
   transition_reveal(Week)
 ```
 
+
 ### Views
 
+Another thing we can alter about the animation is how the scales change. Currently they are static, which may not be the best when we have spread out data like this. You can change how the animation is viewed via view functions. The main one is:
+
+- view_follow()
+
+You can also fix the x or y axis separately if it makes sense (it does in this case as we have values on a fixed scale from 0-100), using the fixed_x and fixed_y arguments.
+
+Try adding **view_follow(fixed_y = TRUE)** to the previous animation as see how it looks.
+
+```{r, eval=F}
+popularity %>% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = "Time", y = "Popularity", title = "Week: {frame_along}") +
+  theme_classic() +
+  theme(legend.position = "top") +
+  transition_reveal(Week) +
+  view_follow(fixed_y = TRUE)
+```
 
 
 

@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Nolan &amp; Anton" />
+<meta name="author" content="Nolan Meyer" />
 
 
 <title>Data Science Tutorial: Intro to Animations in R</title>
@@ -245,8 +245,8 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Data Science Tutorial: Intro to Animations in R</h1>
-<h4 class="author">Nolan &amp; Anton</h4>
-<h4 class="date">9/19/2022</h4>
+<h4 class="author">Nolan Meyer</h4>
+<h4 class="date">9/21/2022</h4>
 
 </div>
 
@@ -407,7 +407,7 @@ head(popularity)</code></pre>
 </div>
 <div id="labels" class="section level3">
 <h3>Labels</h3>
-<p>Another thing we should make sure to add to our animation is how the animation is transitioning. While we know the animation is changing by week, our viewer may not realize or understand that. With some transition functions this may or may not be easily inferable, so it’s good practice to include this information on the plot.</p>
+<p>Another thing we should make sure to add to our animation is how it is transitioning. While we know the animation is changing by week, our viewer may not realize or understand that. With some transition functions this may or may not be easily inferable, so it’s good practice to include this information on the plot.</p>
 <p>We can add this information in the <strong>labs()</strong> part of our ggplot statement, specifying one of the corresponding transition variables related to the transition function we are using (see below).</p>
 <table>
 <thead>
@@ -450,6 +450,20 @@ head(popularity)</code></pre>
 </div>
 <div id="views" class="section level3">
 <h3>Views</h3>
+<p>Another thing we can alter about the animation is how the scales change. Currently they are static, which may not be the best when we have spread out data like this. You can change how the animation is viewed via view functions. The main one is:</p>
+<ul>
+<li>view_follow()</li>
+</ul>
+<p>You can also fix the x or y axis separately if it makes sense (it does in this case as we have values on a fixed scale from 0-100), using the fixed_x and fixed_y arguments.</p>
+<p>Try adding <strong>view_follow(fixed_y = TRUE)</strong> to the previous animation as see how it looks.</p>
+<pre class="r"><code>popularity %&gt;% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = &quot;Time&quot;, y = &quot;Popularity&quot;, title = &quot;Week: {frame_along}&quot;) +
+  theme_classic() +
+  theme(legend.position = &quot;top&quot;) +
+  transition_reveal(Week) +
+  view_follow(fixed_y = TRUE)</code></pre>
 </div>
 <div id="rendering" class="section level3">
 <h3>Rendering</h3>
