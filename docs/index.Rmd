@@ -104,9 +104,7 @@ We will walk through each of these in detail and build upon them to create some 
 
 
 
-## Transition functions
-
-### Basics
+## Basics
 
 Transitions control how the data gets displayed in your animation. Do you want your data to populate over time by year, by category, or another filter? This is determined by the transition function you select. The list of common transition functions is shown below, along with their functionality.
 
@@ -134,6 +132,9 @@ Transition functions also have a few common arguments that useful to know as you
 
 There are of course other arguments specific to each transition function, however these are crucial ones to know when building animations.
 
+
+
+## Transition functions & Animation Components
 
 
 ### Transition_reveal()
