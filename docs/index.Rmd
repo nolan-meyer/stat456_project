@@ -95,7 +95,7 @@ Now we're ready for animations.
 Within gganimate, the main concept is the use of **transition functions** to create an animation. Other components of an animation the we will cover along with these functions are:
 
 - Labels
-- **Views**
+- Views
 - Rendering
 - Shadows
 - Easing
@@ -120,7 +120,7 @@ Transitions control how the data gets displayed in your animation. Do you want y
 Transition functions are simply added to your regular ggplot statements following a "+". 
 
 
-Transition functions also have a few common arguments that useful to know as you often will want to adjust these. Typically, whatever variable you are animating on goes first. In addition, the other main ones are:
+Transition functions also have a few common arguments that are useful to know as you often will want to adjust these. Typically, whatever variable you are animating on goes first. In addition, the other main arguments are:
 
 | Name        | Functionality |
 |:-----------|:-----------|
@@ -130,7 +130,7 @@ Transition functions also have a few common arguments that useful to know as you
 | wrap | Controls if the animation should wrap-around back to the start at the end |
 
 
-There are of course other arguments specific to each transition function, however these are crucial ones to know when building animations.
+There are of course other arguments specific to each transition function, however these are the crucial ones to know when building animations.
 
 
 
@@ -143,7 +143,7 @@ Lets try using transition_reveal() first. This transition will reveal the data a
 
 Add **transition_reveal()** to your plot, with the Week variable as the first argument.
 
-```{r, eval=F}
+```{r}
 popularity %>% 
   ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
   geom_line() +
@@ -174,7 +174,7 @@ We can add this information in the **labs()** part of our ggplot statement, spec
 
 In this case, lets add **title = "Week: {frame_along}"** to our label.
 
-```{r, eval=F}
+```{r}
 popularity %>% 
   ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
   geom_line() +
@@ -183,6 +183,8 @@ popularity %>%
   theme(legend.position = "top") +
   transition_reveal(Week)
 ```
+
+Now we can see each week at the top as it is being displayed.
 
 
 ### Views
@@ -195,7 +197,7 @@ You can also fix the x or y axis separately if it makes sense (it does in this c
 
 Try adding **view_follow(fixed_y = TRUE)** to the previous animation as see how it looks.
 
-```{r, eval=F}
+```{r}
 popularity %>% 
   ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
   geom_line() +
@@ -206,7 +208,7 @@ popularity %>%
   view_follow(fixed_y = TRUE)
 ```
 
-
+This is a cool way to show data populating over time.
 
 
 ### Rendering
@@ -253,7 +255,7 @@ p <- popularity %>%
   transition_reveal(Week)
 ```
 
-```{r, eval=F}
+```{r}
 animate(p, width = 700, height = 425, fps = 25, duration = 16, rewind = FALSE, start_pause = 25, end_pause = 25)
 ```
 
@@ -263,9 +265,9 @@ animate(p, width = 700, height = 425, fps = 25, duration = 16, rewind = FALSE, s
 
 Now, perhaps we wanted to iterate through the different search terms, rather than seeing them all at once. In this case, we can use transition_filter(). This transition allows you to animate trough a range of filtering conditions -- in this case Search Term.
 
-Using the same plot as before, change transition_reveal() to **transition_filter()**. Then, add in the following arguments: transition_length, filter_length, and the filter conditions. These conditions should be the Search Term equal to each of your terms. Also, update the title label to the corresponding variable -- "{closest_filter}". See below for reference:
+Using the same plot as before, change transition_reveal() to **transition_filter()**. Then, add in the following arguments: **transition_length**, **filter_length**, and the **filter conditions**. These conditions should be the Search Term equal to each of your terms. Also, update the title label to the corresponding variable: **"{closest_filter}"**. See below for reference:
 
-```{r, eval=F}
+```{r}
 popularity %>% 
   ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
   geom_line() +
@@ -304,7 +306,7 @@ recent_term %>%
 
 From here, we can add in the **transition_states()** function, as we have distinct stages (weeks) of data. Use the Week variable as the first argument in the transition function, and don't forget to add a label for the transition! In this case you have a few options for the label, if you want to display the previous, current, on next state respectively.
 
-```{r, eval=F}
+```{r}
 recent_term %>% 
   ggplot(aes(x = Week, y = Popularity, fill = Popularity)) +
   geom_col() +
@@ -327,9 +329,9 @@ Shadows allow you to show previous data during the course of an animation. The t
 
 Each offer different ways of representing past data in an animation, as their names suggest. 
 
-Try adding **shadow_mark** to the previous bar chart animation and see what it does.
+Try adding **shadow_mark()** to the previous bar chart animation and see what it does.
 
-```{r, eval=F}
+```{r}
 recent_term %>% 
   ggplot(aes(x = Week, y = Popularity, fill = Popularity)) +
   geom_col() +
@@ -391,13 +393,13 @@ gapminder %>%
   geom_smooth(aes(x = gdpPercap, y = lifeExp, stat = "smooth")) +
   scale_color_viridis_d() +
   scale_x_log10() +
-  labs(x = "GDP per capita", y = "Life expectancy", alpha = "GDP") +
+  labs(x = "GDP per capita", y = "Life expectancy / Count", alpha = "GDP") +
   theme_classic()
 ```
 
 Now, lets add **transition_layer()** to animate this plot.
 
-```{r, eval=F}
+```{r}
 gapminder %>% 
   ggplot() +
   geom_histogram(aes(x = gdpPercap, alpha = 0.5, show.legend = FALSE)) +
@@ -405,7 +407,7 @@ gapminder %>%
   geom_smooth(aes(x = gdpPercap, y = lifeExp, stat = "smooth")) +
   scale_color_viridis_d() +
   scale_x_log10() +
-  labs(x = "GDP per capita", y = "Life expectancy", alpha = "GDP") +
+  labs(x = "GDP per capita", y = "Life expectancy / Count", alpha = "GDP") +
   theme_classic() +
   transition_layers()
 ```
@@ -417,9 +419,9 @@ This can be a great way to show multiple types of plots layered together as seen
 
 As the name implies, this function allows you to transition through distinct states in time, like year. This is a better option for point data, whereas transition_reveal() is better for line data.
 
-To see it in action, add **transition_time()** to your plot above, with year as the argument, and adding the correct label for this function.
+To see it in action, add **transition_time()** to the original gapminder plot, with year as the argument, and adding the correct label for this function.
 
-```{r, eval=F}
+```{r}
 gapminder %>% 
   ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
   geom_point(alpha = 0.75, show.legend = FALSE) +
@@ -432,7 +434,7 @@ gapminder %>%
 
 Try adding another shadow function to this animation:
 
-```{r, eval=F}
+```{r}
 gapminder %>% 
   ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
   geom_point(alpha = 0.75, show.legend = FALSE) +
@@ -455,7 +457,7 @@ To have slow-to-fast transitions we can use the argument: **quadratic-in** and t
 
 Try adding one of these to the previous animation.
 
-```{r, eval=F}
+```{r}
 gapminder %>% 
   ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
   geom_point(alpha = 0.75, show.legend = FALSE) +
@@ -470,5 +472,32 @@ gapminder %>%
 
 
 
+# Conslusion
 
+Creating animations in R is relatively easy and quite fun to do. They are also very practical in that they can showcase different elements and dimensions of data that a static plot simply cannot. From this tutorial, you now have the skills necessary to create, edit, and save animations like the one below.
+
+**One final task:** Edit your last visualization to include each of the 5 animation components we covered:
+
+- Labels
+- Views
+- Rendering
+- Shadows
+- Easing
+
+```{r}
+final_plot <- gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
+  geom_point(alpha = 0.75, show.legend = FALSE) +
+  facet_wrap(~continent) +
+  scale_color_viridis_d() +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy", title = "Year: {frame_time}") +
+  theme_classic() +
+  transition_time(year) +
+  shadow_wake(wake_length = 0.2) +
+  ease_aes('linear') +
+  view_follow()
+
+animate(final_plot, fps = 20, duration = 10, rewind = FALSE, start_pause = 20, end_pause = 20)
+```
 
