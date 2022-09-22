@@ -318,9 +318,9 @@ head(popularity)</code></pre>
 <ul>
 <li>Labels</li>
 <li><strong>Views</strong></li>
+<li>Rendering</li>
 <li>Shadows</li>
 <li>Easing</li>
-<li><strong>Rendering</strong></li>
 </ul>
 <p>We will walk through each of these in detail and build upon them to create some cool visualizations.</p>
 <div id="transition-functions" class="section level2">
@@ -419,6 +419,39 @@ head(popularity)</code></pre>
 </div>
 <div id="views" class="section level3">
 <h3>Views</h3>
+</div>
+<div id="rendering" class="section level3">
+<h3>Rendering</h3>
+<p>We want to be able to save and display our animations in a good format for viewing. Saving animations can save space and time to load them, and adjusting features like duration can also greatly improve the final animation. There are a few functions that help with that.</p>
+<p>To save animations as gifs you can use the <strong>anim_save()</strong> function, imputing the desired file name in the parentheses. Then, to load it use the <strong>knitr::include_graphics()</strong> function, with the file name in the parentheses. Try it out on a previous plot.</p>
+<pre class="r"><code>popularity %&gt;% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = &quot;Time&quot;, y = &quot;Popularity&quot;, title = &quot;Week: {frame_along}&quot;) +
+  theme_classic() +
+  theme(legend.position = &quot;top&quot;) +
+  transition_reveal(Week)
+
+anim_save(&quot;popularity_anim&quot;)</code></pre>
+<pre class="r"><code>knitr::include_graphics(&quot;popularity_anim&quot;)</code></pre>
+<p>To adjust how animations are displayed, including duration, height/width, fps, and more, the <strong>animate()</strong> function is useful. Key arguments that can be changed are:</p>
+<ul>
+<li>fps</li>
+<li>duration</li>
+<li>width</li>
+<li>height</li>
+<li>start_pause</li>
+<li>end_pause</li>
+<li>rewind</li>
+</ul>
+<pre class="r"><code>p &lt;- popularity %&gt;% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = &quot;Time&quot;, y = &quot;Popularity&quot;, title = &quot;Week: {frame_along}&quot;) +
+  theme_classic() +
+  theme(legend.position = &quot;top&quot;) +
+  transition_reveal(Week)</code></pre>
+<pre class="r"><code>animate(p, width = 700, height = 425, fps = 25, duration = 20, rewind = FALSE, start_pause = 25, end_pause = 25)</code></pre>
 </div>
 <div id="transition_filter" class="section level3">
 <h3>Transition_filter()</h3>
@@ -577,10 +610,6 @@ head(popularity)</code></pre>
   transition_time(year) +
   shadow_wake(wake_length = 0.2) +
   ease_aes(&#39;quadratic-out&#39;)</code></pre>
-</div>
-<div id="rendering" class="section level3">
-<h3>Rendering</h3>
-<p>Lastly, we want to be able to save and display our animations in a good format for viewing…</p>
 </div>
 </div>
 </div>

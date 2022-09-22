@@ -96,9 +96,9 @@ Within gganimate, the main concept is the use of **transition functions** to cre
 
 - Labels
 - **Views**
+- Rendering
 - Shadows
 - Easing
-- **Rendering**
 
 We will walk through each of these in detail and build upon them to create some cool visualizations.
 
@@ -179,6 +179,51 @@ popularity %>%
 
 
 
+### Rendering
+
+We want to be able to save and display our animations in a good format for viewing. Saving animations can save space and time to load them, and adjusting features like duration can also greatly improve the final animation. There are a few functions that help with that. 
+
+To save animations as gifs you can use the **anim_save()** function, imputing the desired file name in the parentheses. Then, to load it use the **knitr::include_graphics()** function, with the file name in the parentheses. Try it out on a previous plot.
+
+```{r, eval=F}
+popularity %>% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = "Time", y = "Popularity", title = "Week: {frame_along}") +
+  theme_classic() +
+  theme(legend.position = "top") +
+  transition_reveal(Week)
+
+anim_save("popularity_anim")
+```
+
+```{r, eval=F}
+knitr::include_graphics("popularity_anim")
+```
+
+To adjust how animations are displayed, including duration, height/width, fps, and more, the **animate()** function is useful. Key arguments that can be changed are:
+
+- fps
+- duration
+- width
+- height
+- start_pause
+- end_pause
+- rewind
+
+```{r}
+p <- popularity %>% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = "Time", y = "Popularity", title = "Week: {frame_along}") +
+  theme_classic() +
+  theme(legend.position = "top") +
+  transition_reveal(Week)
+```
+
+```{r, eval=F}
+animate(p, width = 700, height = 425, fps = 25, duration = 20, rewind = FALSE, start_pause = 25, end_pause = 25)
+```
 
 
 
@@ -392,6 +437,6 @@ gapminder %>%
 ```
 
 
-### Rendering
 
-Lastly, we want to be able to save and display our animations in a good format for viewing...
+
+
