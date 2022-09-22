@@ -121,8 +121,18 @@ Transitions control how the data gets displayed in your animation. Do you want y
 
 Transition functions are simply added to your regular ggplot statements following a "+". 
 
-<<<<<<<<<<<<<<<------!!!!!!!!!**TALK ABOUT FUNCTION ARGUMENTS**!!!!!!-------->>>>>>>>>>>>>>>
 
+Transition functions also have a few common arguments that useful to know as you often will want to adjust these. Typically, whatever variable you are animating on goes first. In addition, the other main ones are:
+
+| Name        | Functionality |
+|:-----------|:-----------|
+| transition_length | Controls the relative length of individual transitions | 
+| filter/layer/state_length | Controls the relative length of pause at each state |
+| range | Controls the time range to animate (if applicable) |
+| wrap | Controls if the animation should wrap-around back to the start at the end |
+
+
+There are of course other arguments specific to each transition function, however these are crucial ones to know when building animations.
 
 
 
@@ -211,6 +221,8 @@ To adjust how animations are displayed, including duration, height/width, fps, a
 - end_pause
 - rewind
 
+Save your plot and then try adjusting some of these to see how the output of the animation changes.
+
 ```{r}
 p <- popularity %>% 
   ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
@@ -222,7 +234,7 @@ p <- popularity %>%
 ```
 
 ```{r, eval=F}
-animate(p, width = 700, height = 425, fps = 25, duration = 20, rewind = FALSE, start_pause = 25, end_pause = 25)
+animate(p, width = 700, height = 425, fps = 25, duration = 16, rewind = FALSE, start_pause = 25, end_pause = 25)
 ```
 
 
