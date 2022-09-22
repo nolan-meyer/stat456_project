@@ -95,11 +95,10 @@ Now we're ready for animations.
 Within gganimate, the main concept is the use of **transition functions** to create an animation. Other components of an animation the we will cover along with these functions are:
 
 - Labels
-- Views
+- **Views**
 - Shadows
 - Easing
-- Enter and Exit
-- Rendering
+- **Rendering**
 
 We will walk through each of these in detail and build upon them to create some cool visualizations.
 
@@ -305,6 +304,41 @@ gapminder %>%
   theme_classic()
 ```
 
+### Transiton_layers()
+
+In some cases, you may want to show multiple geoms on the same plot, like a line and bar chart together. Transition_layers() allows for this functionality, and adds these layers in one-by-one during the anitmation.
+
+First, lets edit the previous plot and add some more geom elements to it. Remove the coloring and size, and add a histogram of the GDP Per Capita and a geom_smooth of the points.
+
+```{r}
+gapminder %>% 
+  ggplot() +
+  geom_histogram(aes(x = gdpPercap, alpha = 0.5, show.legend = FALSE)) +
+  geom_point(aes(x = gdpPercap, y = lifeExp, show.legend = FALSE)) +
+  geom_smooth(aes(x = gdpPercap, y = lifeExp, stat = "smooth")) +
+  scale_color_viridis_d() +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy", alpha = "GDP") +
+  theme_classic()
+```
+
+Now, lets add **transition_layer()** to animate this plot.
+
+```{r, eval=F}
+gapminder %>% 
+  ggplot() +
+  geom_histogram(aes(x = gdpPercap, alpha = 0.5, show.legend = FALSE)) +
+  geom_point(aes(x = gdpPercap, y = lifeExp, show.legend = FALSE)) +
+  geom_smooth(aes(x = gdpPercap, y = lifeExp, stat = "smooth")) +
+  scale_color_viridis_d() +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy", alpha = "GDP") +
+  theme_classic() +
+  transition_layers()
+```
+
+This can be a great way to show multiple types of plots layered together as seen here.
+
 
 ### Transition_time()
 
@@ -363,8 +397,11 @@ gapminder %>%
 
 
 
-### Transiton_layers()
 
 
 
 ### Transition_components()
+
+
+
+### Rendering
