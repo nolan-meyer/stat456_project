@@ -95,8 +95,8 @@ Now we're ready for animations.
 Within gganimate, the main concept is the use of **transition functions** to create an animation. Other components of an animation the we will cover along with these functions are:
 
 - Labels
-- Shadows
 - Views
+- Shadows
 - Easing
 - Enter and Exit
 - Rendering
@@ -121,8 +121,11 @@ Transitions control how the data gets displayed in your animation. Do you want y
 | transition_components | Transition individual components through their own lifecycle |
 
 
-
 Transition functions are simply added to your regular ggplot statements following a "+". 
+
+<<<<<<<<<<<<<<<------!!!!!!!!!**TALK ABOUT FUNCTION ARGUMENTS**!!!!!!-------->>>>>>>>>>>>>>>
+
+
 
 
 ### Transition_reveal()
@@ -175,6 +178,13 @@ popularity %>%
   transition_reveal(Week)
 ```
 
+### Views
+
+
+
+
+
+
 
 
 ### Transition_filter()
@@ -182,12 +192,6 @@ popularity %>%
 Now, perhaps we wanted to iterate through the different search terms, rather than seeing them all at once. In this case, we can use transition_filter(). This transition allows you to animate trough a range of filtering conditions -- in this case Search Term.
 
 Using the same plot as before, change transition_reveal() to **transition_filter()**. Then, add in the following arguments: transition_length, filter_length, and the filter conditions. These conditions should be the Search Term equal to each of your terms. Also, update the title label to the corresponding variable -- "{closest_filter}". See below for reference:
-
-
-
-<<<<<<<<<<<<<<<------!!!!!!!!!**TALK ABOUT FUNCTION ARGUMENTS**!!!!!!-------->>>>>>>>>>>>>>>
-
-
 
 ```{r, eval=F}
 popularity %>% 
@@ -289,6 +293,18 @@ gapminder %>%
   theme_classic()
 ```
 
+Lets add a log transformation so we can see the data a bit better:
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
+  geom_point(alpha = 0.75, show.legend = FALSE) +
+  scale_color_viridis_d() +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy") +
+  theme_classic()
+```
+
 
 ### Transition_time()
 
@@ -301,9 +317,48 @@ gapminder %>%
   ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
   geom_point(alpha = 0.75, show.legend = FALSE) +
   scale_color_viridis_d() +
+  scale_x_log10() +
   labs(x = "GDP per capita", y = "Life expectancy", title = "Year: {frame_time}") +
   theme_classic() +
   transition_time(year)
+```
+
+Try adding another shadow function to this animation:
+
+```{r, eval=F}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
+  geom_point(alpha = 0.75, show.legend = FALSE) +
+  scale_color_viridis_d() +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy", title = "Year: {frame_time}") +
+  theme_classic() +
+  transition_time(year) +
+  shadow_wake(wake_length = 0.2)
+```
+
+This really highlights the general trend of increasing life expectancy & GDP per-capita over time.
+
+
+### Easing
+
+Suppose you wanted to change the rate of the transition in the animation. You could go about doing that via easing. Easing controls the "acceleration" per-se of the animation. By default it is linear/constant speed during transitions as we have seen, but you could make it slow down or speed up during the transitions too. This is done via the **ease_aes()** function.
+
+To have slow-to-fast transitions we can use the argument: **quadratic-in** and to have fast-to-slow transitions down use the argument: **quadratic-out**.
+
+Try adding one of these to the previous animation.
+
+```{r, eval=F}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
+  geom_point(alpha = 0.75, show.legend = FALSE) +
+  scale_color_viridis_d() +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy", title = "Year: {frame_time}") +
+  theme_classic() +
+  transition_time(year) +
+  shadow_wake(wake_length = 0.2) +
+  ease_aes('quadratic-out')
 ```
 
 
