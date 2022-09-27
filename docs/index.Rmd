@@ -55,7 +55,9 @@ library(gapminder)
 
 To create animated plots we must first have some tidy data to work with. We'll start with an unique data set to get familiar with some of the basic features and then later explore some example data.
 
-Head over to (Google Search Trends)[https://trends.google.com/trends/?geo=US] and search up a term that interests you. You should get a graph of the popularity of the search term over time. Click "add comparison" at the top and add at least two more terms (so you have 3 or more total).
+**To Do:**
+
+Head over to [Google Search Trends](https://trends.google.com/trends/?geo=US) and search up a term that interests you. You should get a graph of the popularity of the search term over time. Click "add comparison" at the top and add at least two more terms (so you have 3 or more total).
 
 One you have a graph of multiple terms, download this as a .csv file to your computer.
 
@@ -139,7 +141,9 @@ There are of course other arguments specific to each transition function, howeve
 
 ### Transition_reveal()
 
-Lets try using transition_reveal() first. This transition will reveal the data along a given dimension -- in this case time. This can be a good option when you have line charts or time-series data. 
+Lets try using transition_reveal() first. This transition will reveal the data along a given dimension -- in this case time. This can be a good option when you have line charts or time-series data and want to show a progression of data over that dimension.
+
+**To Do:**
 
 Add **transition_reveal()** to your plot, with the Week variable as the first argument.
 
@@ -171,6 +175,7 @@ We can add this information in the **labs()** part of our ggplot statement, spec
 | transition_layers	| previous_layer, closest_layer, next_layer, nlayers |
 
 
+**To Do:**
 
 In this case, lets add **title = "Week: {frame_along}"** to our label.
 
@@ -195,6 +200,9 @@ Another thing we can alter about the animation is how the scales change. Current
 
 You can also fix the x or y axis separately if it makes sense (it does in this case as we have values on a fixed scale from 0-100), using the fixed_x and fixed_y arguments.
 
+
+**To Do:**
+
 Try adding **view_follow(fixed_y = TRUE)** to the previous animation as see how it looks.
 
 ```{r}
@@ -208,12 +216,15 @@ popularity %>%
   view_follow(fixed_y = TRUE)
 ```
 
-This is a cool way to show data populating over time.
+This is a different way to show data populating over time and can be useful when the data is pretty spread out.
 
 
 ### Rendering
 
 We want to be able to save and display our animations in a good format for viewing. Saving animations can save space and time to load them, and adjusting features like duration can also greatly improve the final animation. There are a few functions that help with that. 
+
+
+**To Do:**
 
 To save animations as gifs you can use the **anim_save()** function, imputing the desired file name in the parentheses. Then, to load it use the **knitr::include_graphics()** function, with the file name in the parentheses. Try it out on a previous plot.
 
@@ -243,6 +254,9 @@ To adjust how animations are displayed, including duration, height/width, fps, a
 - end_pause
 - rewind
 
+
+**To Do:**
+
 Save your plot and then try adjusting some of these to see how the output of the animation changes.
 
 ```{r}
@@ -259,11 +273,15 @@ p <- popularity %>%
 animate(p, width = 700, height = 425, fps = 25, duration = 16, rewind = FALSE, start_pause = 25, end_pause = 25)
 ```
 
+These adjustments can greatly improve how the animation is displayed, but note that it can slow down processing time.
+
 
 
 ### Transition_filter()
 
-Now, perhaps we wanted to iterate through the different search terms, rather than seeing them all at once. In this case, we can use transition_filter(). This transition allows you to animate trough a range of filtering conditions -- in this case Search Term.
+Now, perhaps we wanted to iterate through the different search terms, rather than seeing them all at once. In this case, we can use transition_filter(). This transition allows you to animate trough a range of filtering conditions -- in this case Search Term -- and see the data separately for each. This can be a cleaner way to view multiple categories of data, but makes comparison between them harder.
+
+**To Do:**
 
 Using the same plot as before, change transition_reveal() to **transition_filter()**. Then, add in the following arguments: **transition_length**, **filter_length**, and the **filter conditions**. These conditions should be the Search Term equal to each of your terms. Also, update the title label to the corresponding variable: **"{closest_filter}"**. See below for reference:
 
@@ -279,12 +297,16 @@ popularity %>%
                     `Search Term` == "Premier League", `Search Term` == "UEFA Champions League", `Search Term` == "World cup")
 ```
 
-When we run the plot we now get the animation transitioning through each of these filters, providing a different view of the same data.
+When we run the plot we now get the animation transitioning through each of these filters, providing a separate view of each of the search terms' popularity over time.
+
 
 
 ### Transition_states()
 
 Another transition function is transition_states(). This function allows you to animate between several distinct stages of the data, whether that be before/during/after an event, by time segment, or another relevant partition.
+
+
+**To Do:**
 
 Before we use this, lets focus our data down to a smaller section of time for one category. Filter your data to include only one term for the most recent 4-6 weeks of data, like so:
 
@@ -329,6 +351,9 @@ Shadows allow you to show previous data during the course of an animation. The t
 
 Each offer different ways of representing past data in an animation, as their names suggest. 
 
+
+**To Do:**
+
 Try adding **shadow_mark()** to the previous bar chart animation and see what it does.
 
 ```{r}
@@ -350,7 +375,11 @@ We will explore the other shadow functions later in other plots.
 
 ### New Data
 
-Some transition functions work better on different types of data. To showcase the other functions, we will switch to the gapminder data set. This is a great example data set for animations, and it contains data on worldwide economic, health, and other public information. Load the data set and preview it below:
+Some transition functions work better on different types of data. To showcase the other functions, we will switch to the gapminder data set. This is a great example data set for animations, and it contains data on worldwide economic, health, and other public information. 
+
+**To Do:**
+
+Load the data set and preview it below:
 
 ```{r}
 head(gapminder)
@@ -381,7 +410,9 @@ gapminder %>%
 
 ### Transiton_layers()
 
-In some cases, you may want to show multiple geoms on the same plot, like a line and bar chart together. Transition_layers() allows for this functionality, and adds these layers in one-by-one during the anitmation.
+In some cases, you may want to show multiple geoms on the same plot, like a line and bar chart together. Transition_layers() allows for this functionality, and adds these layers in one-by-one during the animation.
+
+**To Do:**
 
 First, lets edit the previous plot and add some more geom elements to it. Remove the coloring and size, and add a histogram of the GDP Per Capita and a geom_smooth of the points.
 
@@ -419,6 +450,8 @@ This can be a great way to show multiple types of plots layered together as seen
 
 As the name implies, this function allows you to transition through distinct states in time, like year. This is a better option for point data, whereas transition_reveal() is better for line data.
 
+**To Do:**
+
 To see it in action, add **transition_time()** to the original gapminder plot, with year as the argument, and adding the correct label for this function.
 
 ```{r}
@@ -455,6 +488,8 @@ Suppose you wanted to change the rate of the transition in the animation. You co
 
 To have slow-to-fast transitions we can use the argument: **quadratic-in** and to have fast-to-slow transitions down use the argument: **quadratic-out**.
 
+**To Do:**
+
 Try adding one of these to the previous animation.
 
 ```{r}
@@ -475,6 +510,8 @@ gapminder %>%
 # Conslusion
 
 Creating animations in R is relatively easy and quite fun to do. They are also very practical in that they can showcase different elements and dimensions of data that a static plot simply cannot. From this tutorial, you now have the skills necessary to create, edit, and save animations like the one below.
+
+**To Do:**
 
 **One final task:** Edit your last visualization to include each of the 5 animation components we covered:
 
