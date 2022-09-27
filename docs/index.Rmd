@@ -1,11 +1,12 @@
 ---
 title: "Data Science Tutorial: Intro to Animations in R"
-author: "Nolan Meyer"
+author: "Nolan & Anton"
 date: "9/21/2022"
 output: 
   html_document:
     toc: true
     toc_float: true
+    code_folding: show
 ---
 
 ```{r setup, include=FALSE}
@@ -39,6 +40,7 @@ You will likely need to install the following packages if you haven't worked wit
 ```{r, eval=F}
 install.packages("gganimate")
 install.packages("gapminder")
+install.packages("transformr")
 ```
 
 Then load the necessary packages:
@@ -48,6 +50,7 @@ library(gganimate)
 library(ggplot2)
 library(tidyverse)
 library(gapminder)
+library(lubridate)
 ```
 
 
@@ -57,20 +60,35 @@ To create animated plots we must first have some tidy data to work with. We'll s
 
 **To Do:**
 
-Head over to [Google Search Trends](https://trends.google.com/trends/?geo=US) and search up a term that interests you. You should get a graph of the popularity of the search term over time. Click "add comparison" at the top and add at least two more terms (so you have 3 or more total).
+1. Head over to [Google Search Trends](https://trends.google.com/trends/?geo=US) and search up a term that interests you.You should get a graph of the popularity of the search term over time. 
+2. Click "add comparison" at the top and add at least two more terms (so you have 3 or more total).
+3. Select a 12 month data period.
 
-One you have a graph of multiple terms, download this as a .csv file to your computer.
+One you have a graph of multiple terms, download this as a .csv file to your computer. 
 
-**Note:** Once you have your .csv downloaded, click on it in the bottom right "Files" pane and click "View File". The .csv file will open in another tab. Delete the first two rows so that "Week" and the terms you searched are now at the top. Click "Save", and now your .csv is ready for importing.
+**Note:** Once you have your .csv downloaded, click on it in the bottom right "Files" pane and click "View File". The .csv file will open in another tab. Delete the first two rows so that "Week" and the terms you searched are now at the top. Change the column names to something short and simple. Click "Save", and now your .csv is ready for importing. Save it to the same folder as this file.
 
-```{r}
+```{r, eval=FALSE}
+popularity <- read_csv("multiTimeline.csv")
+popularity$Week <- mdy(popularity$Week)
+head(popularity)
+```
+
+```{r, class.source = 'fold-hide'}
 popularity <- read_csv("/Users/nolan/MACALESTER/Stat 456/multiTimeline.csv")
 head(popularity)
 ```
 
 We want this data in tidy format, so lets **pivot_longer** our data.
 
-```{r}
+```{r, eval=FALSE}
+popularity <- popularity %>% 
+  pivot_longer(cols = `*first column*`:`*last column*`,
+               names_to = "Search Term",
+               values_to = "Popularity")
+```
+
+```{r, class.source = 'fold-hide'}
 popularity <- popularity %>% 
   pivot_longer(cols = `World cup`:`UEFA Champions League`,
                names_to = "Search Term",
@@ -147,7 +165,17 @@ Lets try using transition_reveal() first. This transition will reveal the data a
 
 Add **transition_reveal()** to your plot, with the Week variable as the first argument.
 
-```{r}
+```{r, eval=FALSE}
+popularity %>% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = "Time", y = "Popularity") +
+  theme_classic() +
+  theme(legend.position = "top") +
+  ???
+```
+
+```{r, class.source = 'fold-hide'}
 popularity %>% 
   ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
   geom_line() +
@@ -179,7 +207,17 @@ We can add this information in the **labs()** part of our ggplot statement, spec
 
 In this case, lets add **title = "Week: {frame_along}"** to our label.
 
-```{r}
+```{r, eval=FALSE}
+popularity %>% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = "Time", y = "Popularity", ???) +
+  theme_classic() +
+  theme(legend.position = "top") +
+  transition_reveal(Week)
+```
+
+```{r, class.source = 'fold-show'}
 popularity %>% 
   ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
   geom_line() +
@@ -205,7 +243,18 @@ You can also fix the x or y axis separately if it makes sense (it does in this c
 
 Try adding **view_follow(fixed_y = TRUE)** to the previous animation as see how it looks.
 
-```{r}
+```{r, eval=FALSE}
+popularity %>% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = "Time", y = "Popularity", title = "Week: {frame_along}") +
+  theme_classic() +
+  theme(legend.position = "top") +
+  transition_reveal(Week) +
+  ???
+```
+
+```{r, class.source = 'fold-show'}
 popularity %>% 
   ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
   geom_line() +
@@ -257,7 +306,7 @@ To adjust how animations are displayed, including duration, height/width, fps, a
 
 **To Do:**
 
-Save your plot and then try adjusting some of these to see how the output of the animation changes.
+Save your plot and then try adjusting some of these (like the 'fps' setting)to see how the output of the animation changes.
 
 ```{r}
 p <- popularity %>% 
@@ -273,6 +322,7 @@ p <- popularity %>%
 animate(p, width = 700, height = 425, fps = 25, duration = 16, rewind = FALSE, start_pause = 25, end_pause = 25)
 ```
 
+
 These adjustments can greatly improve how the animation is displayed, but note that it can slow down processing time.
 
 
@@ -281,11 +331,25 @@ These adjustments can greatly improve how the animation is displayed, but note t
 
 Now, perhaps we wanted to iterate through the different search terms, rather than seeing them all at once. In this case, we can use transition_filter(). This transition allows you to animate trough a range of filtering conditions -- in this case Search Term -- and see the data separately for each. This can be a cleaner way to view multiple categories of data, but makes comparison between them harder.
 
+
 **To Do:**
 
 Using the same plot as before, change transition_reveal() to **transition_filter()**. Then, add in the following arguments: **transition_length**, **filter_length**, and the **filter conditions**. These conditions should be the Search Term equal to each of your terms. Also, update the title label to the corresponding variable: **"{closest_filter}"**. See below for reference:
 
-```{r}
+Note: you might need to install the 'transformr' package.
+
+```{r, eval=FALSE}
+popularity %>% 
+  ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
+  geom_line() +
+  labs(x = "Time", y = "Popularity", title = "{closest_filter}") +
+  theme_classic() +
+  theme(legend.position = "top") +
+  transition_filter(transition_length = 0.05,
+                    filter_length = 2, `Search Term` == "var1", `Search Term` == "var2", `Search Term` == "var3")
+```
+
+```{r, class.source = 'fold-show'}
 popularity %>% 
   ggplot(aes(x = Week, y = Popularity, group = `Search Term`, color = `Search Term`)) +
   geom_line() +
@@ -310,7 +374,14 @@ Another transition function is transition_states(). This function allows you to 
 
 Before we use this, lets focus our data down to a smaller section of time for one category. Filter your data to include only one term for the most recent 4-6 weeks of data, like so:
 
-```{r}
+```{r, eval=FALSE}
+recent_term <- popularity %>% 
+  filter(Week > "2022-08-01",
+         `Search Term` == "var1")
+```
+
+
+```{r, class.source = 'fold-show'}
 recent_term <- popularity %>% 
   filter(Week > "2022-08-01",
          `Search Term` == "Premier League")
@@ -356,7 +427,18 @@ Each offer different ways of representing past data in an animation, as their na
 
 Try adding **shadow_mark()** to the previous bar chart animation and see what it does.
 
-```{r}
+```{r, eval=FALSE}
+recent_term %>% 
+  ggplot(aes(x = Week, y = Popularity, fill = Popularity)) +
+  geom_col() +
+  scale_fill_distiller(palette = "Greens", direction = 1) +
+  theme_classic() +
+  labs(title = "Week: {closest_state}") +
+  transition_states(Week, wrap = FALSE) +
+  ???
+```
+
+```{r, class.source = 'fold-show'}
 recent_term %>% 
   ggplot(aes(x = Week, y = Popularity, fill = Popularity)) +
   geom_col() +
@@ -430,7 +512,20 @@ gapminder %>%
 
 Now, lets add **transition_layer()** to animate this plot.
 
-```{r}
+```{r,eval=FALSE}
+gapminder %>% 
+  ggplot() +
+  geom_histogram(aes(x = gdpPercap, alpha = 0.5, show.legend = FALSE)) +
+  geom_point(aes(x = gdpPercap, y = lifeExp, show.legend = FALSE)) +
+  geom_smooth(aes(x = gdpPercap, y = lifeExp, stat = "smooth")) +
+  scale_color_viridis_d() +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy / Count", alpha = "GDP") +
+  theme_classic() +
+  ???
+```
+
+```{r, class.source = 'fold-show'}
 gapminder %>% 
   ggplot() +
   geom_histogram(aes(x = gdpPercap, alpha = 0.5, show.legend = FALSE)) +
@@ -454,7 +549,18 @@ As the name implies, this function allows you to transition through distinct sta
 
 To see it in action, add **transition_time()** to the original gapminder plot, with year as the argument, and adding the correct label for this function.
 
-```{r}
+```{r, eval=FALSE}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
+  geom_point(alpha = 0.75, show.legend = FALSE) +
+  scale_color_viridis_d() +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy", title = "Year: ???") +
+  theme_classic() +
+  ???
+```
+
+```{r, class.source = 'fold-show'}
 gapminder %>% 
   ggplot(aes(x = gdpPercap, y = lifeExp, color = country, size = pop)) +
   geom_point(alpha = 0.75, show.legend = FALSE) +
@@ -464,6 +570,7 @@ gapminder %>%
   theme_classic() +
   transition_time(year)
 ```
+
 
 Try adding another shadow function to this animation:
 
@@ -544,8 +651,6 @@ animate(final_plot, fps = 20, duration = 10, rewind = FALSE, start_pause = 20, e
 
 ### Notes:
 
-**Nolan:**
-
 Feedback:
 
 - Give examples of when to use certain animation functions & what type of data they are best for.
@@ -555,5 +660,5 @@ Feedback:
 Improvements made:
 
 - Added in more info to the beginning and end of transition functions sections that specifically talked about use cases, when the animation is useful, and data that works well with that type of animation.
-- Added in bolded text indicating where the user is meant to write code. This should help separate the general & the specific information more and make it clearer to the user what they are supposed to do in the guide.
+- Added in bolded text indicating where the user is meant to write code. This should help separate the general & the specific information more and make it clearer to the user what they are supposed to do in the guide. Also generalized some terms in the code blocks and added more specific code in hidden code chunks for reference.
 - Considered removing some text, but ultimately think what's included is all pretty necessary information. Also, adding in the "to-do" identifiers should help break up the text a bit more and make it more manageable in smaller pieces.
