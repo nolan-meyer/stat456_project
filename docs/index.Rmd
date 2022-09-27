@@ -538,3 +538,22 @@ final_plot <- gapminder %>%
 animate(final_plot, fps = 20, duration = 10, rewind = FALSE, start_pause = 20, end_pause = 20)
 ```
 
+
+
+---
+
+### Notes:
+
+**Nolan:**
+
+Feedback:
+
+- Give examples of when to use certain animation functions & what type of data they are best for.
+- Add more comments to identify what info is general to gganimate and what is specific to the individual data we are working with.
+- Think about potentially reducing the amount of text or separating it a little better.
+
+Improvements made:
+
+- Added in more info to the beginning and end of transition functions sections that specifically talked about use cases, when the animation is useful, and data that works well with that type of animation.
+- Added in bolded text indicating where the user is meant to write code. This should help separate the general & the specific information more and make it clearer to the user what they are supposed to do in the guide.
+- Considered removing some text, but ultimately think what's included is all pretty necessary information. Also, adding in the "to-do" identifiers should help break up the text a bit more and make it more manageable in smaller pieces.
