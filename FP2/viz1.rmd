@@ -1,0 +1,46 @@
+---
+title: "viz1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#devtools::install_github("slowkow/ggrepel")
+library(ggrepel)
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+```
+
+```{r}
+vizdata <- read_csv("viz1data.csv")
+```
+
+```{r}
+vizdata1 <- vizdata %>%
+  filter(field !="Total")
+```
+
+
+```{r}
+set.seed(123)
+ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field)) +
+  geom_point(size = 2.5, color = "#00AFBB") +
+  geom_text_repel(aes(label=field), size=2.25, box.padding = 0.5, segment.size = 0.25) +
+  xlim(3500,15000) + ylim(60000,110000) +
+  theme_classic() +
+  xlab("Mean Cumulative Amount Borrowed For Undergrad in 2016") +
+  ylab("Mean Parents' Income") +
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
+```
+
+```{r}
+fig <- plot_ly(vizdata1, x = ~mean_borrow, y = ~mean_income, text = vizdata1$field, type = 'scatter', mode = 'markers', name = 'Tips')
+fig
+```
+
