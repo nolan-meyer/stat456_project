@@ -29,20 +29,26 @@ vizdata1 <- vizdata %>%
 
 ```{r}
 set.seed(123)
-ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field)) +
-  geom_point(size = 2.5, color = "#00AFBB") +
+ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field, color=major_category)) +
+  geom_point(size = 2.5) +
   geom_text_repel(aes(label=field), 
                   size=2.25, 
                   box.padding = 0.5, 
-                  segment.size = 0.25) +
+                  segment.size = 0.25,
+                  color = "black") +
   xlim(3500,15000) + 
   ylim(60000,110000) +
   theme_classic() +
   labs(x = "Mean Cumulative Amount Borrowed (USD)", 
        y = "Mean Parents' Income (USD)", 
        title = "Amount Borrowed for Undergrad Majors Compared to Parents' Income, 2016") +
-  theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1),
+        legend.position = "hide")
 ```
+
+
+
+
 
 ```{r, eval=FALSE}
 fig <- plot_ly(vizdata1, x = ~mean_borrow, y = ~mean_income, text = vizdata1$field, type = 'scatter', mode = 'markers', name = 'Tips')

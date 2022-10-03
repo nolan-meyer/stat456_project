@@ -1,112 +1,24 @@
-field,mean_borrow,mean_income,sample_borrow,sample_income
-Total,10318,84552,19532284,9902137
-Undecided,4097,76423,449628,257642
-Computer and information sciences,9901,80558,867717,358684
-Engineering and engineering technology,8842,97256,1158989,713502
-"Biological and physical science, science tech",9419,92638,1052731,766811
-Mathematics,9587,100313,119067,81280
-Agriculture and natural resources,9212,91339,263161,167375
-General studies and other,6445,78980,2004331,1038251
-Social sciences,11471,90587,719367,460007
-Psychology,13621,78554,691503,413473
-Humanities,10798,90004,890517,577117
-History,10735,107618,118179,74544
-Personal and consumer services,11456,76373,635926,357837
-"Manufacturing, construction, repair & transportation",6616,67702,538187,198292
-Military technology and protective services,9594,63408,747990,353666
-Health care fields,12652,71965,3493230,1269637
-Business,11276,93901,3022989,1461412
-Education,10422,84436,851690,457669
-Architecture,8696,96367,58813,38131
-Communications,12300,95345,477773,339546
-Public administration and human services,12411,63516,355199,140652
-Design and applied arts,13110,79541,245531,139944
-Law and legal studies,11382,63476,129945,40505
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
-,,,,
+field,mean_borrow,mean_income,sample_borrow,sample_income,major_category
+Total,10318,84552,19532284,9902137,N/A
+Undecided,4097,76423,449628,257642,Undecided
+Computer and information sciences,9901,80558,867717,358684,"Science, Technology, Engineering, and Math"
+Engineering and engineering technology,8842,97256,1158989,713502,"Science, Technology, Engineering, and Math"
+"Biological and physical science, science tech",9419,92638,1052731,766811,"Science, Technology, Engineering, and Math"
+Mathematics,9587,100313,119067,81280,"Science, Technology, Engineering, and Math"
+Agriculture and natural resources,9212,91339,263161,167375,"Science, Technology, Engineering, and Math"
+General studies and other,6445,78980,2004331,1038251,Multi-Interdisciplinary Studies
+Social sciences,11471,90587,719367,460007,Social Sciences
+Psychology,13621,78554,691503,413473,Social Sciences
+Humanities,10798,90004,890517,577117,Arts and Humanities
+History,10735,107618,118179,74544,Social Sciences
+Personal and consumer services,11456,76373,635926,357837,Public and Social Services
+"Manufacturing, construction, repair & transportation",6616,67702,538187,198292,Public and Social Services
+Military technology and protective services,9594,63408,747990,353666,Public and Social Services
+Health care fields,12652,71965,3493230,1269637,Health and Medicine
+Business,11276,93901,3022989,1461412,Business
+Education,10422,84436,851690,457669,Social Science
+Architecture,8696,96367,58813,38131,"Science, Technology, Engineering, and Math"
+Communications,12300,95345,477773,339546,Social Science
+Public administration and human services,12411,63516,355199,140652,Public and Social Services
+Design and applied arts,13110,79541,245531,139944,Arts and Humanities
+Law and legal studies,11382,63476,129945,40505,Public and Social Services
