@@ -36,7 +36,7 @@ ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field, color=major_catego
                   box.padding = 0.5, 
                   segment.size = 0.25,
                   color = "black") +
-  xlim(3500,15000) + 
+  xlim(0,15000) + 
   ylim(60000,110000) +
   theme_classic() +
   labs(x = "Mean Cumulative Amount Borrowed (USD)", 
