@@ -10,7 +10,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```
 
-# FP1
 
 ```{r}
 library(readxl)
@@ -18,7 +17,7 @@ library(ggplot2)
 library(tidyverse)
 ```
 
-## Potential Research Questions:
+# Potential Research Questions:
 
 1. Who benefits the most from the loan forgiveness (gender, race, class)?
 
@@ -27,10 +26,10 @@ library(tidyverse)
 3. What majors provide most financial security and “easiest” opportunities to pay off debt? Which majors require students to take out most money relative to cost of attendance?
 
 
-## Data sets:
+## Data Analysis:
 
 
-### First Data Set
+### First Data Set: How has the cost of college changed over time?
 
 - **Data source**: National Center for Education Statistics, [https://nces.ed.gov/programs/digest/d21/tables/dt21_330.10.asp?current=yes]()
 - **Data description**: This data set includes the "average undergraduate tuition, fees, room, and board rates charged for full-time students in degree-granting post secondary institutions, by level and control of institution: Selected years, 1963-64 through 2020-21". While I did simplify the data source down a bit, it contains great detail of these amounts by each level of variable measured.
@@ -39,7 +38,7 @@ library(tidyverse)
 - **Visualize one interesting variable**.
 
 ```{r}
-tuition_cost <- read_excel("tabn330.10.xls", sheet = "Sheet1")
+tuition_cost <- read_excel("college_cost_over_time.xls", sheet = "Sheet1")
 head(tuition_cost)
 
 tuition_cost %>% 
@@ -54,7 +53,7 @@ tuition_cost %>%
 
 
 
-### Second Data Set
+### Second Data Set: Who borrows the most money for college?
 
 - **Data source**: National Center for Education Statistics [https://nces.ed.gov/datalab/powerstats/121-national-postsecondary-student-aid-study-2016-undergraduates/averages-medians-percents]()
 - ***Data description**: - this data table includes the "cumulative amount borrowed for undergrad (average) by Race/ethnicity and gender". This data was collected in the 2016 addition of the National Postsecondary Student Aid Study.
@@ -63,11 +62,11 @@ tuition_cost %>%
 - **Visualize one interesting variable.**
 
 ```{r}
-Cum_amt_borrowed_2016 <- read_excel("PowerStats_AveragesMediansPercents_20220914_231112.xlsx", sheet = "Sheet1")
+Cum_amt_borrowed_2016 <- read_excel("amt_borrowed.xlsx", sheet = "Sheet1")
 head(Cum_amt_borrowed_2016)
 
 Cum_amt_borrowed_2016 %>% 
-  ggplot(aes(x = Race, y = Amount, fill = Gender)) +
+  ggplot(aes(x = fct_reorder(Race, Amount, .desc = T), y = Amount, fill = Gender)) +
   geom_bar(stat="identity", position = position_dodge()) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
@@ -78,10 +77,23 @@ Cum_amt_borrowed_2016 %>%
 **Variables to join by**: We could probably connect the race or gender variables across this data set and a majors/field of study data set to compare if these amounts are being driven by major choices.
 
 
+### Who recieves the most aid in paying for college?
+
+```{r}
+total_aid_2016 <- read_excel("total_aid.xlsx")
+head(total_aid_2016)
+
+total_aid_2016 %>% 
+  ggplot(aes(x = fct_reorder(`Race/ethnicity`, `Total aid amount`, .desc = T), y = `Total aid amount`, fill = Gender)) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(x = "", y = "", fill = "", title = "Average total aid amount for undergrad in 2016 (USD) by race and gender")
+```
 
 
-
-# FP2
+### How does the amount borrowed for college vary by major and parent's income?
 
 ```{r}
 #devtools::install_github("slowkow/ggrepel")
@@ -123,14 +135,10 @@ ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field, color=major_catego
 
 
 
-
-
-# FP3
-
-## After College Job Analysis
+### What majors tend to lead to higher paying jobs after college?
 
 ```{r}
-salary_by_major_2018 <- read_excel("PowerStats_AveragesMediansPercents_20221010_104340.xlsx")
+salary_by_major_2018 <- read_excel("salary_by_major_0818.xlsx")
 head(salary_by_major_2018)
 
 salary_by_major_2018 %>% 
