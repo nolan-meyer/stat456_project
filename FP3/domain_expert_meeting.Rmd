@@ -21,11 +21,11 @@ library(tidyverse)
 
 # Research Questions:
 
-1. Who benefits the most from the loan forgiveness (gender, race, class)?
+1. With rising tuition costs, who is college most affordable for, and what fields of study do they pursue?
 
-2. How has the cost of tuition tracked in comparison to inflation rates, cost of living, and post-college income?
+2. Which college majors are worthwhile to study from a financial standpoint? (Which majors provide the most financial security & “easiest” opportunities to pay off debt?)
 
-3. What majors provide most financial security and “easiest” opportunities to pay off debt? Which majors require students to take out most money relative to cost of attendance?
+3. Which college majors provide the biggest uplift in a student's financial situation from pre-college to post-graduation? (Biggest change in financial indicators, i.e. salary)
 
 
 
