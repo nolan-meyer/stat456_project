@@ -19,7 +19,7 @@ library(tidyverse)
 ```
 
 
-# Research Questions:
+# Research Questions
 
 1. With rising tuition costs, who is college most affordable for, and what fields of study do they pursue?
 
@@ -29,10 +29,10 @@ library(tidyverse)
 
 
 
-# Preliminary Results & Analysis:
+# Preliminary Results & Analysis
 
 
-## How has the cost of college changed over time?
+### How has the cost of college changed over time?
 
 - **Data source**: National Center for Education Statistics, [https://nces.ed.gov/programs/digest/d21/tables/dt21_330.10.asp?current=yes]()
 - **Data description**: This data set includes the "average undergraduate tuition, fees, room, and board rates charged for full-time students in degree-granting post secondary institutions, by level and control of institution: Selected years, 1963-64 through 2020-21".
@@ -49,12 +49,13 @@ tuition_cost %>%
   labs(title = "Average undergraduate cost of fees, room, and board rates in current USD", x = "", y = "")
 ```
 
+- **Findings**: The cost of college has increased rapidly, especially at private institutions. At face value, this increase makes college less affordable for many students, and may mean they have to take out more loans and debt to finance it. 
 
 
-## Who borrows the most money for college?
+### Who borrows the most money for college?
 
 - **Data source**: National Center for Education Statistics [https://nces.ed.gov/datalab/powerstats/121-national-postsecondary-student-aid-study-2016-undergraduates/averages-medians-percents]()
-- ***Data description**: - this data table includes the "cumulative amount borrowed for undergrad (average) by Race/ethnicity and gender". This data was collected in the 2016 addition of the National Postsecondary Student Aid Study.
+- **Data description**: - this data table includes the "cumulative amount borrowed for undergrad (average) by Race/ethnicity and gender". This data was collected in the 2016 addition of the National Postsecondary Student Aid Study.
 
 ```{r}
 Cum_amt_borrowed_2016 <- read_excel("amt_borrowed.xlsx", sheet = "Sheet1")
@@ -69,8 +70,13 @@ Cum_amt_borrowed_2016 %>%
   labs(x = "", y = "", fill = "", title = "Average amount borrowed for undergrad in 2016 (USD) by race and gender")
 ```
 
+- **Findings**: It appears that on average, females were having to borrow more for undergrad in 2016, and so were individuals who identified as Black or African American. 
 
-## Who recieves the most aid in paying for college?
+
+### Who recieves the most aid in paying for college?
+
+- **Data source**: National Center for Education Statistics [https://nces.ed.gov/datalab/powerstats/121-national-postsecondary-student-aid-study-2016-undergraduates/averages-medians-percents]()
+- ***Data description**: - this data table includes the "average total aid amount for undergrad by Race/ethnicity and gender". This data was collected in the 2016 addition of the National Postsecondary Student Aid Study.
 
 ```{r}
 total_aid_2016 <- read_excel("total_aid.xlsx")
@@ -86,7 +92,7 @@ total_aid_2016 %>%
 ```
 
 
-## How does the amount borrowed for college vary by major and parent's income?
+### How does the amount borrowed for college vary by major and parent's income?
 
 ```{r}
 #devtools::install_github("slowkow/ggrepel")
@@ -128,7 +134,7 @@ ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field, color=major_catego
 
 
 
-## What majors tend to lead to higher paying jobs after college?
+### What majors tend to lead to higher paying jobs after college?
 
 ```{r}
 salary_by_major_2018 <- read_excel("salary_by_major_0818.xlsx")
@@ -142,3 +148,6 @@ salary_by_major_2018 %>%
   theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1, size = 7, color = "black")) +
   labs(x = "Undergraduate Field of Study, 2008", y = "Current Job Salary in 2018", title = "")
 ```
+
+
+# Questions
