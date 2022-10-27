@@ -76,7 +76,7 @@ Cum_amt_borrowed_2016 %>%
 ### Who recieves the most aid in paying for college?
 
 - **Data source**: National Center for Education Statistics [https://nces.ed.gov/datalab/powerstats/121-national-postsecondary-student-aid-study-2016-undergraduates/averages-medians-percents]()
-- ***Data description**: - this data table includes the "average total aid amount for undergrad by Race/ethnicity and gender". This data was collected in the 2016 addition of the National Postsecondary Student Aid Study.
+- **Data description**: this data table includes the "average total aid amount for undergrad by Race/ethnicity and gender". This data was collected in the 2016 addition of the National Postsecondary Student Aid Study.
 
 ```{r}
 total_aid_2016 <- read_excel("total_aid.xlsx")
@@ -95,6 +95,9 @@ total_aid_2016 %>%
 
 
 ### How does the amount borrowed for college vary by major and parent's income?
+
+- **Data Source**: 
+- **Data Description**:
 
 ```{r}
 #devtools::install_github("slowkow/ggrepel")
@@ -135,9 +138,13 @@ ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field, color=major_catego
         legend.position = "right")
 ```
 
+- **Findings**:
 
 
 ### What majors tend to lead to higher paying jobs after college?
+
+- **Data Source**: 
+- **Data Description**:
 
 ```{r}
 salary_by_major_2018 <- read_excel("salary_by_major_0818.xlsx")
@@ -152,5 +159,14 @@ salary_by_major_2018 %>%
   labs(x = "Undergraduate Field of Study, 2008", y = "Current Job Salary in 2018", title = "")
 ```
 
+- **Findings**:
+ 
 
 # Questions
+
+1. Which of these questions seems most interesting and you think we should focus on / explore more?
+
+2. What other background information about this topic should we consider? Are there other pieces of information we should look at or take into consideration in our analysis?
+
+3. Do you have any other feedback about our project? What's going well and what could be improved?
+
