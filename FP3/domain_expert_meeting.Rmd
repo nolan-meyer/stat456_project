@@ -91,6 +91,8 @@ total_aid_2016 %>%
   labs(x = "", y = "", fill = "", title = "Average total aid amount for undergrad in 2016 (USD) by race and gender")
 ```
 
+- **Findings**: Average aid amounts are distributed pretty equally between gender and race categories, in 2016.
+
 
 ### How does the amount borrowed for college vary by major and parent's income?
 
@@ -113,7 +115,7 @@ vizdata1 <- vizdata %>%
   filter(field !="Total")
 ```
 
-```{r}
+```{r, fig.width=10.25, fig.height=5}
 set.seed(123)
 ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field, color=major_category)) +
   geom_point(size = 2.5) +
@@ -127,9 +129,10 @@ ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field, color=major_catego
   theme_classic() +
   labs(x = "Mean Cumulative Amount Borrowed (USD)", 
        y = "Mean Parents' Income (USD)", 
-       title = "Amount Borrowed for Undergrad Majors Compared to Parents' Income, 2016") +
+       title = "Amount Borrowed for Undergrad Majors Compared to Parents' Income, 2016",
+       color = "Major Category") +
   theme(panel.border = element_rect(color = "black", fill = NA, size = 1),
-        legend.position = "hide")
+        legend.position = "right")
 ```
 
 
