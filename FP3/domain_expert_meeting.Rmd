@@ -1,15 +1,16 @@
 ---
-title: "FP3"
-author: "Nolan Meyer"
-date: "10/10/2022"
-output: html_document
+title: "Domain Expert Meeting"
+author: "Nolan & Anton"
+date: "10/28/2022"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = F, message = F, warning = F)
 ```
-
 
 ```{r}
 library(readxl)
@@ -17,7 +18,8 @@ library(ggplot2)
 library(tidyverse)
 ```
 
-# Potential Research Questions:
+
+# Research Questions:
 
 1. Who benefits the most from the loan forgiveness (gender, race, class)?
 
@@ -26,20 +28,18 @@ library(tidyverse)
 3. What majors provide most financial security and “easiest” opportunities to pay off debt? Which majors require students to take out most money relative to cost of attendance?
 
 
-## Data Analysis:
+
+# Preliminary Results & Analysis:
 
 
-### First Data Set: How has the cost of college changed over time?
+## How has the cost of college changed over time?
 
 - **Data source**: National Center for Education Statistics, [https://nces.ed.gov/programs/digest/d21/tables/dt21_330.10.asp?current=yes]()
-- **Data description**: This data set includes the "average undergraduate tuition, fees, room, and board rates charged for full-time students in degree-granting post secondary institutions, by level and control of institution: Selected years, 1963-64 through 2020-21". While I did simplify the data source down a bit, it contains great detail of these amounts by each level of variable measured.
-- **Data limitations**: The data is pretty recent, however some limitations include the data format and lack of other variables. It took a long time to import this data given how it was formatted originally (see link). I had to manually extract only the most necessary, general information and reformat it for use in R. Secondly, while it provides great information on this subject, it lacks other information like inflation rates which we will have to gather from another source for comparison.
-- **Show the variable names. Describe the most useful / interesting ones**. Variables: Year, Type (Public/Private), Length (2yr/4yr), and Amount (average cost of undergraduate tuition, fees, room, and board)
-- **Visualize one interesting variable**.
+- **Data description**: This data set includes the "average undergraduate tuition, fees, room, and board rates charged for full-time students in degree-granting post secondary institutions, by level and control of institution: Selected years, 1963-64 through 2020-21".
 
 ```{r}
 tuition_cost <- read_excel("college_cost_over_time.xls", sheet = "Sheet1")
-head(tuition_cost)
+#head(tuition_cost)
 
 tuition_cost %>% 
   ggplot(aes(x = Year, y = Amount, color = Length)) +
@@ -49,21 +49,16 @@ tuition_cost %>%
   labs(title = "Average undergraduate cost of fees, room, and board rates in current USD", x = "", y = "")
 ```
 
-**Variables to join by**: We could probably connect the year variable across this data set and an inflation data set to compare how tuition has tracked in relation over time.
 
 
-
-### Second Data Set: Who borrows the most money for college?
+## Who borrows the most money for college?
 
 - **Data source**: National Center for Education Statistics [https://nces.ed.gov/datalab/powerstats/121-national-postsecondary-student-aid-study-2016-undergraduates/averages-medians-percents]()
 - ***Data description**: - this data table includes the "cumulative amount borrowed for undergrad (average) by Race/ethnicity and gender". This data was collected in the 2016 addition of the National Postsecondary Student Aid Study.
-- **Data limitations**: This data is interesting but is only collected ~every 4 years, meaning we can't get a super detailed view of how these values change over time, only a macro level view at certain intervals. WE also don't have the most recent data.
-- **Show the variable names. Describe the most useful / interesting ones**. Variables: Race, gender, Amount (Average cumulative amount borrowed for undergrad).
-- **Visualize one interesting variable.**
 
 ```{r}
 Cum_amt_borrowed_2016 <- read_excel("amt_borrowed.xlsx", sheet = "Sheet1")
-head(Cum_amt_borrowed_2016)
+#head(Cum_amt_borrowed_2016)
 
 Cum_amt_borrowed_2016 %>% 
   ggplot(aes(x = fct_reorder(Race, Amount, .desc = T), y = Amount, fill = Gender)) +
@@ -74,14 +69,12 @@ Cum_amt_borrowed_2016 %>%
   labs(x = "", y = "", fill = "", title = "Average amount borrowed for undergrad in 2016 (USD) by race and gender")
 ```
 
-**Variables to join by**: We could probably connect the race or gender variables across this data set and a majors/field of study data set to compare if these amounts are being driven by major choices.
 
-
-### Who recieves the most aid in paying for college?
+## Who recieves the most aid in paying for college?
 
 ```{r}
 total_aid_2016 <- read_excel("total_aid.xlsx")
-head(total_aid_2016)
+#head(total_aid_2016)
 
 total_aid_2016 %>% 
   ggplot(aes(x = fct_reorder(`Race/ethnicity`, `Total aid amount`, .desc = T), y = `Total aid amount`, fill = Gender)) +
@@ -93,7 +86,7 @@ total_aid_2016 %>%
 ```
 
 
-### How does the amount borrowed for college vary by major and parent's income?
+## How does the amount borrowed for college vary by major and parent's income?
 
 ```{r}
 #devtools::install_github("slowkow/ggrepel")
@@ -135,11 +128,11 @@ ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field, color=major_catego
 
 
 
-### What majors tend to lead to higher paying jobs after college?
+## What majors tend to lead to higher paying jobs after college?
 
 ```{r}
 salary_by_major_2018 <- read_excel("salary_by_major_0818.xlsx")
-head(salary_by_major_2018)
+#head(salary_by_major_2018)
 
 salary_by_major_2018 %>% 
   filter(`Field of study: undergraduate (10 categories)` != "Undeclared") %>% 
@@ -149,8 +142,3 @@ salary_by_major_2018 %>%
   theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1, size = 7, color = "black")) +
   labs(x = "Undergraduate Field of Study, 2008", y = "Current Job Salary in 2018", title = "")
 ```
-
-
-
-
-
