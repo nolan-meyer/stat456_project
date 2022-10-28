@@ -162,6 +162,17 @@ salary_by_major_2018 %>%
 - **Findings**: We see that 10 years later, the two majors with the highest earnings are computer science and engineering, averaging just over 100k/yr. On the other end of the spectrum, education is the lowest, averaging around 50k/yr.
  
 
+```{r}
+data1 <- read_xlsx("salary_parents_income.xlsx")
+```
+
+
+
+
+
+
+
+
 # Questions
 
 1. Which of these questions seems most interesting and you think we should focus on / explore more?
