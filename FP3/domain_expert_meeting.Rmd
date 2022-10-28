@@ -143,8 +143,8 @@ ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field, color=major_catego
 
 ### What majors tend to lead to higher paying jobs after college?
 
-- **Data Source**: 
-- **Data Description**:
+- **Data Source**: National Center for Education Statistics [https://nces.ed.gov/datalab/powerstats/54-baccalaureate-and-beyond-2008-2018/averages-medians-percents]()
+- **Data Description**: This included data from the Baccalaureate and Beyond study which followed students from 2008-2018. Compared is their major studied in 2008 and their salary as of 2018.
 
 ```{r}
 salary_by_major_2018 <- read_excel("salary_by_major_0818.xlsx")
@@ -159,7 +159,7 @@ salary_by_major_2018 %>%
   labs(x = "Undergraduate Field of Study, 2008", y = "Current Job Salary in 2018", title = "")
 ```
 
-- **Findings**:
+- **Findings**: We see that 10 years later, the two majors with the highest earnings are computer science and engineering, averaging just over 100k/yr. On the other end of the spectrum, education is the lowest, averaging around 50k/yr.
  
 
 # Questions
