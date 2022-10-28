@@ -96,8 +96,8 @@ total_aid_2016 %>%
 
 ### How does the amount borrowed for college vary by major and parent's income?
 
-- **Data Source**: 
-- **Data Description**:
+- **Data Source**: - **Data source**: National Center for Education Statistics [https://nces.ed.gov/datalab/powerstats/121-national-postsecondary-student-aid-study-2016-undergraduates/averages-medians-percents]()
+- **Data Description**: Data includes mean parent's income in USD in 2016, and the mean cumulative amount borrowed for college, by major.
 
 ```{r}
 #devtools::install_github("slowkow/ggrepel")
@@ -138,7 +138,7 @@ ggplot(vizdata1, aes(x=mean_borrow,y=mean_income,label=field, color=major_catego
         legend.position = "right")
 ```
 
-- **Findings**:
+- **Findings**: After grouping the majors by category, we notice some clustering and interesting trends. We see a similar pattern for STEM educations, and also see a general negative relationship between the x and y variables if we ignore some of  the left-most "outliers".
 
 
 ### What majors tend to lead to higher paying jobs after college?
