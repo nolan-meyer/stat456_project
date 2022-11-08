@@ -8,6 +8,11 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(lubridate)
+```
 
 
 # Deliverables
@@ -34,6 +39,6 @@ knitr::opts_chunk$set(echo = TRUE)
 # Data
 
 ```{r}
-
+data <- read_csv("11_8_data.csv")
 ```
 
