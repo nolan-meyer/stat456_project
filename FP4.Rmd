@@ -2,12 +2,16 @@
 title: "FP4"
 author: "Nolan & Anton"
 date: "11/8/2022"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
+
 ```{r}
 library(tidyverse)
 library(ggplot2)
@@ -25,13 +29,16 @@ library(lubridate)
 # Research Questions
 
 1.
-  a. Focusing on federal aid & loans, are there any gender and race biases in how much aid is given based on EFC?
 
-  b. At what point does your family income (and/or EFC) result in zero federal aid?
+  - Focusing on federal aid & loans, are there any gender and race biases in how much aid is given based on EFC?
+
+  - At what point does your family income (and/or EFC) result in zero federal aid?
   
 2.
 
-  a. What majors provide the best ROI of expected family contributions in terms of salary post grad?
+  - What majors provide the best ROI of expected family contributions in terms of salary post grad?
+  
+  - What majors provide the biggest increase in financial well-being based on family income or EFC?
 
 
 
@@ -40,5 +47,6 @@ library(lubridate)
 
 ```{r}
 data <- read_csv("11_8_data.csv")
+head(data)
 ```
 
