@@ -17,9 +17,23 @@ knitr::opts_chunk$set(echo = TRUE)
 - Project plan for rest of semester
 
 
+# Research Questions
+
+1.
+  a. Focusing on federal aid & loans, are there any gender and race biases in how much aid is given based on EFC?
+
+  b. At what point does your family income (and/or EFC) result in zero federal aid?
+  
+2.
+
+  a. What majors provide the best ROI of expected family contributions in terms of salary post grad?
+
+
+
 
 # Data
 
 ```{r}
 
 ```
+
