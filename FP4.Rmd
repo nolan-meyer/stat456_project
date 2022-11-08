@@ -9,3 +9,17 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+# Deliverables
+
+- 6-8 min presentation
+- Analysis of research questions & findings
+- Project plan for rest of semester
+
+
+
+# Data
+
+```{r}
+
+```
