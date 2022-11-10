@@ -50,3 +50,20 @@ data <- read_csv("11_8_data.csv")
 head(data)
 ```
 
+```{r}
+data <- readxl::read_xlsx("11_8_data.xlsx", sheet = "salary")
+conf_int <- readxl::read_xlsx("11_8_data.xlsx", sheet = "confidence_intervals")
+
+data %>% 
+  ggplot() +
+  geom_bar(aes(x = fct_reorder(`Field of study: undergraduate (23 categories)`, `Primary job: Annualized salary, 2012`, .desc = T), y = `Primary job: Annualized salary, 2012`), stat = "identity", fill = "skyblue", alpha = 0.7) +
+  geom_errorbar(aes(x = `Field of study: undergraduate (23 categories)`, ymin=`CI_low`, ymax=`CI_high`), width=0.4, colour="orange", alpha=0.9, size=1) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 52, vjust = 1, hjust=1, size = 5.5, color = "black")) +
+  labs(x = "Field of Study, 2008", y = "Salary, 2012")
+```
+
+
+
+
+
