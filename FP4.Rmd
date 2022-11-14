@@ -6,6 +6,7 @@ output:
   html_document:
     toc: true
     toc_float: true
+    code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
@@ -17,6 +18,7 @@ library(tidyverse)
 library(ggplot2)
 library(lubridate)
 library(ggrepel)
+library(readxl)
 ```
 
 
@@ -24,6 +26,18 @@ library(ggrepel)
 # Introduction & RQ's
 
 As college students, we are well aware of the phenomenon of rising tuition costs. In recent years, the cost of attending college has skyrocketed, leaving many to wonder how they will afford to finance their education. Many students have to take out federal loans to help cover the up-front costs.
+
+```{r}
+tuition_cost <- read_excel("FP3/college_cost_over_time.xls", sheet = "Sheet1")
+head(tuition_cost)
+
+tuition_cost %>% 
+  ggplot(aes(x = Year, y = Amount, color = Length)) +
+  geom_line() +
+  facet_wrap(~Type) +
+  theme_classic() +
+  labs(title = "Average undergraduate cost of fees, room, and board rates in current USD", x = "", y = "")
+```
 
 This leads us to wonder: how are federal loans distributed, and who has to take out the most loans for college? Which majors tend to borrow the most, and do they provide a good return on investment? Our research questions are stated below: 
 
@@ -44,9 +58,9 @@ This leads us to wonder: how are federal loans distributed, and who has to take 
 
 # Data
 
-Our data files come from the National Center for Education Statistics, which can be found here. [https://nces.ed.gov/datalab/](NCES DataLab) The two studies we have used separately so far in our work are the "Baccalaureate & Beyond (08-18)" study and the "National Post-secondary Student Aid Study, Undergraduate (2016)". In general, both studies compile various data on undergraduate students like major, financial aid, student loan amount, and much more. The B&B study also include data *beyond* the undergraduate level and tracks data like future salary.
+Our data files come from the National Center for Education Statistics, which can be found here: [NCES DataLab](https://nces.ed.gov/datalab/). The two studies we have used separately so far in our work are the "Baccalaureate & Beyond (08-18)" study and the "National Post-secondary Student Aid Study, Undergraduate (2016)". In general, both studies compile various data on undergraduate students like major, financial aid, student loan amount, and much more. The B&B study also include data *beyond* the undergraduate level and tracks data like future salary.
 
-We manually pulled and cleaned datasets relating to particular variables of interest, which are loaded in below. 
+We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
 
 ```{r}
 data <- read_csv("11_8_data.csv")
@@ -59,20 +73,25 @@ exploregender <- read_csv("10_efc_borrow_gender.csv")
 
 # Work, Plots, and Analyses
 
-```{r}
-data <- readxl::read_xlsx("11_8_data.xlsx", sheet = "salary")
-conf_int <- readxl::read_xlsx("11_8_data.xlsx", sheet = "confidence_intervals")
+## Amount Borrowed for College in 2016 by race and gender
 
-data %>% 
-  ggplot() +
-  geom_bar(aes(x = fct_reorder(`Field of study: undergraduate (23 categories)`, `Primary job: Annualized salary, 2012`, .desc = T), y = `Primary job: Annualized salary, 2012`), stat = "identity", fill = "skyblue", alpha = 0.7) +
-  geom_errorbar(aes(x = `Field of study: undergraduate (23 categories)`, ymin=`CI_low`, ymax=`CI_high`), width=0.4, colour="orange", alpha=0.9, size=1) +
+```{r}
+Cum_amt_borrowed_2016 <- read_excel("FP3/amt_borrowed.xlsx", sheet = "Sheet1")
+head(Cum_amt_borrowed_2016)
+
+Cum_amt_borrowed_2016 %>% 
+  ggplot(aes(x = fct_reorder(Race, Amount, .desc = T), y = Amount, fill = Gender)) +
+  geom_bar(stat="identity", position = position_dodge()) +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 52, vjust = 1, hjust=1, size = 5.5, color = "black")) +
-  labs(x = "Field of Study, 2008", y = "Salary, 2012")
+  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(x = "", y = "", fill = "", title = "Average amount borrowed for undergrad in 2016 (USD) by race and gender")
 ```
 
 
+
+
+## Differences in Amount Borrowed vs EFC by major and gender
 
 ```{r}
 male <- exploregender %>%
@@ -102,8 +121,8 @@ ggplot(final,aes(x=efc,y=borr,color=gender, group=field)) +
                   segment.size = 0.25,
                   color = "black")+
 geom_line(color="purple")
-
 ```
+
 > We exclude education from our analysis because it violates our assumption - the more you are able to pay, the less you borrow.
 
 > If a segment is inelastic (<1), it means the following:
@@ -141,12 +160,51 @@ tab<-wider1%>%
 ```
 
 
-# Plan for Semester
+
+## Future Salary
+
+### Salary in 2012 based on field of study in 2008, with confidence intervals
+
+```{r}
+data <- readxl::read_xlsx("11_8_data.xlsx", sheet = "salary")
+conf_int <- readxl::read_xlsx("11_8_data.xlsx", sheet = "confidence_intervals")
+
+data %>% 
+  ggplot() +
+  geom_bar(aes(x = fct_reorder(`Field of study: undergraduate (23 categories)`, `Primary job: Annualized salary, 2012`, .desc = T), y = `Primary job: Annualized salary, 2012`), stat = "identity", fill = "skyblue", alpha = 0.7) +
+  geom_errorbar(aes(x = `Field of study: undergraduate (23 categories)`, ymin=`CI_low`, ymax=`CI_high`), width=0.4, colour="orange", alpha=0.9, size=1) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 52, vjust = 1, hjust=1, size = 5.5, color = "black")) +
+  labs(x = "Field of Study, 2008", y = "Salary, 2012")
+```
+
+### Salary in 2018 based on field of study in 2008
+
+```{r}
+salary_by_major_2018 <- read_excel("FP3/salary_by_major_0818.xlsx")
+head(salary_by_major_2018)
+
+salary_by_major_2018 %>% 
+  filter(`Field of study: undergraduate (10 categories)` != "Undeclared") %>% 
+  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Current job, as of B&B:08/18 interview: Annualized salary`, .desc = T), y = `Current job, as of B&B:08/18 interview: Annualized salary`)) +
+  geom_bar(stat="identity", fill = "#69b3a2") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1, size = 7, color = "black")) +
+  labs(x = "Undergraduate Field of Study, 2008", y = "Current Job Salary in 2018", title = "")
+```
+
+
+
+# Rest of Semester Plan
 
 
 
 
 
 # Contributions
+
+Anton:
+
+Nolan:
 
 
