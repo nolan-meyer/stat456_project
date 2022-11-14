@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 library(tidyverse)
 library(ggplot2)
 library(lubridate)
+library(ggrepel)
 ```
 
 
@@ -65,5 +66,79 @@ data %>%
 
 
 
+#--------------
+
+
+```{r}
+#data <- read_csv("11_8_data.csv")
+explorerace <- read_csv("10_efc_borrow_race.csv")
+exploregender <- read_csv("10_efc_borrow_gender.csv")
+```
+
+```{r}
+male <- exploregender %>%
+  select(field,efc_m,borr_m) %>%
+  mutate(gender = "m")
+  colnames(male) <- c("field","efc","borr","gender")
+female <- exploregender %>%
+  select(field,efc_f,borr_f) %>%
+  mutate(gender = "f")
+  colnames(female) <- c("field","efc","borr","gender")
+final <- rbind(male,female)
+final$efc <- extract_numeric(final$efc)
+```
+
+
+```{r, eval=F}
+longgender <- exploregender %>%
+  pivot_longer(cols=c(`efc_f`,`borr_f`,`efc_m`,`borr_m`),names_to="dollars",values_to="total")
+```
+
+```{r}
+ggplot(final,aes(x=efc,y=borr,color=gender, group=field)) +
+  geom_point() +
+  geom_text_repel(aes(label=field),
+                  size=2.25,
+                  box.padding = 0.5,
+                  segment.size = 0.25,
+                  color = "black")+
+geom_line(color="purple")
+
+```
+> We exclude education from our analysis because it violates our assumption - the more you are able to pay, the less you borrow.
+
+> If a segment is inelastic (<1), it means the following:
+1. The gender that borrows less borrows a lot less even though it is able to pay a little bit more.  
+2. The gender that borrows less has less financial burden during college but has to pay more during studies (they finance less of their education)
+> If a segment is elastic (>1), it means the following:
+1. The gender that borrows less borrows a little less even thouh it is able to pay a lot more
+2. The gender that borrows less has more financial burden leaving college but has to pay less during studies (they finance more of their education).
+
+
+```{r}
+wider <- final %>%
+    pivot_wider(names_from=gender,values_from=c(efc,borr),values_fill=0,names_sort=TRUE)
+```
+
+```{r}
+wider <- wider %>%
+  mutate(change_efc = (pmax(efc_f,efc_m)-pmin(efc_f,efc_m))/pmin(efc_f,efc_m),change_borr = (pmax(borr_f,borr_m)-pmin(borr_f,borr_m))/pmin(borr_f,borr_m))%>%
+    mutate(elasticity = change_efc/change_borr)%>%
+  mutate(borr_more = case_when(borr_m>borr_f ~ 'm',
+  borr_m<borr_f ~ 'f'))
+```
+
+```{r}
+wider1 <- wider %>%
+  mutate(mid_efc=(efc_f+efc_m)/2,mid_borr=(borr_f+borr_m)/2) %>% mutate(elasticity=((efc_f-efc_m)/(mid_efc))/((borr_f-borr_m)/(mid_borr)))%>%
+  mutate(borr_more = case_when(borr_m>borr_f ~ 'm',
+  borr_m<borr_f ~ 'f'))%>%
+  arrange(elasticity)
+```
+
+```{r}
+tab<-wider1%>%
+  select(field,elasticity,borr_more)
+```
 
 
