@@ -75,9 +75,10 @@ exploregender <- read_csv("10_efc_borrow_gender.csv")
 
 ## Amount Borrowed for College in 2016 by race and gender
 
+We began by first exploring who typically has to borrow the most to pay for college. To do this we looked at the amount students borrowed for their undergraduate studies in 2016, and differentiated by race and gender.
+
 ```{r}
 Cum_amt_borrowed_2016 <- read_excel("FP3/amt_borrowed.xlsx", sheet = "Sheet1")
-head(Cum_amt_borrowed_2016)
 
 Cum_amt_borrowed_2016 %>% 
   ggplot(aes(x = fct_reorder(Race, Amount, .desc = T), y = Amount, fill = Gender)) +
@@ -88,6 +89,9 @@ Cum_amt_borrowed_2016 %>%
   labs(x = "", y = "", fill = "", title = "Average amount borrowed for undergrad in 2016 (USD) by race and gender")
 ```
 
+This plot clearly shows that across the board, on average female students had to borrow more in 2016 than male students. This could be partly due to the fact that female students represent a slight majority in college enrollment, which extends to private enrollment which is generally more expensive. Still, this plot shows a stark difference between the two genders in the amount borrowed for undergrad.
+
+From this data we also observe that those who identify as "Black or African American" have the highest average amount borrowed, followed by those who identify as "White". 
 
 
 
