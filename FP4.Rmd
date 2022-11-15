@@ -23,7 +23,7 @@ library(readxl)
 
 
 
-# Introduction & RQ's
+# Introduction & Research Questions
 
 As college students, we are well aware of the phenomenon of rising tuition costs. In recent years, the cost of attending college has skyrocketed, leaving many to wonder how they will afford to finance their education. 
 
@@ -51,6 +51,12 @@ Many students end up having to take out federal loans to help cover the up-front
   - At what point does your **family income** (and/or EFC) **result in  zero federal aid/loans**?
 
 
+**Note:** When considering loans, aid, and EFC in our research, our sample size is only undergraduate students who received federal loans to help finance college in the given years. This is only a subset of the total population that goes to college, and thus our findings should only be considered for this smaller subset of students reflected in our project.
+
+
+## Definitions
+
+- **Expected Family Contribution (EFC):** According to the [Federal Student Aid website](https://fsapartners.ed.gov/sites/default/files/2021-08/2223EFCFormulaGuide.pdf), "The Expected Family Contribution (EFC) is a number that determines students’ eligibility for certain types of federal student aid. This number is calculated with the EFC formulas, which use the information that students provide on the Free Application for Federal Student Aid (FAFSA). Financial aid administrators (FAAs) subtract the EFC from students’ cost of attendance to determine their need for...federal student financial assistance offered by the U.S. Department of Education". Among other things, two main factors that go into an EFC calculation are the student's income and parent's income.
 
 
 # Data
@@ -68,11 +74,11 @@ exploregender <- read_csv("10_efc_borrow_gender.csv")
 
 
 
-# Plots, and Analyses
+# Plots and Analyses
 
-## Amount Borrowed for College in 2016 by race and gender
+## Cumulative amount borrowed for college by race and gender
 
-We began by first exploring who typically has to borrow the most to pay for college. To do this we looked at the amount students borrowed for their undergraduate studies in 2016, and differentiated by race and gender.
+We began by first exploring who typically has to borrow the most to pay for college. To do this we looked at the total amount students borrowed for their undergraduate studies, and differentiated by race and gender.
 
 ```{r}
 Cum_amt_borrowed_2016 <- read_excel("FP3/amt_borrowed.xlsx", sheet = "Sheet1")
@@ -83,16 +89,18 @@ Cum_amt_borrowed_2016 %>%
   theme_classic() +
   theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
   scale_fill_brewer(palette = "Paired") +
-  labs(x = "", y = "", fill = "", title = "Average amount borrowed for undergrad in 2016 (USD) by race and gender")
+  labs(x = "", y = "", fill = "", title = "Average cumulative amount borrowed for undergrad (2016, USD)")
 ```
 
-This plot clearly shows that across the board, on average female students had to borrow more in 2016 than male students. This could be partly due to the fact that female students represent a slight majority in college enrollment, which extends to private enrollment which is generally more expensive. Still, this plot shows a stark difference between the two genders in the amount borrowed for undergrad.
+This plot clearly shows that across the board, on average female students had to borrow more than male students. This could be partly due to the fact that female students represent a slight majority in college enrollment, which extends to private enrollment that is generally more expensive. Still, this plot shows a stark difference between the two genders in the amount borrowed for undergrad.
 
 From this data we also observe that those who identify as "Black or African American" have the highest average amount borrowed, followed by those who identify as "White". 
 
 
 
-## Differences in Amount Borrowed vs EFC by major and gender
+## Differences in amount borrowed vs EFC by major and gender
+
+Next, we decided to explore how EFC and the amount borrowed for college vary by major and gender. Our general assumption is that the more you are able to pay (higher EFC), the less you have to borrow, thus resulting in a negative relationship between the x & y variables. What we want to know is if certain genders borrow vastly different amounts *for the same field of study* with similar EFCs, or vice versa. 
 
 ```{r}
 male <- exploregender %>%
@@ -114,24 +122,39 @@ longgender <- exploregender %>%
 ```
 
 ```{r}
-ggplot(final,aes(x=efc,y=borr,color=gender, group=field)) +
-  geom_point() +
-  geom_text_repel(aes(label=field),
+final %>% 
+  filter(field != "Education") %>% 
+  ggplot(aes(x=efc,y=borr,color=gender, group=field)) + 
+    geom_point() +
+    geom_text_repel(aes(label=field),
                   size=2.25,
                   box.padding = 0.5,
                   segment.size = 0.25,
-                  color = "black")+
-geom_line(color="purple")
+                  color = "black") +
+    geom_line(color="purple") +
+    scale_color_manual(labels=c("Female", "Male"), values = c("red", "blue")) +
+    labs(color="", x = "EFC", y = "Cumulative amount borrowed") +
+    theme_classic()
 ```
 
-> We exclude education from our analysis because it violates our assumption - the more you are able to pay, the less you borrow.
+There's a lot to unpack here, but lets start from the basics. We do see negative relationships as expected for these 8 fields of study, meaning the more you can afford to pay results in borrowing less for college. (We did exclude education from our analysis because it was the only field of study that violated this relationship.)
 
-> If a segment is inelastic (<1), it means the following:
-1. The gender that borrows less borrows a lot less even though it is able to pay a little bit more.  
-2. The gender that borrows less has less financial burden during college but has to pay more during studies (they finance less of their education)
-> If a segment is elastic (>1), it means the following:
-1. The gender that borrows less borrows a little less even thouh it is able to pay a lot more
-2. The gender that borrows less has more financial burden leaving college but has to pay less during studies (they finance more of their education).
+Next, we see two primary groups, the first being health care, humanities, social science, and physical sciences, and the other being engineering, business, computer science, and general studies. The first group has higher amounts borrowed on average but very negative slopes, and can be characterized as "inelastic". The second group has lower amounts borrowed on average but less negative slopes, and can be characterized as "elastic".
+
+
+If a segment is inelastic (|Slope| < 1), it means the following:
+
+- 1. The gender that borrows less borrows a lot less even though it is able to pay a little bit more based on EFC.  
+
+- 2. The gender that borrows less has less financial burden during college but has to pay more during studies (they finance less of their education)
+
+
+If a segment is elastic (|Slope| > 1), it means the following:
+
+- 1. The gender that borrows less borrows a little less even though it is able to pay a lot more based on EFC.
+
+- 2. The gender that borrows less has more financial burden leaving college but has to pay less during studies (they finance more of their education).
+
 
 
 ```{r}
@@ -183,7 +206,7 @@ data %>%
 
 ```{r}
 salary_by_major_2018 <- read_excel("FP3/salary_by_major_0818.xlsx")
-head(salary_by_major_2018)
+#head(salary_by_major_2018)
 
 salary_by_major_2018 %>% 
   filter(`Field of study: undergraduate (10 categories)` != "Undeclared") %>% 
