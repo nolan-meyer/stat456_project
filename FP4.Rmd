@@ -235,14 +235,47 @@ We see that the top two majors from 2008 in terms of salary in 2018 are engineer
 
 # Rest of Semester Plan
 
+- By Tue, Nov. 22 (before break):
+
+    - Incorporate feedback from intermediate presenation
+    
+    - Aquire any last data sources we may want to add in our analyses
+    
+    - Finalize plots that we plan on using for this final presentation
+
+- By Thur, Dec. 1 (~1 week before presentations):
+
+    - All plots have some level of analyses that relates to our main RQs
+    
+    - Have final structure & outline laid out so that we effectively tell a story.
+
+- By Thur, Dec. 8:
+
+    - Have fully polished final presentation ready to go.
+    
+    - All resources compiled in the GitHub repo in reproducible states.
+    
+    - Be prepared for the final presenations (have practiced presenting, who's talking about what, etc.)
 
 
 
 
 # Contributions
 
-Anton:
+Anton: 
+
+- Created the main plot focusing on amount borrowed vs EFC and the elasticity measures
+
+- Pulled and cleaned data relating to that plot, and also provided much of the analysis
+
+- Build the slide deck for the presentation
 
 Nolan:
+
+- Created the other "supplemental" plots
+
+- Added introductory information and analyses to all other plots and general narrative
+
+- Built the FP4 file and required content
 
 
