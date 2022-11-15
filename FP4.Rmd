@@ -1,7 +1,7 @@
 ---
-title: "FP4"
+title: "FP4 - Intermediate Narrative"
 author: "Nolan & Anton"
-date: "11/8/2022"
+date: "11/15/2022"
 output: 
   html_document:
     toc: true
@@ -25,11 +25,11 @@ library(readxl)
 
 # Introduction & RQ's
 
-As college students, we are well aware of the phenomenon of rising tuition costs. In recent years, the cost of attending college has skyrocketed, leaving many to wonder how they will afford to finance their education. Many students have to take out federal loans to help cover the up-front costs.
+As college students, we are well aware of the phenomenon of rising tuition costs. In recent years, the cost of attending college has skyrocketed, leaving many to wonder how they will afford to finance their education. 
 
 ```{r}
 tuition_cost <- read_excel("FP3/college_cost_over_time.xls", sheet = "Sheet1")
-head(tuition_cost)
+#head(tuition_cost)
 
 tuition_cost %>% 
   ggplot(aes(x = Year, y = Amount, color = Length)) +
@@ -39,26 +39,23 @@ tuition_cost %>%
   labs(title = "Average undergraduate cost of fees, room, and board rates in current USD", x = "", y = "")
 ```
 
-This leads us to wonder: how are federal loans distributed, and who has to take out the most loans for college? Which majors tend to borrow the most, and do they provide a good return on investment? Our research questions are stated below: 
+Many students end up having to take out federal loans to help cover the up-front costs. This leads us to wonder: how are federal loans distributed, and who has to take out the most loans for college? Which majors tend to borrow the most, and do they provide a good return on investment? Our research questions are stated below: 
 
-1.
 
   - Focusing on federal aid & loans, are there any **gender and race biases in how much aid is given** (or based on EFC)?
 
+  - What majors provide the **best ROI** in terms of salary post grad?
+  
+  - What majors provide the **biggest increase in financial well-being** (based on pre-college family income or EFC)?
+  
   - At what point does your **family income** (and/or EFC) **result in  zero federal aid/loans**?
-  
-2.
-
-  - What majors provide the **best ROI** of expected family contributions (EFC) in terms of salary post grad?
-  
-  - What majors provide the **biggest increase in financial well-being** (based on family income or EFC)?
 
 
 
 
 # Data
 
-Our data files come from the National Center for Education Statistics, which can be found here: [NCES DataLab](https://nces.ed.gov/datalab/). The two studies we have used separately so far in our work are the "Baccalaureate & Beyond (08-18)" study and the "National Post-secondary Student Aid Study, Undergraduate (2016)". In general, both studies compile various data on undergraduate students like major, financial aid, student loan amount, and much more. The B&B study also include data *beyond* the undergraduate level and tracks data like future salary.
+Our data files come from the National Center for Education Statistics, which can be found here: [NCES DataLab](https://nces.ed.gov/datalab/). The two studies we used separately so far in our work are the "Baccalaureate & Beyond (08-18)" study and the "National Post-secondary Student Aid Study, Undergraduate (2016)". In general, both studies compile various data on undergraduate students like demographics, field of study, financial aid received, student loan amount, and much more. The B&B study also include data *beyond* the undergraduate level and tracks data like future salary post graduation.
 
 We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
 
@@ -71,7 +68,7 @@ exploregender <- read_csv("10_efc_borrow_gender.csv")
 
 
 
-# Work, Plots, and Analyses
+# Plots, and Analyses
 
 ## Amount Borrowed for College in 2016 by race and gender
 
