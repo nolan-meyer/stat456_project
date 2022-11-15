@@ -190,7 +190,11 @@ cat(tabl)
 
 ## Future Salary
 
-### Salary in 2012 based on field of study in 2008, with confidence intervals
+We also wanted to explore which majors were most worthwhile to go to college for financially, and provided the best salaries in the future. Below we did both both a short term and long term analysis of salaries by major.
+
+### Salary in 2012 based on field of study in 2008
+
+Here we looked at the short-term value of college majors, and the average salary attained four years after graduation. Because this time frame is more recent after college, we included the most specific field of study descriptions for more clarity. 
 
 ```{r}
 data <- readxl::read_xlsx("11_8_data.xlsx", sheet = "salary")
@@ -202,10 +206,15 @@ data %>%
   geom_errorbar(aes(x = `Field of study: undergraduate (23 categories)`, ymin=`CI_low`, ymax=`CI_high`), width=0.4, colour="orange", alpha=0.9, size=1) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 52, vjust = 1, hjust=1, size = 5.5, color = "black")) +
-  labs(x = "Field of Study, 2008", y = "Salary, 2012")
+  labs(x = "Undergraduate Field of Study, 2008", y = "Salary, 2012")
 ```
 
+We see that the top three majors from 2008 in terms of salary in 2012 are: engineering, computer science, and manufacturing/construction. 
+
+
 ### Salary in 2018 based on field of study in 2008
+
+Here we looked at the longer-term value of college majors, and the average salary attained ten years after graduation. Because this time frame is a bit longer after college, we grouped the majors into more general fields of study for easier analysis. 
 
 ```{r}
 salary_by_major_2018 <- read_excel("FP3/salary_by_major_0818.xlsx")
@@ -213,13 +222,15 @@ salary_by_major_2018 <- read_excel("FP3/salary_by_major_0818.xlsx")
 
 salary_by_major_2018 %>% 
   filter(`Field of study: undergraduate (10 categories)` != "Undeclared") %>% 
-  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Current job, as of B&B:08/18 interview: Annualized salary`, .desc = T), y = `Current job, as of B&B:08/18 interview: Annualized salary`)) +
-  geom_bar(stat="identity", fill = "#69b3a2") +
+  ggplot() +
+  geom_bar(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Current job, as of B&B:08/18 interview: Annualized salary`, .desc = T), y = `Current job, as of B&B:08/18 interview: Annualized salary`), stat="identity", fill = "#69b3a2", alpha = 0.7) +
+  geom_errorbar(aes(x = `Field of study: undergraduate (10 categories)`, ymin=`CI_low`, ymax=`CI_high`), width=0.4, colour="orange", alpha=0.9, size=1) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1, size = 7, color = "black")) +
-  labs(x = "Undergraduate Field of Study, 2008", y = "Current Job Salary in 2018", title = "")
+  labs(x = "Undergraduate Field of Study, 2008", y = "Current Salary in 2018", title = "")
 ```
 
+We see that the top two majors from 2008 in terms of salary in 2018 are engineering and computer science, followed by business and physical sciences in third and fourth respectively.
 
 
 # Rest of Semester Plan
