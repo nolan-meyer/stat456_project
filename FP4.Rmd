@@ -266,9 +266,8 @@ Anton:
 
 - Created the main plot focusing on amount borrowed vs EFC and the elasticity measures
 
-- Pulled and cleaned data relating to that plot, and also provided much of the analysis
+- Pulled and cleaned data relating to that plot, and also provided its analysis
 
-- Build the slide deck for the presentation
 
 Nolan:
 
@@ -277,5 +276,7 @@ Nolan:
 - Added introductory information and analyses to all other plots and general narrative
 
 - Built the FP4 file and required content
+
+- Built the slide deck for the presentation
 
 
