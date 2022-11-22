@@ -237,9 +237,9 @@ We see that the top two majors from 2008 in terms of salary in 2018 are engineer
 
 - By Tue, Nov. 22 (before break):
 
-    - Incorporate feedback from intermediate presenation
+    - Incorporate feedback from intermediate presentation
     
-    - Aquire any last data sources we may want to add in our analyses
+    - Acquire any last data sources we may want to add in our analyses
     
     - Finalize plots that we plan on using for this final presentation
 
@@ -255,7 +255,7 @@ We see that the top two majors from 2008 in terms of salary in 2018 are engineer
     
     - All resources compiled in the GitHub repo in reproducible states.
     
-    - Be prepared for the final presenations (have practiced presenting, who's talking about what, etc.)
+    - Be prepared for the final presentations (have practiced presenting, who's talking about what, etc.)
 
 
 
