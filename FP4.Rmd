@@ -190,10 +190,32 @@ cat(tabl)
 
 ```{r}
 efcrank <- uplift[order(uplift$efc,decreasing=TRUE),]
-efcrank$efc_index <- 1:nrow(efcrank)
-salaryrank <- efcrank[order(efcrank$job_salary,decreasing=TRUE),]
-salaryrank$salary_index <- 1:nrow(salaryrank)
-salaryrank$change <- salaryrank$efc_index-salaryrank$salary_index
+efcrank$index <- 1:nrow(efcrank)
+efcrank$time <- 1
+salaryrank <- uplift[order(uplift$job_salary,decreasing=TRUE),]
+salaryrank$index <- 1:nrow(salaryrank)
+salaryrank$time <- 2
+```
+```{r}
+efc_sal <- rbind(efcrank,salaryrank)
+```
+
+```{r}
+ggplot(data = efc_sal, aes(x = time, y = index, group = field)) +
+  geom_line(aes(color = field, alpha = 1), size = 2) +
+  geom_point(aes(color = field, alpha = 1), size = 4) +
+  scale_y_reverse(breaks = 1:nrow(efc_sal))+
+  theme(legend.position = "none") +
+  geom_text_repel(aes(label=field),
+                  size=2.25,
+                  box.padding = 0.5,
+                  segment.size = 0.25,
+                  color = "black")
+```
+
+```{r}
+salaryrank %>%
+  ggplot()
 ```
 
 
