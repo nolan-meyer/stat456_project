@@ -66,9 +66,10 @@ Our data files come from the National Center for Education Statistics, which can
 We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
 
 ```{r}
-data <- read_csv("11_8_data.csv")
+uplift <- read_csv("11_8_data_clean.csv")
 explorerace <- read_csv("10_efc_borrow_race.csv")
 exploregender <- read_csv("10_efc_borrow_gender.csv")
+
 ```
 
 
@@ -184,6 +185,15 @@ Engineering and engineering technology |	-2.9719174 |	Females	|
 | General studies and other |	-5.8112563 |	Females	|
 "
 cat(tabl)
+```
+## Financial well-being
+
+```{r}
+efcrank <- uplift[order(uplift$efc,decreasing=TRUE),]
+efcrank$efc_index <- 1:nrow(efcrank)
+salaryrank <- efcrank[order(efcrank$job_salary,decreasing=TRUE),]
+salaryrank$salary_index <- 1:nrow(salaryrank)
+salaryrank$change <- salaryrank$efc_index-salaryrank$salary_index
 ```
 
 
