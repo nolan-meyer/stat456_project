@@ -66,7 +66,7 @@ Our data files come from the National Center for Education Statistics, which can
 We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
 
 ```{r}
-uplift <- read_csv("11_8_data_clean.csv")
+uplift <- read_csv("statuschanges.csv")
 explorerace <- read_csv("10_efc_borrow_race.csv")
 exploregender <- read_csv("10_efc_borrow_gender.csv")
 
@@ -189,15 +189,23 @@ cat(tabl)
 ## Financial well-being
 
 ```{r}
-efcrank <- uplift[order(uplift$efc,decreasing=TRUE),]
-efcrank$index <- 1:nrow(efcrank)
-efcrank$time <- 1
-salaryrank <- uplift[order(uplift$job_salary,decreasing=TRUE),]
-salaryrank$index <- 1:nrow(salaryrank)
-salaryrank$time <- 2
-```
-```{r}
-efc_sal <- rbind(efcrank,salaryrank)
+prerank <- uplift[order(uplift$income_pre,decreasing=TRUE),]
+prerank$index <- 1:nrow(prerank)
+prerank$time <- 1
+
+#efcrank <- uplift[order(uplift$efc,decreasing=TRUE),]
+#efcrank$index <- 1:nrow(efcrank)
+#efcrank$time <- 1
+
+salaryrank2012 <- uplift[order(uplift$salary_2012_primary,decreasing=TRUE),]
+salaryrank2012$index <- 1:nrow(salaryrank2012)
+salaryrank2012$time <- 2
+
+salaryrank2017 <- uplift[order(uplift$income_2017_gross,decreasing=TRUE),]
+salaryrank2017$index <- 1:nrow(salaryrank2017)
+salaryrank2017$time <- 3
+
+efc_sal <- rbind(prerank,salaryrank2012,salaryrank2017)
 ```
 
 ```{r}
