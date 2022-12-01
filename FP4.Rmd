@@ -69,7 +69,6 @@ We manually pulled and cleaned data sets relating to particular variables of int
 uplift <- read_csv("statuschanges.csv")
 explorerace <- read_csv("10_efc_borrow_race.csv")
 exploregender <- read_csv("10_efc_borrow_gender.csv")
-
 ```
 
 
@@ -96,6 +95,13 @@ Cum_amt_borrowed_2016 %>%
 This plot clearly shows that across the board, on average female students had to borrow more than male students. This could be partly due to the fact that female students represent a slight majority in college enrollment, which extends to private enrollment that is generally more expensive. Still, this plot shows a stark difference between the two genders in the amount borrowed for undergrad.
 
 From this data we also observe that those who identify as "Black or African American" have the highest average amount borrowed, followed by those who identify as "White". 
+
+
+
+
+## Amount Borrowed vs EFC Plots (ADD IN w/ SAME YEAR)
+
+
 
 
 
