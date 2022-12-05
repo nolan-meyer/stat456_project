@@ -99,10 +99,116 @@ From this data we also observe that those who identify as "Black or African Amer
 
 
 
-## Amount Borrowed vs EFC Plots (ADD IN w/ SAME YEAR)
+## Amount Borrowed & EFC Distributions by Major
+
+```{r}
+efc_and_borr <- readxl::read_xlsx("efc_and_amt_borrowed_over_time.xlsx")
+#head(efc_and_borr)
+efc_and_borr <- efc_and_borr %>% 
+  mutate(ratio = `Cumulative amount borrowed for undergrad`/`Expected Family Contribution`)
+```
+
+```{r}
+efc_and_borr %>% 
+  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Expected Family Contribution`, .desc = T), y = `Expected Family Contribution`, fill = factor(Year))) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 55, vjust = 1, hjust=1, size = 8, color = "black")) +
+  scale_fill_brewer(palette = "Purples") +
+  labs(x = "", y = "", fill = "", title = "Average Expected Family Contribution")
+```
+
+```{r}
+males <- efc_and_borr %>% 
+  filter(Gender == "Male")
+females <- efc_and_borr %>% 
+  filter(Gender == "Female")
+
+males_ave_efc <- mean(males$`Expected Family Contribution`)
+females_ave_efc <- mean(females$`Expected Family Contribution`)
+
+data_hline <- data.frame(Gender = unique(efc_and_borr$Gender),
+                         hline = c(males_ave_efc, females_ave_efc))
 
 
+plot <- efc_and_borr %>% 
+  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Expected Family Contribution`, .desc = T), y = `Expected Family Contribution`, fill = factor(Year))) +
+  geom_bar(stat="identity", position = position_dodge(), width = 0.8) +
+  facet_grid(. ~Gender) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 7, color = "black")) +
+  scale_fill_brewer(palette = "Purples") +
+  labs(x = "", y = "", fill = "", title = "Average Expected Family Contribution")
 
+plot +
+  geom_hline(data = data_hline,
+             aes(yintercept = hline),
+             color = "orange")
+```
+
+```{r}
+efc_and_borr %>% 
+  filter(`Field of study: undergraduate (10 categories)` != "General studies and other") %>% 
+  filter(`Field of study: undergraduate (10 categories)` != "Undecided") %>% 
+  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Cumulative amount borrowed for undergrad`, .desc = T), y = `Cumulative amount borrowed for undergrad`, fill = factor(Year))) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 55, vjust = 1, hjust=1, size = 8, color = "black")) +
+  scale_fill_brewer(palette = "Blues") +
+  labs(x = "", y = "", fill = "", title = "Average Amount Borrowed for Undergrad")
+```
+
+```{r} 
+efc_and_borr2 <- efc_and_borr %>% 
+  filter(`Field of study: undergraduate (10 categories)` != "General studies and other") %>% 
+  filter(`Field of study: undergraduate (10 categories)` != "Undecided")
+
+males2 <- efc_and_borr2 %>% 
+  filter(Gender == "Male")
+females2 <- efc_and_borr2 %>% 
+  filter(Gender == "Female")
+
+males_ave_borr <- mean(males2$`Cumulative amount borrowed for undergrad`)
+females_ave_borr <- mean(females2$`Cumulative amount borrowed for undergrad`)
+
+data_hline1 <- data.frame(Gender = unique(efc_and_borr$Gender),
+                         hline = c(males_ave_borr, females_ave_borr))
+
+
+plot <- efc_and_borr2 %>% 
+  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Cumulative amount borrowed for undergrad`, .desc = T), y = `Cumulative amount borrowed for undergrad`, fill = factor(Year))) +
+  geom_bar(stat="identity", position = position_dodge(), width = 0.8) +
+  facet_grid(. ~Gender) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 7, color = "black")) +
+  scale_fill_brewer(palette = "Blues") +
+  labs(x = "", y = "", fill = "", title = "Average Amount Borrowed for Undergrad")
+
+plot +
+  geom_hline(data = data_hline1,
+             aes(yintercept = hline),
+             color = "orange")
+```
+
+On average we see that:
+
+- **Males**: Higher EFC and lower amounts borrowed
+- **Females**: Lower EFC and higher amounts borrowed
+
+## Ratio of Amount Borrowed Over EFC
+
+```{r, fig.width=10, fig.height=7}
+efc_and_borr %>% 
+  ggplot(aes(x = Year, y = ratio, color = Gender)) +
+  geom_line() +
+  geom_point() +
+  theme_classic() +
+  scale_x_discrete(limits=2008:2016, labels=c(2008,"","","",2012,"","","",2016)) +
+  facet_wrap(nrow = 4, ncol = 3, facets = vars(`Field of study: undergraduate (10 categories)`)) +
+  labs(x = "", y = "Amount borrwed / EFC", color = "")
+```
+
+By 2016, in every major **males** have an equal or lower ratio of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. In essence, **females** on average are having to borrow more even when accounting for EFC.  A ratio of 1 means one borrowed the same amount of money as their expected family contribution.
 
 
 ## Differences in amount borrowed vs EFC by major and gender
