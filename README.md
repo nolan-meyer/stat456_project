@@ -1,7 +1,8 @@
 # Paying For College: Analyzing how Students Finance their Education
 ## Stat 456 (Projects in Data Science) - Nolan Meyer & Anton Korolev
 
-**Abstract:**
+**Abstract**
+
 With tuition costs continuing to rise and being current college students, we were interested in exploring questions around financing college and the economic benefits of earning certain degrees - questions we had to ask ourselves in our own college journey. 
 In this project we analyzed a few main research questions:
 
@@ -12,6 +13,9 @@ In this project we analyzed a few main research questions:
 Our two groups of interest that we analyzed included gender (m/f) and field of study.
 
 
+**Data**
+
+We compiled our datasets from the National Center for Education Statistics (NCES), which can be found here: https://nces.ed.gov/datalab/. Our focus centered on two studies: National Postsecondary Student Aid Study, Undergraduate (NPSAS:UG) (08, 12, 16), and Baccalaureate and Beyond (B&B) (08/18).
 
  
 
