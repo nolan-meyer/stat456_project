@@ -1,6 +1,6 @@
 ---
-title: "FP5 - Final Report"
-author: "Nolan & Anton"
+title: "Paying For College: Analyzing how Students Finance their Education"
+author: "Nolan Meyer & Anton Korolev"
 date: "12/14/2022"
 output: 
   html_document:
@@ -39,16 +39,15 @@ tuition_cost %>%
   labs(title = "Average undergraduate cost of fees, room, and board rates in current USD", x = "", y = "")
 ```
 
-Many students end up having to take out federal loans to help cover the up-front costs. This leads us to wonder: how are federal loans distributed, and who has to take out the most loans for college? Which majors tend to borrow the most, and do they provide a good return on investment? Our research questions are stated below: 
+Many students end up having to take out federal loans to help cover the up-front costs. This leads us to wonder: how are federal loans distributed, and who has to borrow the most for college? Which majors tend to borrow the most, and do they provide a good return on investment? Our research questions are stated below: 
 
-
-  - Focusing on federal aid & loans, are there any **gender and race biases in how much aid is given** (or based on EFC)?
-
-  - What majors provide the **best ROI** in terms of salary post grad?
+  - On average, who can afford to pay more (based on EFC), and who borrows more money to pay for their undergraduate studies? 
   
-  - What majors provide the **biggest increase in financial well-being** (based on pre-college family income or EFC)?
+  - Are there any differences in borrowing between these groups, for those with similar EFC's (Expected Family Contribution)? Is one group borrowing more/less than the other?
+
+  - What major(s) provide the biggest increase in financial well-being post graduation?
   
-  - At what point does your **family income** (and/or EFC) **result in  zero federal aid/loans**?
+Our two groups of interest that we analyzed across were gender (m/f) and field of study.
 
 
 **Note:** When considering loans, aid, and EFC in our research, our sample size is only undergraduate students who received federal loans to help finance college in the given years. This is only a subset of the total population that goes to college, and thus our findings should only be considered for this smaller subset of students reflected in our project.
@@ -59,9 +58,14 @@ Many students end up having to take out federal loans to help cover the up-front
 - **Expected Family Contribution (EFC):** According to the [Federal Student Aid website](https://fsapartners.ed.gov/sites/default/files/2021-08/2223EFCFormulaGuide.pdf), "The Expected Family Contribution (EFC) is a number that determines students’ eligibility for certain types of federal student aid. This number is calculated with the EFC formulas, which use the information that students provide on the Free Application for Federal Student Aid (FAFSA). Financial aid administrators (FAAs) subtract the EFC from students’ cost of attendance to determine their need for...federal student financial assistance offered by the U.S. Department of Education". Among other things, two main factors that go into an EFC calculation are the student's income and parent's income.
 
 
-# Data
+## Data
 
-Our data files come from the National Center for Education Statistics, which can be found here: [NCES DataLab](https://nces.ed.gov/datalab/). The two studies we used separately so far in our work are the "Baccalaureate & Beyond (08-18)" study and the "National Post-secondary Student Aid Study, Undergraduate (2016)". In general, both studies compile various data on undergraduate students like demographics, field of study, financial aid received, student loan amount, and much more. The B&B study also include data *beyond* the undergraduate level and tracks data like future salary post graduation.
+Our data files are compiled from the National Center for Education Statistics, which can be found here: [NCES DataLab](https://nces.ed.gov/datalab/). The two studies we used separately in our work are:
+
+- "Baccalaureate & Beyond (08-18)" 
+- "National Post-secondary Student Aid Study, Undergraduate (08, 12, 16)". 
+
+In general, both studies compile various data on undergraduate students like demographics, field of study, financial aid received, student loan amount, and much more. The B&B study also includes data *beyond* the undergraduate level and tracks data like future salary post graduation.
 
 We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
 
@@ -69,6 +73,10 @@ We manually pulled and cleaned data sets relating to particular variables of int
 uplift <- read_csv("Data/statuschanges.csv")
 explorerace <- read_csv("Data/10_efc_borrow_race.csv")
 exploregender <- read_csv("Data/10_efc_borrow_gender.csv")
+Cum_amt_borrowed_2016 <- read_excel("Data/amt_borrowed.xlsx", sheet = "Sheet1")
+efc_and_borr <- readxl::read_xlsx("Data/efc_and_amt_borrowed_over_time.xlsx")
+salary_data <- readxl::read_xlsx("Data/11_8_data.xlsx", sheet = "salary")
+salary_by_major_2018 <- read_excel("Data/salary_by_major_0818.xlsx")
 ```
 
 
@@ -81,8 +89,6 @@ exploregender <- read_csv("Data/10_efc_borrow_gender.csv")
 We began by first exploring who typically has to borrow the most to pay for college. To do this we looked at the total amount students borrowed for their undergraduate studies, and differentiated by race and gender.
 
 ```{r}
-Cum_amt_borrowed_2016 <- read_excel("Data/amt_borrowed.xlsx", sheet = "Sheet1")
-
 Cum_amt_borrowed_2016 %>% 
   ggplot(aes(x = fct_reorder(Race, Amount, .desc = T), y = Amount, fill = Gender)) +
   geom_bar(stat="identity", position = position_dodge()) +
@@ -102,7 +108,6 @@ From this data we also observe that those who identify as "Black or African Amer
 ## Amount Borrowed & EFC Distributions by Major
 
 ```{r}
-efc_and_borr <- readxl::read_xlsx("Data/efc_and_amt_borrowed_over_time.xlsx")
 #head(efc_and_borr)
 efc_and_borr <- efc_and_borr %>% 
   mutate(ratio = `Cumulative amount borrowed for undergrad`/`Expected Family Contribution`)
@@ -353,10 +358,7 @@ We also wanted to explore which majors were most worthwhile to go to college for
 Here we looked at the short-term value of college majors, and the average salary attained four years after graduation. Because this time frame is more recent after college, we included the most specific field of study descriptions for more clarity. 
 
 ```{r}
-data <- readxl::read_xlsx("Data/11_8_data.xlsx", sheet = "salary")
-conf_int <- readxl::read_xlsx("Data/11_8_data.xlsx", sheet = "confidence_intervals")
-
-data %>% 
+salary_data %>% 
   ggplot() +
   geom_bar(aes(x = fct_reorder(`Field of study: undergraduate (23 categories)`, `Primary job: Annualized salary, 2012`, .desc = T), y = `Primary job: Annualized salary, 2012`), stat = "identity", fill = "skyblue", alpha = 0.7) +
   geom_errorbar(aes(x = `Field of study: undergraduate (23 categories)`, ymin=`CI_low`, ymax=`CI_high`), width=0.4, colour="orange", alpha=0.9, size=1) +
@@ -373,7 +375,6 @@ We see that the top three majors from 2008 in terms of salary in 2012 are: engin
 Here we looked at the longer-term value of college majors, and the average salary attained ten years after graduation. Because this time frame is a bit longer after college, we grouped the majors into more general fields of study for easier analysis. 
 
 ```{r}
-salary_by_major_2018 <- read_excel("Data/salary_by_major_0818.xlsx")
 #head(salary_by_major_2018)
 
 salary_by_major_2018 %>% 
