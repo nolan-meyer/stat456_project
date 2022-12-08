@@ -10,7 +10,7 @@ In this project we analyzed a few main research questions:
 - Are there any differences in borrowing between these groups, for those with similar EFC's (Expected Family Contribution)? Is one group borrowing more/less than the other?
 - What major(s) provide the greatest increase in financial well-being after college?
 
-Our two groups of interest that we analyzed included gender (m/f) and field of study.
+Our two groups of interest that we analyzed across were gender (m/f) and field of study.
 
 
 **Data**
