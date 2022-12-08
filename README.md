@@ -20,6 +20,7 @@ We compiled our datasets from the National Center for Education Statistics (NCES
 - National Postsecondary Student Aid Study, Undergraduate (NPSAS:UG) (08, 12, 16)
 - Baccalaureate and Beyond (B&B) (08/18).
 
+These datasets which we pulled and cleaned from NCES are available in the repository as .csv or .xlsx files.
  
 
 
