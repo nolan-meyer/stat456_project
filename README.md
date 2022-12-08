@@ -23,8 +23,11 @@ We compiled our datasets from the National Center for Education Statistics (NCES
 These datasets which we pulled and cleaned from NCES are available in the repository as .csv or .xlsx files.
  
 
+**Report**
+
+Our full report and analysis can be found in the file labelled "final_report". Select the .rmd version for the code to reproduce our work, or the .html version for a reader-friendly display.
 
 
 
-
+----------------------------------------------------------------------------------------------------------------------------------
 Also, find our tutorial on animations (gganimate) here: https://nolan-meyer.github.io/stat456_project/ (files in the docs folder)
