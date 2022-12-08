@@ -8,7 +8,7 @@ In this project we analyzed a few main research questions:
 
 - On average, who can afford to pay more (based on EFC), and who borrows more money to pay for their undergraduate studies? 
 - Are there any differences in borrowing between these groups, for those with similar EFC's (Expected Family Contribution)? Is one group borrowing more/less than the other?
-- What major(s) provide the greatest increase in finacial well-being after college?
+- What major(s) provide the greatest increase in financial well-being after college?
 
 Our two groups of interest that we analyzed included gender (m/f) and field of study.
 
@@ -25,7 +25,7 @@ These datasets which we pulled and cleaned from NCES are available in the reposi
 
 **Report**
 
-Our full report and analysis can be found in the file labelled "final_report". Select the the .html version for a reader-friendly format or the .rmd version for the code to reproduce our work.
+Our full report and analysis can be found in the file labeled "final_report". Select the the .html version for a reader-friendly format or the .rmd version for the code to reproduce our work.
 
 
 
