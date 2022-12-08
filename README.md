@@ -15,7 +15,10 @@ Our two groups of interest that we analyzed included gender (m/f) and field of s
 
 **Data**
 
-We compiled our datasets from the National Center for Education Statistics (NCES), which can be found here: https://nces.ed.gov/datalab/. Our focus centered on two studies: National Postsecondary Student Aid Study, Undergraduate (NPSAS:UG) (08, 12, 16), and Baccalaureate and Beyond (B&B) (08/18).
+We compiled our datasets from the National Center for Education Statistics (NCES), which can be found here: https://nces.ed.gov/datalab/. Our focus centered on two studies: 
+
+- National Postsecondary Student Aid Study, Undergraduate (NPSAS:UG) (08, 12, 16)
+- Baccalaureate and Beyond (B&B) (08/18).
 
  
 
