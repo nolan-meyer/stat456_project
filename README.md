@@ -1,6 +1,7 @@
 # Paying For College: Analyzing how Students Finance their Education
 ## Stat 456 (Projects in Data Science) - Nolan Meyer & Anton Korolev
 
+**Abstract:**
 With tuition costs continuing to rise and being current college students, we were interested in exploring questions around financing college and the economic benefits of earning certain degrees - questions we had to ask ourselves in our own college journey. 
 In this project we analyzed a few main research questions:
 
