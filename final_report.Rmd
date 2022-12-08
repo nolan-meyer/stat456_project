@@ -1,7 +1,7 @@
 ---
 title: "Paying For College: Analyzing how Students Finance their Education"
 author: "Nolan Meyer & Anton Korolev"
-date: "12/14/2022"
+date: "12/15/2022"
 output: 
   html_document:
     toc: true
@@ -65,9 +65,9 @@ Our data files are compiled from the National Center for Education Statistics, w
 - "Baccalaureate & Beyond (08-18)" 
 - "National Post-secondary Student Aid Study, Undergraduate (08, 12, 16)". 
 
-In general, both studies compile various data on undergraduate students like demographics, field of study, financial aid received, student loan amount, and much more. The B&B study also includes data *beyond* the undergraduate level and tracks data like future salary post graduation.
+In general, both studies compile various data on undergraduate students like demographics, undergraduate field of study, financial aid received, cumulative amount borrowed, student loan amount, and much more. The B&B study also includes data *beyond* the undergraduate level and tracks data like future salary post graduation.
 
-We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
+We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. This was done using the [NCES DataLab](https://nces.ed.gov/datalab/). Here you can select a study and analysis type (averages/medians/percents), and then select variables of interest and filters to generate a data table. We then downloaded this data as a .csv or .xlsx and cleaned it, leaving just the raw data for us to analyze. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
 
 ```{r}
 uplift <- read_csv("Data/statuschanges.csv")
@@ -82,7 +82,7 @@ salary_by_major_2018 <- read_excel("Data/salary_by_major_0818.xlsx")
 
 
 
-# Plots and Analyses
+# Analyses
 
 ## Cumulative amount borrowed for college by race and gender
 
@@ -388,4 +388,13 @@ salary_by_major_2018 %>%
 ```
 
 We see that the top two majors from 2008 in terms of salary in 2018 are engineering and computer science, followed by business and physical sciences in third and fourth respectively.
+
+
+
+# Conclusion
+
+## Summary
+
+## Limitations
+
 
