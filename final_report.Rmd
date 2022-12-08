@@ -28,7 +28,7 @@ library(readxl)
 As college students, we are well aware of the phenomenon of rising tuition costs. In recent years, the cost of attending college has skyrocketed, leaving many to wonder how they will afford to finance their education. 
 
 ```{r}
-tuition_cost <- read_excel("FP3/college_cost_over_time.xls", sheet = "Sheet1")
+tuition_cost <- read_excel("Data/college_cost_over_time.xls", sheet = "Sheet1")
 #head(tuition_cost)
 
 tuition_cost %>% 
@@ -66,9 +66,9 @@ Our data files come from the National Center for Education Statistics, which can
 We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
 
 ```{r}
-uplift <- read_csv("statuschanges.csv")
-explorerace <- read_csv("10_efc_borrow_race.csv")
-exploregender <- read_csv("10_efc_borrow_gender.csv")
+uplift <- read_csv("Data/statuschanges.csv")
+explorerace <- read_csv("Data/10_efc_borrow_race.csv")
+exploregender <- read_csv("Data/10_efc_borrow_gender.csv")
 ```
 
 
@@ -81,7 +81,7 @@ exploregender <- read_csv("10_efc_borrow_gender.csv")
 We began by first exploring who typically has to borrow the most to pay for college. To do this we looked at the total amount students borrowed for their undergraduate studies, and differentiated by race and gender.
 
 ```{r}
-Cum_amt_borrowed_2016 <- read_excel("FP3/amt_borrowed.xlsx", sheet = "Sheet1")
+Cum_amt_borrowed_2016 <- read_excel("Data/amt_borrowed.xlsx", sheet = "Sheet1")
 
 Cum_amt_borrowed_2016 %>% 
   ggplot(aes(x = fct_reorder(Race, Amount, .desc = T), y = Amount, fill = Gender)) +
@@ -102,7 +102,7 @@ From this data we also observe that those who identify as "Black or African Amer
 ## Amount Borrowed & EFC Distributions by Major
 
 ```{r}
-efc_and_borr <- readxl::read_xlsx("efc_and_amt_borrowed_over_time.xlsx")
+efc_and_borr <- readxl::read_xlsx("Data/efc_and_amt_borrowed_over_time.xlsx")
 #head(efc_and_borr)
 efc_and_borr <- efc_and_borr %>% 
   mutate(ratio = `Cumulative amount borrowed for undergrad`/`Expected Family Contribution`)
@@ -353,8 +353,8 @@ We also wanted to explore which majors were most worthwhile to go to college for
 Here we looked at the short-term value of college majors, and the average salary attained four years after graduation. Because this time frame is more recent after college, we included the most specific field of study descriptions for more clarity. 
 
 ```{r}
-data <- readxl::read_xlsx("11_8_data.xlsx", sheet = "salary")
-conf_int <- readxl::read_xlsx("11_8_data.xlsx", sheet = "confidence_intervals")
+data <- readxl::read_xlsx("Data/11_8_data.xlsx", sheet = "salary")
+conf_int <- readxl::read_xlsx("Data/11_8_data.xlsx", sheet = "confidence_intervals")
 
 data %>% 
   ggplot() +
@@ -373,7 +373,7 @@ We see that the top three majors from 2008 in terms of salary in 2012 are: engin
 Here we looked at the longer-term value of college majors, and the average salary attained ten years after graduation. Because this time frame is a bit longer after college, we grouped the majors into more general fields of study for easier analysis. 
 
 ```{r}
-salary_by_major_2018 <- read_excel("FP3/salary_by_major_0818.xlsx")
+salary_by_major_2018 <- read_excel("Data/salary_by_major_0818.xlsx")
 #head(salary_by_major_2018)
 
 salary_by_major_2018 %>% 
@@ -387,52 +387,4 @@ salary_by_major_2018 %>%
 ```
 
 We see that the top two majors from 2008 in terms of salary in 2018 are engineering and computer science, followed by business and physical sciences in third and fourth respectively.
-
-
-# Rest of Semester Plan
-
-- By Tue, Nov. 22 (before break):
-
-    - Incorporate feedback from intermediate presentation
-    
-    - Acquire any last data sources we may want to add in our analyses
-    
-    - Finalize plots that we plan on using for this final presentation
-
-- By Thur, Dec. 1 (~1 week before presentations):
-
-    - All plots have some level of analyses that relates to our main RQs
-    
-    - Have final structure & outline laid out so that we effectively tell a story.
-
-- By Thur, Dec. 8:
-
-    - Have fully polished final presentation ready to go.
-    
-    - All resources compiled in the GitHub repo in reproducible states.
-    
-    - Be prepared for the final presentations (have practiced presenting, who's talking about what, etc.)
-
-
-
-
-# Contributions
-
-Anton: 
-
-- Created the main plot focusing on amount borrowed vs EFC and the elasticity measures
-
-- Pulled and cleaned data relating to that plot, and also provided its analysis
-
-
-Nolan:
-
-- Created the other "supplemental" plots
-
-- Added introductory information and analyses to all other plots and general narrative
-
-- Built the FP4 file and required content
-
-- Built the slide deck for the presentation
-
 
