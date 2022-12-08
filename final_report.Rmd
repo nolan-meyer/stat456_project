@@ -77,6 +77,7 @@ Cum_amt_borrowed_2016 <- read_excel("Data/amt_borrowed.xlsx", sheet = "Sheet1")
 efc_and_borr <- readxl::read_xlsx("Data/efc_and_amt_borrowed_over_time.xlsx")
 salary_data <- readxl::read_xlsx("Data/11_8_data.xlsx", sheet = "salary")
 salary_by_major_2018 <- read_excel("Data/salary_by_major_0818.xlsx")
+statusdata <- read.csv("Data/mostvariablesvalues.csv")
 ```
 
 
@@ -221,30 +222,40 @@ By 2016, in every major **males** have an equal or lower ratio of amount borrowe
 Next, we decided to explore how EFC and the amount borrowed for college vary by major and gender. Our general assumption is that the more you are able to pay (higher EFC), the less you have to borrow, thus resulting in a negative relationship between the x & y variables. What we want to know is if certain genders borrow vastly different amounts *for the same field of study* with similar EFCs, or vice versa. 
 
 ```{r}
-male <- exploregender %>%
-  select(field,efc_m,borr_m) %>%
-  mutate(gender = "m")
-  colnames(male) <- c("field","efc","borr","gender")
-female <- exploregender %>%
-  select(field,efc_f,borr_f) %>%
-  mutate(gender = "f")
-  colnames(female) <- c("field","efc","borr","gender")
-final <- rbind(male,female)
-final$efc <- extract_numeric(final$efc)
+# male <- exploregender %>%
+#   select(field,efc_m,borr_m) %>%
+#   mutate(gender = "m")
+#   colnames(male) <- c("field","efc","borr","gender")
+# female <- exploregender %>%
+#   select(field,efc_f,borr_f) %>%
+#   mutate(gender = "f")
+#   colnames(female) <- c("field","efc","borr","gender")
+# final <- rbind(male,female)
+# final$efc <- extract_numeric(final$efc)
+# 
+# final %>% 
+#   filter(field != "Education") %>% 
+#   ggplot(aes(x=efc,y=borr,color=gender, group=field)) + 
+#     geom_point() +
+#     geom_text_repel(aes(label=field),
+#                   size=2.25,
+#                   box.padding = 0.5,
+#                   segment.size = 0.25,
+#                   color = "black") +
+#     geom_line(color="purple") +
+#     scale_color_manual(labels=c("Female", "Male"), values = c("red", "blue")) +
+#     labs(color="", x = "EFC", y = "Cumulative amount borrowed") +
+#     theme_classic()
 
-final %>% 
-  filter(field != "Education") %>% 
-  ggplot(aes(x=efc,y=borr,color=gender, group=field)) + 
-    geom_point() +
-    geom_text_repel(aes(label=field),
-                  size=2.25,
-                  box.padding = 0.5,
-                  segment.size = 0.25,
-                  color = "black") +
-    geom_line(color="purple") +
-    scale_color_manual(labels=c("Female", "Male"), values = c("red", "blue")) +
-    labs(color="", x = "EFC", y = "Cumulative amount borrowed") +
-    theme_classic()
+### MODIFY THIS CODE FOR STATUSDATA
+Cum_amt_borrowed_2016 %>% 
+  ggplot(aes(x = Race, y = Amount, fill = Gender)) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(x = "", y = "", fill = "", title = "Average amount borrowed for undergrad in 2016 (USD) by race and gender")
+
 ```
 
 There's a lot to unpack here, but lets start from the basics. We do see negative relationships as expected for these 8 fields of study, meaning the more you can afford to pay results in borrowing less for college. (We did exclude education from our analysis because it was the only field of study that violated this relationship.)
@@ -306,28 +317,84 @@ cat(tabl)
 
 ## Financial well-being
 
+# ```{r}
+# prerank <- uplift[order(uplift$income_pre,decreasing=TRUE),]
+# prerank$index <- 1:nrow(prerank)
+# prerank$time <- 2008
+# 
+# #efcrank <- uplift[order(uplift$efc,decreasing=TRUE),]
+# #efcrank$index <- 1:nrow(efcrank)
+# #efcrank$time <- 1
+# 
+# salaryrank2012 <- uplift[order(uplift$salary_2012_primary,decreasing=TRUE),]
+# salaryrank2012$index <- 1:nrow(salaryrank2012)
+# salaryrank2012$time <- 2012
+# 
+# salaryrank2017 <- uplift[order(uplift$income_2017_gross,decreasing=TRUE),]
+# salaryrank2017$index <- 1:nrow(salaryrank2017)
+# salaryrank2017$time <- 2017
+# 
+# efc_sal <- rbind(prerank,salaryrank2012,salaryrank2017)
+# ```
 ```{r}
-prerank <- uplift[order(uplift$income_pre,decreasing=TRUE),]
+prerank <- statusdata[order(statusdata$`Total.income..Parents.and.independent`,decreasing=TRUE),]
 prerank$index <- 1:nrow(prerank)
-prerank$time <- 2008
+prerank$time <- 2006
 
 #efcrank <- uplift[order(uplift$efc,decreasing=TRUE),]
 #efcrank$index <- 1:nrow(efcrank)
 #efcrank$time <- 1
 
-salaryrank2012 <- uplift[order(uplift$salary_2012_primary,decreasing=TRUE),]
+salaryrank2012 <- statusdata[order(statusdata$`Annualized.total.salary.for.all.jobs.in.2012`,decreasing=TRUE),]
 salaryrank2012$index <- 1:nrow(salaryrank2012)
 salaryrank2012$time <- 2012
 
-salaryrank2017 <- uplift[order(uplift$income_2017_gross,decreasing=TRUE),]
+salaryrank2017 <- statusdata[order(statusdata$`Gross.income.in.2017`,decreasing=TRUE),]
 salaryrank2017$index <- 1:nrow(salaryrank2017)
 salaryrank2017$time <- 2017
 
 efc_sal <- rbind(prerank,salaryrank2012,salaryrank2017)
 ```
+```{r}
+ggplot(data = efc_sal, aes(x = time, y = index, group = field_of_study)) +
+  geom_line(aes(color = field_of_study, alpha = 1), size = 2) +
+  geom_point(aes(color = field_of_study, alpha = 1), size = 4) +
+  scale_y_reverse(breaks = 1:nrow(efc_sal))+
+  theme_classic() +
+  labs(x = "Time", y = "Rank") +
+  theme(legend.position = "none") +
+  scale_x_discrete(limits=2008:2017, labels=c(2008,"","","",2012,"","","","",2017)) +
+  geom_text_repel(aes(label=field_of_study),
+                  size=2.25,
+                  box.padding = 0.5,
+                  segment.size = 0.25,
+                  color = "black") 
+```
+```{r}
+colnames(statusdata)
+```
 
 ```{r}
-ggplot(data = efc_sal, aes(x = time, y = index, group = field)) +
+prerank <- statusdata[order(statusdata$`Total.income..Parents.and.independent`,decreasing=TRUE),]
+prerank$index <- 1:nrow(prerank)
+prerank$time <- 2006
+
+#efcrank <- uplift[order(uplift$efc,decreasing=TRUE),]
+#efcrank$index <- 1:nrow(efcrank)
+#efcrank$time <- 1
+
+salaryrank2012 <- statusdata[order(statusdata$`Annualized.total.salary.for.all.jobs.in.2012`,decreasing=TRUE),]
+salaryrank2012$index <- 1:nrow(salaryrank2012)
+salaryrank2012$time <- 2012
+
+salaryrank2017 <- statusdata[order(statusdata$`Gross.income.in.2017`,decreasing=TRUE),]
+salaryrank2017$index <- 1:nrow(salaryrank2017)
+salaryrank2017$time <- 2017
+
+efc_sal <- rbind(prerank,salaryrank2012,salaryrank2017)
+```
+```{r}
+ggplot(data = statusdata, aes(x = time, y = index, group = field)) +
   geom_line(aes(color = field, alpha = 1), size = 2) +
   geom_point(aes(color = field, alpha = 1), size = 4) +
   scale_y_reverse(breaks = 1:nrow(efc_sal))+
@@ -340,11 +407,6 @@ ggplot(data = efc_sal, aes(x = time, y = index, group = field)) +
                   box.padding = 0.5,
                   segment.size = 0.25,
                   color = "black") 
-```
-
-```{r, eval=F}
-salaryrank %>%
-  ggplot()
 ```
 
 
