@@ -25,7 +25,7 @@ These datasets which we pulled and cleaned from NCES are available in the reposi
 
 **Report**
 
-Our full report and analysis can be found in the file labelled "final_report". Select the .rmd version for the code to reproduce our work, or the .html version for a reader-friendly display.
+Our full report and analysis can be found in the file labelled "final_report". Select the the .html version for a reader-friendly format or the .rmd version for the code to reproduce our work.
 
 
 
