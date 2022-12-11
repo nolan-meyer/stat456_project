@@ -373,36 +373,42 @@ ggplot(data = efc_sal, aes(x = time, y = index, group = field_of_study)) +
 ```{r}
 colnames(statusdata)
 ```
+[17] "Cumulative.amount.borrowed.for.education.as.of.2012"                                    [10] "Amount.owed.in.2009"                                                                    [16] "Cumulative.amount.borrowed.in.federal.and.private.student.loans"                        
+```{r}
+loansdata <- statusdata %>%
+  select(`Cumulative.amount.borrowed.for.education.as.of.2012`,`Amount.owed.in.2009`,`Cumulative.amount.borrowed.in.federal.and.private.student.loans`,`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,field_of_study)
+```
+
+
 
 ```{r}
-prerank <- statusdata[order(statusdata$`Total.income..Parents.and.independent`,decreasing=TRUE),]
-prerank$index <- 1:nrow(prerank)
-prerank$time <- 2006
+rank2008 <- loansdata[order(loansdata$`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,decreasing=TRUE),]
+rank2008$amountborrowed <-loansdata$`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`
+rank2008$index <- 1:nrow(rank2008)
+rank2008$time <- 2008
 
-#efcrank <- uplift[order(uplift$efc,decreasing=TRUE),]
-#efcrank$index <- 1:nrow(efcrank)
-#efcrank$time <- 1
+rank2012 <- loansdata[order(loansdata$`Cumulative.amount.borrowed.for.education.as.of.2012`,decreasing=TRUE),]
+rank2012$amountborrowed <-loansdata$`Cumulative.amount.borrowed.for.education.as.of.2012`
+rank2012$index <- 1:nrow(rank2012)
+rank2012$time <- 2012
 
-salaryrank2012 <- statusdata[order(statusdata$`Annualized.total.salary.for.all.jobs.in.2012`,decreasing=TRUE),]
-salaryrank2012$index <- 1:nrow(salaryrank2012)
-salaryrank2012$time <- 2012
+rank2019 <- loansdata[order(loansdata$`Cumulative.amount.borrowed.in.federal.and.private.student.loans`,decreasing=TRUE),]
+rank2019$amountborrowed <-loansdata$`Cumulative.amount.borrowed.in.federal.and.private.student.loans`
+rank2019$index <- 1:nrow(rank2019)
+rank2019$time <- 2019
 
-salaryrank2017 <- statusdata[order(statusdata$`Gross.income.in.2017`,decreasing=TRUE),]
-salaryrank2017$index <- 1:nrow(salaryrank2017)
-salaryrank2017$time <- 2017
-
-efc_sal <- rbind(prerank,salaryrank2012,salaryrank2017)
+loanscumulative <- rbind(rank2008,rank2012,rank2019)
 ```
 ```{r}
-ggplot(data = statusdata, aes(x = time, y = index, group = field)) +
-  geom_line(aes(color = field, alpha = 1), size = 2) +
-  geom_point(aes(color = field, alpha = 1), size = 4) +
-  scale_y_reverse(breaks = 1:nrow(efc_sal))+
+ggplot(data = loanscumulative, aes(x = time, y = amountborrowed, group = field_of_study)) +
+  geom_line(aes(color = field_of_study, alpha = 1), size = 2) +
+  geom_point(aes(color = field_of_study, alpha = 1), size = 4) +
+  # scale_y_reverse(breaks = 1:nrow(loanscumulative))+
   theme_classic() +
-  labs(x = "Time", y = "Rank") +
+  labs(x = "Time", y = "Cumulative Amount Borrowed") +
   theme(legend.position = "none") +
-  scale_x_discrete(limits=2008:2017, labels=c(2008,"","","",2012,"","","","",2017)) +
-  geom_text_repel(aes(label=field),
+  scale_x_discrete(limits=2008:2019, labels=c(2008,"","","",2012,"","","","","","",2019)) +
+  geom_text_repel(aes(label=field_of_study),
                   size=2.25,
                   box.padding = 0.5,
                   segment.size = 0.25,
