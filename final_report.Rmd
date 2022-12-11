@@ -77,7 +77,7 @@ Cum_amt_borrowed_2016 <- read_excel("Data/amt_borrowed.xlsx", sheet = "Sheet1")
 efc_and_borr <- readxl::read_xlsx("Data/efc_and_amt_borrowed_over_time.xlsx")
 salary_data <- readxl::read_xlsx("Data/11_8_data.xlsx", sheet = "salary")
 salary_by_major_2018 <- read_excel("Data/salary_by_major_0818.xlsx")
-statusdata <- read.csv("Data/mostvariablesvalues.csv")
+statusdata <- read.csv("Data/morevarsupd.csv")
 ```
 
 
