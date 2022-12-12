@@ -315,35 +315,10 @@ Engineering and engineering technology |	-2.9719174 |	Females	|
 cat(tabl)
 ```
 
-## Financial well-being
-
-# ```{r}
-# prerank <- uplift[order(uplift$income_pre,decreasing=TRUE),]
-# prerank$index <- 1:nrow(prerank)
-# prerank$time <- 2008
-# 
-# #efcrank <- uplift[order(uplift$efc,decreasing=TRUE),]
-# #efcrank$index <- 1:nrow(efcrank)
-# #efcrank$time <- 1
-# 
-# salaryrank2012 <- uplift[order(uplift$salary_2012_primary,decreasing=TRUE),]
-# salaryrank2012$index <- 1:nrow(salaryrank2012)
-# salaryrank2012$time <- 2012
-# 
-# salaryrank2017 <- uplift[order(uplift$income_2017_gross,decreasing=TRUE),]
-# salaryrank2017$index <- 1:nrow(salaryrank2017)
-# salaryrank2017$time <- 2017
-# 
-# efc_sal <- rbind(prerank,salaryrank2012,salaryrank2017)
-# ```
 ```{r}
 prerank <- statusdata[order(statusdata$`Total.income..Parents.and.independent`,decreasing=TRUE),]
 prerank$index <- 1:nrow(prerank)
 prerank$time <- 2006
-
-#efcrank <- uplift[order(uplift$efc,decreasing=TRUE),]
-#efcrank$index <- 1:nrow(efcrank)
-#efcrank$time <- 1
 
 salaryrank2012 <- statusdata[order(statusdata$`Annualized.total.salary.for.all.jobs.in.2012`,decreasing=TRUE),]
 salaryrank2012$index <- 1:nrow(salaryrank2012)
@@ -373,13 +348,10 @@ ggplot(data = efc_sal, aes(x = time, y = index, group = field_of_study)) +
 ```{r}
 colnames(statusdata)
 ```
-[17] "Cumulative.amount.borrowed.for.education.as.of.2012"                                    [10] "Amount.owed.in.2009"                                                                    [16] "Cumulative.amount.borrowed.in.federal.and.private.student.loans"                        
 ```{r}
 loansdata <- statusdata %>%
   select(`Cumulative.amount.borrowed.for.education.as.of.2012`,`Amount.owed.in.2009`,`Cumulative.amount.borrowed.in.federal.and.private.student.loans`,`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,field_of_study)
 ```
-
-
 
 ```{r}
 rank2008 <- loansdata[order(loansdata$`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,decreasing=TRUE),]
