@@ -42,9 +42,9 @@ cpi <- cpidata %>%
   select(-REC,-EDUCATION)%>%
   pivot_longer(cols=c("TUITION","ALL_ITEMS","ENERGY","HOUSING","MEDICAL",  "FOOD_BEV","TRANSPORT","APPAREL"),names_to='cpi_type',values_to = "cpi_value")
 cpi$date <- as.Date(cpi$date,"%m/%d/%Y")
-```
 
-```{r}
+
+
 cpigraph <- cpi %>% 
   ggplot(aes(x = date, y = cpi_value, group = cpi_type, color = cpi_type)) +
   geom_line() +
@@ -56,6 +56,7 @@ cpigraph <- cpi %>%
 animate(cpigraph, width = 700, height = 425, fps = 15, duration = 35, rewind = FALSE, start_pause = 25, end_pause = 250)
 ```
 
+The average cost of attending a 4-year university has climbed to over \$20,000 for public colleges, and near \$50,000 for private ones.
 
 ```{r}
 tuition_cost <- read_excel("Data/college_cost_over_time.xls", sheet = "Sheet1")
@@ -92,17 +93,6 @@ Our two groups of interest that we analyzed across were gender (m/f) and field o
 
 ## Data
 
-Our data files are compiled from the National Center for Education Statistics, which can be found here: [NCES DataLab](https://nces.ed.gov/datalab/). The two studies we used separately in our work are:
-
-- "Baccalaureate & Beyond" (2008-2018)
-- "National Post-secondary Student Aid Study, Undergraduate" ('08, '12, '16)
-
-In general, both studies compile various data on undergraduate students like demographics, undergraduate field of study, financial aid received, cumulative amount borrowed, student loan amount, and much more. The B&B study also includes data *beyond* the undergraduate level and tracks data like future salary post graduation.
-
-We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. This was done using the [NCES DataLab](https://nces.ed.gov/datalab/). Here you can select a study and analysis type (averages/medians/percents), and then select variables of interest and filters to generate a data table. We then downloaded this data as a .csv or .xlsx and cleaned it, leaving just the raw data for us to analyze. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
-
-**Note:** When considering loans, aid, and EFC in our research, our sample size only includes undergraduate students who applied for or received federal loans to help finance college in the given years. This is only a subset of the total population that goes to college, and does not include those students who did not fill out the FAFSA. Thus, our findings should only be considered for this smaller subset of students reflected in our project.
-
 ```{r}
 uplift <- read_csv("Data/statuschanges.csv")
 explorerace <- read_csv("Data/10_efc_borrow_race.csv")
@@ -114,12 +104,22 @@ salary_by_major_2018 <- read_excel("Data/salary_by_major_0818.xlsx")
 statusdata <- read.csv("Data/morevarsupd.csv")
 ```
 
+Our data files are compiled from the National Center for Education Statistics, which can be found here: [NCES DataLab](https://nces.ed.gov/datalab/). The two studies we used separately in our work are:
+
+- "Baccalaureate & Beyond" (2008-2018)
+- "National Post-secondary Student Aid Study, Undergraduate" ('08, '12, '16)
+
+In general, both studies compile various data on undergraduate students like demographics, undergraduate field of study, financial aid received, cumulative amount borrowed, student loan amount, and much more. The B&B study also includes data *beyond* the undergraduate level and tracks data like future salary post graduation.
+
+We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. This was done using the [NCES DataLab](https://nces.ed.gov/datalab/). Here you can select a study and analysis type (averages/medians/percents), and then select variables of interest and filters to generate a data table. We then downloaded this data as a .csv or .xlsx and cleaned it, leaving just the raw data for us to analyze. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
+
+**Note:** When considering loans, aid, and EFC in our research, our sample size only includes undergraduate students who applied for or received federal loans to help finance college in the given years. This is only a subset of the total population that goes to college, and does not include those students who did not fill out the FAFSA. Thus, our findings should only be considered for this smaller subset of students reflected in our project.
 
 
 
 # Analyses
 
-## Cumulative amount borrowed for college by race and gender
+## Cumulative amount borrowed for college
 
 We began by first exploring who typically has to borrow the most to pay for college. To do this we looked at the total amount students borrowed for their undergraduate studies, and differentiated by race and gender.
 
@@ -140,51 +140,7 @@ From this data we also observe that those who identify as "Black or African Amer
 
 
 
-## Amount Borrowed & EFC Distributions by Major
-
-```{r}
-#head(efc_and_borr)
-efc_and_borr <- efc_and_borr %>% 
-  mutate(ratio = `Cumulative amount borrowed for undergrad`/`Expected Family Contribution`)
-```
-
-```{r}
-efc_and_borr %>% 
-  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Expected Family Contribution`, .desc = T), y = `Expected Family Contribution`, fill = factor(Year))) +
-  geom_bar(stat="identity", position = position_dodge()) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 55, vjust = 1, hjust=1, size = 8, color = "black")) +
-  scale_fill_brewer(palette = "Purples") +
-  labs(x = "", y = "", fill = "", title = "Average Expected Family Contribution")
-```
-
-```{r}
-males <- efc_and_borr %>% 
-  filter(Gender == "Male")
-females <- efc_and_borr %>% 
-  filter(Gender == "Female")
-
-males_ave_efc <- mean(males$`Expected Family Contribution`)
-females_ave_efc <- mean(females$`Expected Family Contribution`)
-
-data_hline <- data.frame(Gender = unique(efc_and_borr$Gender),
-                         hline = c(males_ave_efc, females_ave_efc))
-
-
-plot <- efc_and_borr %>% 
-  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Expected Family Contribution`, .desc = T), y = `Expected Family Contribution`, fill = factor(Year))) +
-  geom_bar(stat="identity", position = position_dodge(), width = 0.8) +
-  facet_grid(. ~Gender) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 7, color = "black")) +
-  scale_fill_brewer(palette = "Purples") +
-  labs(x = "", y = "", fill = "", title = "Average Expected Family Contribution")
-
-plot +
-  geom_hline(data = data_hline,
-             aes(yintercept = hline),
-             color = "orange")
-```
+## Amount Borrowed & EFC Distributions
 
 ```{r}
 efc_and_borr %>% 
@@ -230,10 +186,57 @@ plot +
              color = "orange")
 ```
 
+
+```{r}
+#head(efc_and_borr)
+efc_and_borr <- efc_and_borr %>% 
+  mutate(ratio = `Cumulative amount borrowed for undergrad`/`Expected Family Contribution`)
+
+
+efc_and_borr %>% 
+  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Expected Family Contribution`, .desc = T), y = `Expected Family Contribution`, fill = factor(Year))) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 55, vjust = 1, hjust=1, size = 8, color = "black")) +
+  scale_fill_brewer(palette = "Purples") +
+  labs(x = "", y = "", fill = "", title = "Average Expected Family Contribution")
+```
+
+```{r}
+males <- efc_and_borr %>% 
+  filter(Gender == "Male")
+females <- efc_and_borr %>% 
+  filter(Gender == "Female")
+
+males_ave_efc <- mean(males$`Expected Family Contribution`)
+females_ave_efc <- mean(females$`Expected Family Contribution`)
+
+data_hline <- data.frame(Gender = unique(efc_and_borr$Gender),
+                         hline = c(males_ave_efc, females_ave_efc))
+
+
+plot <- efc_and_borr %>% 
+  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Expected Family Contribution`, .desc = T), y = `Expected Family Contribution`, fill = factor(Year))) +
+  geom_bar(stat="identity", position = position_dodge(), width = 0.8) +
+  facet_grid(. ~Gender) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 7, color = "black")) +
+  scale_fill_brewer(palette = "Purples") +
+  labs(x = "", y = "", fill = "", title = "Average Expected Family Contribution")
+
+plot +
+  geom_hline(data = data_hline,
+             aes(yintercept = hline),
+             color = "orange")
+```
+
+
 On average we see that:
 
 - **Males**: Higher EFC and lower amounts borrowed
 - **Females**: Lower EFC and higher amounts borrowed
+
+
 
 ## Ratio of Amount Borrowed Over EFC
 
@@ -251,9 +254,9 @@ efc_and_borr %>%
 By 2016, in every major **males** have an equal or lower ratio of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. In essence, **females** on average are having to borrow more even when accounting for EFC.  A ratio of 1 means one borrowed the same amount of money as their expected family contribution.
 
 
-## Differences in amount borrowed vs EFC by major and gender
+<!-- ## Differences in amount borrowed vs EFC by major and gender -->
 
-Next, we decided to explore how EFC and the amount borrowed for college vary by major and gender. Our general assumption is that the more you are able to pay (higher EFC), the less you have to borrow, thus resulting in a negative relationship between the x & y variables. What we want to know is if certain genders borrow vastly different amounts *for the same field of study* with similar EFCs, or vice versa. 
+<!-- Next, we decided to explore how EFC and the amount borrowed for college vary by major and gender. Our general assumption is that the more you are able to pay (higher EFC), the less you have to borrow, thus resulting in a negative relationship between the x & y variables. What we want to know is if certain genders borrow vastly different amounts *for the same field of study* with similar EFCs, or vice versa.  -->
 
 ```{r}
 male <- exploregender %>%
@@ -266,7 +269,9 @@ female <- exploregender %>%
    colnames(female) <- c("field","efc","borr","gender")
 final <- rbind(male,female)
 final$efc <- extract_numeric(final$efc)
+```
 
+```{r}
 # final %>% 
 #   filter(field != "Education") %>% 
 #   ggplot(aes(x=efc,y=borr,color=gender, group=field)) + 
@@ -282,38 +287,40 @@ final$efc <- extract_numeric(final$efc)
 #     theme_classic()
 
 ### MODIFY THIS CODE FOR STATUSDATA
-Cum_amt_borrowed_2016 %>% 
-  ggplot(aes(x = Race, y = Amount, fill = Gender)) +
-  geom_bar(stat="identity", position = position_dodge()) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
-  scale_fill_brewer(palette = "Paired") +
-  labs(x = "", y = "", fill = "", title = "Average amount borrowed for undergrad in 2016 (USD) by race and gender")
 
+# Cum_amt_borrowed_2016 %>% 
+#  ggplot(aes(x = Race, y = Amount, fill = Gender)) +
+#  geom_bar(stat="identity", position = position_dodge()) +
+#  theme_classic() +
+#  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
+#  scale_fill_brewer(palette = "Paired") +
+#  labs(x = "", y = "", fill = "", title = "Average amount borrowed for undergrad in 2016 (USD) by race and gender")
+
+#
 ```
 
-There's a lot to unpack here, but lets start from the basics. We do see negative relationships as expected for these 8 fields of study, meaning the more you can afford to pay results in borrowing less for college. (We did exclude education from our analysis because it was the only field of study that violated this relationship.)
+<!-- There's a lot to unpack here, but lets start from the basics. We do see negative relationships as expected for these 8 fields of study, meaning the more you can afford to pay results in borrowing less for college. (We did exclude education from our analysis because it was the only field of study that violated this relationship.) -->
 
-Next, we see two primary groups, the first being health care, humanities, social science, and physical sciences, and the other being engineering, business, computer science, and general studies. The first group has higher amounts borrowed on average but very negative slopes, and can be characterized as "inelastic". The second group has lower amounts borrowed on average but less negative slopes, and can be characterized as "elastic".
-
-
-If a segment is inelastic (|elasticity| < 1), it means the following:
-
-- 1. The gender that borrows less **borrows a lot less** even though it is **able to pay only a little bit more** based on EFC.  
-
-- 2. The gender that borrows less has less financial burden during college but has to pay more during studies (they finance less of their education)
+<!-- Next, we see two primary groups, the first being health care, humanities, social science, and physical sciences, and the other being engineering, business, computer science, and general studies. The first group has higher amounts borrowed on average but very negative slopes, and can be characterized as "inelastic". The second group has lower amounts borrowed on average but less negative slopes, and can be characterized as "elastic". -->
 
 
-If a segment is elastic (|elasticity| > 1), it means the following:
+<!-- If a segment is inelastic (|elasticity| < 1), it means the following: -->
 
-- 1. The gender that borrows less **only borrows a little less** even though it is **able to pay a lot more** based on EFC.
+<!-- - 1. The gender that borrows less **borrows a lot less** even though it is **able to pay only a little bit more** based on EFC.   -->
 
-- 2. The gender that borrows less has more financial burden leaving college but has to pay less during studies (they finance more of their education).
+<!-- - 2. The gender that borrows less has less financial burden during college but has to pay more during studies (they finance less of their education) -->
 
 
-This is also summarized in the table below, with the first four entries representing "group 1" and the last four entries representing "group 2".
+<!-- If a segment is elastic (|elasticity| > 1), it means the following: -->
 
-```{r}
+<!-- - 1. The gender that borrows less **only borrows a little less** even though it is **able to pay a lot more** based on EFC. -->
+
+<!-- - 2. The gender that borrows less has more financial burden leaving college but has to pay less during studies (they finance more of their education). -->
+
+
+<!-- This is also summarized in the table below, with the first four entries representing "group 1" and the last four entries representing "group 2". -->
+
+```{r, echo=FALSE, include=FALSE}
 wider <- final %>%
     pivot_wider(names_from=gender,values_from=c(efc,borr),values_fill=0,names_sort=TRUE)
 
@@ -333,7 +340,7 @@ tab<-wider1%>%
   select(field,elasticity,borr_more)
 ```
 
-```{r table2, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+```{r table2, echo=FALSE, message=FALSE, warnings=FALSE, results='asis', include=FALSE}
 tabl <- "
 | Field         | Elasticity    | Who borrows more  |
 |---------------|:--------------|:--------------------------|
@@ -349,6 +356,9 @@ Engineering and engineering technology |	-2.9719174 |	Females	|
 cat(tabl)
 ```
 
+
+## Financial Well-being
+
 ```{r}
 prerank <- statusdata[order(statusdata$`Total.income..Parents.and.independent`,decreasing=TRUE),]
 prerank$index <- 1:nrow(prerank)
@@ -363,8 +373,9 @@ salaryrank2017$index <- 1:nrow(salaryrank2017)
 salaryrank2017$time <- 2017
 
 efc_sal <- rbind(prerank,salaryrank2012,salaryrank2017)
-```
-```{r}
+
+
+
 ggplot(data = efc_sal, aes(x = time, y = index, group = field_of_study)) +
   geom_line(aes(color = field_of_study, alpha = 1), size = 2) +
   geom_point(aes(color = field_of_study, alpha = 1), size = 4) +
@@ -379,9 +390,7 @@ ggplot(data = efc_sal, aes(x = time, y = index, group = field_of_study)) +
                   segment.size = 0.25,
                   color = "black") 
 ```
-```{r}
-# colnames(statusdata)
-```
+
 ```{r}
 loansdata <- statusdata %>%
   select(`Cumulative.amount.borrowed.for.education.as.of.2012`,`Amount.owed.in.2009`,`Cumulative.amount.borrowed.in.federal.and.private.student.loans`,`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,field_of_study)
