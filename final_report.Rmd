@@ -28,9 +28,34 @@ library(directlabels)
 
 
 
-# Introduction & Research Questions
+# Introduction
 
-As college students, we are well aware of the phenomenon of rising tuition costs. In recent years, the cost of attending college has skyrocketed, leaving many to wonder how they will afford to finance their education. 
+As college students, we are well aware of the phenomenon of rising tuition costs. In recent years, the cost of attending college has skyrocketed at a rate quicker than inflation, outpacing most other CPI's (Consumer Price Indices) and leaving many to wonder how they will afford to finance their education. 
+
+
+```{r}
+cpidata <- read_csv("Data/cpi.csv")
+
+colnames(cpidata) <- c("date","TUITION","ALL_ITEMS","ENERGY","HOUSING","MEDICAL","FOOD_BEV","REC","TRANSPORT","EDUCATION","APPAREL")
+
+cpi <- cpidata %>%
+  select(-REC,-EDUCATION)%>%
+  pivot_longer(cols=c("TUITION","ALL_ITEMS","ENERGY","HOUSING","MEDICAL",  "FOOD_BEV","TRANSPORT","APPAREL"),names_to='cpi_type',values_to = "cpi_value")
+cpi$date <- as.Date(cpi$date,"%m/%d/%Y")
+```
+
+```{r}
+cpigraph <- cpi %>% 
+  ggplot(aes(x = date, y = cpi_value, group = cpi_type, color = cpi_type)) +
+  geom_line() +
+  labs(x = "Time", y = "CPI Value",title="Values of Major CPI Groups", subtitle = "Date: {frame_along}",caption="Data source: FRED, Federal Reserve Bank of St. Louis") +
+  theme_classic() +
+  theme(legend.position = "none") +
+  transition_reveal(date)+
+  geom_dl(aes(label = cpi_type,size=2), method = list(dl.trans(x = x + .2), "last.points"))
+animate(cpigraph, width = 700, height = 425, fps = 15, duration = 35, rewind = FALSE, start_pause = 25, end_pause = 250)
+```
+
 
 ```{r}
 tuition_cost <- read_excel("Data/college_cost_over_time.xls", sheet = "Sheet1")
@@ -44,56 +69,39 @@ tuition_cost %>%
   labs(title = "Average undergraduate cost of fees, room, and board rates in current USD", x = "", y = "")
 ```
 
-
-```{r}
-cpi <- cpidata %>%
-  select(-cpiREC,-cpiEDUC)%>%
-  pivot_longer(cols=c("cpiTUITION","cpiALLITEMS","cpiENERGY","cpiHOUSING","cpiMEDICAL",  "cpiFOODBEV","cpiTRANSP","cpiAPPAREL"),names_to='cpi_type',values_to = "cpi_value")
-cpi$date <- as.Date(cpi$date,"%m/%d/%Y")
-```
-```{r}
-cpigraph <- cpi %>% 
-  ggplot(aes(x = date, y = cpi_value, group = cpi_type, color = cpi_type)) +
-  geom_line() +
-  labs(x = "Time", y = "CPI Value",title="Values of Major CPI Groups", subtitle = "Date: {frame_along}",caption="Data source: FRED, Federal Reserve Bank of St. Louis") +
-  theme_classic() +
-  theme(legend.position = "none") +
-  transition_reveal(date)+
-  geom_dl(aes(label = cpi_type,size=2), method = list(dl.trans(x = x + .2), "last.points"))
-animate(cpigraph, width = 700, height = 425, fps = 15, duration = 40, rewind = FALSE, start_pause = 25, end_pause = 25)
-
-```
+Many students end up having to take out federal loans to help cover the up-front costs. This leads us to wonder: how are federal loans distributed, and who has to borrow the most for college? Which groups tend to borrow the most, and do they provide a good return on investment? Our research questions are stated below.
 
 
-Many students end up having to take out federal loans to help cover the up-front costs. This leads us to wonder: how are federal loans distributed, and who has to borrow the most for college? Which majors tend to borrow the most, and do they provide a good return on investment? Our research questions are stated below: 
+## Research Questions
 
-  - On average, who can afford to pay more (based on EFC), and who borrows more money to pay for their undergraduate studies? 
+Our two groups of interest that we analyzed across were gender (m/f) and field of study.
+
+  - On average, who can afford to pay more, and who borrows more to finance their undergraduate studies? (based on EFC) 
   
-  - Are there any differences in borrowing between these groups, for those with similar EFC's (Expected Family Contribution)? Is one group borrowing more/less than the other?
+  - Are there any differences in borrowing between these groups, for those with similar EFC's? Is one group borrowing more/less than the other?
 
   - What major(s) provide the biggest increase in financial well-being post graduation?
   
-Our two groups of interest that we analyzed across were gender (m/f) and field of study.
-
-
-**Note:** When considering loans, aid, and EFC in our research, our sample size is only undergraduate students who received federal loans to help finance college in the given years. This is only a subset of the total population that goes to college, and thus our findings should only be considered for this smaller subset of students reflected in our project.
-
 
 ## Definitions
 
-- **Expected Family Contribution (EFC):** According to the [Federal Student Aid website](https://fsapartners.ed.gov/sites/default/files/2021-08/2223EFCFormulaGuide.pdf), "The Expected Family Contribution (EFC) is a number that determines students’ eligibility for certain types of federal student aid. This number is calculated with the EFC formulas, which use the information that students provide on the Free Application for Federal Student Aid (FAFSA). Financial aid administrators (FAAs) subtract the EFC from students’ cost of attendance to determine their need for...federal student financial assistance offered by the U.S. Department of Education". Among other things, two main factors that go into an EFC calculation are the student's income and parent's income.
+- **Free Application for Federal Student Aid (FAFSA):** The [College Board](https://blog.collegeboard.org/what-is-the-fafsa) states that, "The Free Application for Federal Student Aid is a form completed by current and prospective college students in the United States to determine their eligibility for student financial aid. It is the form you need to fill out to get any financial aid from the federal government to help pay for college. Each year, over 13 million students who file the FAFSA get more than $120 billion in grants, work-study, and low-interest loans from the U.S. Department of Education."
+
+- **Expected Family Contribution (EFC):** According to the [Federal Student Aid website](https://fsapartners.ed.gov/sites/default/files/2021-08/2223EFCFormulaGuide.pdf), "The Expected Family Contribution (EFC) is a number that determines students’ eligibility for certain types of federal student aid. This number is calculated with the EFC formulas, which use the information that students provide on the FAFSA. Financial aid administrators (FAAs) subtract the EFC from students’ cost of attendance to determine their need for...federal student financial assistance offered by the U.S. Department of Education". Among other things, two main factors that go into an EFC calculation are the student's income and parent's income.
 
 
 ## Data
 
 Our data files are compiled from the National Center for Education Statistics, which can be found here: [NCES DataLab](https://nces.ed.gov/datalab/). The two studies we used separately in our work are:
 
-- "Baccalaureate & Beyond (08-18)" 
-- "National Post-secondary Student Aid Study, Undergraduate (08, 12, 16)". 
+- "Baccalaureate & Beyond" (2008-2018)
+- "National Post-secondary Student Aid Study, Undergraduate" ('08, '12, '16)
 
 In general, both studies compile various data on undergraduate students like demographics, undergraduate field of study, financial aid received, cumulative amount borrowed, student loan amount, and much more. The B&B study also includes data *beyond* the undergraduate level and tracks data like future salary post graduation.
 
 We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. This was done using the [NCES DataLab](https://nces.ed.gov/datalab/). Here you can select a study and analysis type (averages/medians/percents), and then select variables of interest and filters to generate a data table. We then downloaded this data as a .csv or .xlsx and cleaned it, leaving just the raw data for us to analyze. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
+
+**Note:** When considering loans, aid, and EFC in our research, our sample size only includes undergraduate students who applied for or received federal loans to help finance college in the given years. This is only a subset of the total population that goes to college, and does not include those students who did not fill out the FAFSA. Thus, our findings should only be considered for this smaller subset of students reflected in our project.
 
 ```{r}
 uplift <- read_csv("Data/statuschanges.csv")
@@ -104,7 +112,6 @@ efc_and_borr <- readxl::read_xlsx("Data/efc_and_amt_borrowed_over_time.xlsx")
 salary_data <- readxl::read_xlsx("Data/11_8_data.xlsx", sheet = "salary")
 salary_by_major_2018 <- read_excel("Data/salary_by_major_0818.xlsx")
 statusdata <- read.csv("Data/morevarsupd.csv")
-cpidata <- read_csv("Data/cpi.csv")
 ```
 
 
@@ -249,17 +256,17 @@ By 2016, in every major **males** have an equal or lower ratio of amount borrowe
 Next, we decided to explore how EFC and the amount borrowed for college vary by major and gender. Our general assumption is that the more you are able to pay (higher EFC), the less you have to borrow, thus resulting in a negative relationship between the x & y variables. What we want to know is if certain genders borrow vastly different amounts *for the same field of study* with similar EFCs, or vice versa. 
 
 ```{r}
-# male <- exploregender %>%
-#   select(field,efc_m,borr_m) %>%
-#   mutate(gender = "m")
-#   colnames(male) <- c("field","efc","borr","gender")
-# female <- exploregender %>%
-#   select(field,efc_f,borr_f) %>%
-#   mutate(gender = "f")
-#   colnames(female) <- c("field","efc","borr","gender")
-# final <- rbind(male,female)
-# final$efc <- extract_numeric(final$efc)
-# 
+male <- exploregender %>%
+   select(field,efc_m,borr_m) %>%
+   mutate(gender = "m")
+   colnames(male) <- c("field","efc","borr","gender")
+female <- exploregender %>%
+   select(field,efc_f,borr_f) %>%
+   mutate(gender = "f")
+   colnames(female) <- c("field","efc","borr","gender")
+final <- rbind(male,female)
+final$efc <- extract_numeric(final$efc)
+
 # final %>% 
 #   filter(field != "Education") %>% 
 #   ggplot(aes(x=efc,y=borr,color=gender, group=field)) + 
