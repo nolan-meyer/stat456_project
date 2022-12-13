@@ -119,11 +119,11 @@ We manually pulled and cleaned data sets relating to particular variables of int
 
 # Analyses
 
-## Cumulative amount borrowed for college
+<!-- ## Cumulative amount borrowed for college -->
 
-We began by first exploring who typically has to borrow the most to pay for college. To do this we looked at the total amount students borrowed for their undergraduate studies, and differentiated by race and gender.
+<!-- We began by first exploring who typically has to borrow the most to pay for college. To do this we looked at the total amount students borrowed for their undergraduate studies, and differentiated by race and gender. -->
 
-```{r}
+```{r, include=FALSE}
 Cum_amt_borrowed_2016 %>% 
   ggplot(aes(x = fct_reorder(Race, Amount, .desc = T), y = Amount, fill = Gender)) +
   geom_bar(stat="identity", position = position_dodge()) +
@@ -133,9 +133,9 @@ Cum_amt_borrowed_2016 %>%
   labs(x = "", y = "", fill = "", title = "Average cumulative amount borrowed for undergrad (2016, USD)")
 ```
 
-This plot clearly shows that across the board, on average female students had to borrow more than male students. This could be partly due to the fact that female students represent a slight majority in college enrollment, which extends to private enrollment that is generally more expensive. Still, this plot shows a stark difference between the two genders in the amount borrowed for undergrad.
+<!-- This plot clearly shows that across the board, on average female students had to borrow more than male students. This could be partly due to the fact that female students represent a slight majority in college enrollment, which extends to private enrollment that is generally more expensive. Still, this plot shows a stark difference between the two genders in the amount borrowed for undergrad. -->
 
-From this data we also observe that those who identify as "Black or African American" have the highest average amount borrowed, followed by those who identify as "White". 
+<!-- From this data we also observe that those who identify as "Black or African American" have the highest average amount borrowed, followed by those who identify as "White".  -->
 
 
 
