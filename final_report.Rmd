@@ -238,7 +238,7 @@ On average we see that:
 
 
 
-## Ratio of Amount Borrowed Over EFC
+## Ratio of Amount Borrowed / EFC
 
 ```{r, fig.width=10, fig.height=7}
 efc_and_borr %>% 
@@ -253,108 +253,6 @@ efc_and_borr %>%
 
 By 2016, in every major **males** have an equal or lower ratio of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. In essence, **females** on average are having to borrow more even when accounting for EFC.  A ratio of 1 means one borrowed the same amount of money as their expected family contribution.
 
-
-<!-- ## Differences in amount borrowed vs EFC by major and gender -->
-
-<!-- Next, we decided to explore how EFC and the amount borrowed for college vary by major and gender. Our general assumption is that the more you are able to pay (higher EFC), the less you have to borrow, thus resulting in a negative relationship between the x & y variables. What we want to know is if certain genders borrow vastly different amounts *for the same field of study* with similar EFCs, or vice versa.  -->
-
-```{r}
-male <- exploregender %>%
-   select(field,efc_m,borr_m) %>%
-   mutate(gender = "m")
-   colnames(male) <- c("field","efc","borr","gender")
-female <- exploregender %>%
-   select(field,efc_f,borr_f) %>%
-   mutate(gender = "f")
-   colnames(female) <- c("field","efc","borr","gender")
-final <- rbind(male,female)
-final$efc <- extract_numeric(final$efc)
-```
-
-```{r}
-# final %>% 
-#   filter(field != "Education") %>% 
-#   ggplot(aes(x=efc,y=borr,color=gender, group=field)) + 
-#     geom_point() +
-#     geom_text_repel(aes(label=field),
-#                   size=2.25,
-#                   box.padding = 0.5,
-#                   segment.size = 0.25,
-#                   color = "black") +
-#     geom_line(color="purple") +
-#     scale_color_manual(labels=c("Female", "Male"), values = c("red", "blue")) +
-#     labs(color="", x = "EFC", y = "Cumulative amount borrowed") +
-#     theme_classic()
-
-### MODIFY THIS CODE FOR STATUSDATA
-
-# Cum_amt_borrowed_2016 %>% 
-#  ggplot(aes(x = Race, y = Amount, fill = Gender)) +
-#  geom_bar(stat="identity", position = position_dodge()) +
-#  theme_classic() +
-#  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
-#  scale_fill_brewer(palette = "Paired") +
-#  labs(x = "", y = "", fill = "", title = "Average amount borrowed for undergrad in 2016 (USD) by race and gender")
-
-#
-```
-
-<!-- There's a lot to unpack here, but lets start from the basics. We do see negative relationships as expected for these 8 fields of study, meaning the more you can afford to pay results in borrowing less for college. (We did exclude education from our analysis because it was the only field of study that violated this relationship.) -->
-
-<!-- Next, we see two primary groups, the first being health care, humanities, social science, and physical sciences, and the other being engineering, business, computer science, and general studies. The first group has higher amounts borrowed on average but very negative slopes, and can be characterized as "inelastic". The second group has lower amounts borrowed on average but less negative slopes, and can be characterized as "elastic". -->
-
-
-<!-- If a segment is inelastic (|elasticity| < 1), it means the following: -->
-
-<!-- - 1. The gender that borrows less **borrows a lot less** even though it is **able to pay only a little bit more** based on EFC.   -->
-
-<!-- - 2. The gender that borrows less has less financial burden during college but has to pay more during studies (they finance less of their education) -->
-
-
-<!-- If a segment is elastic (|elasticity| > 1), it means the following: -->
-
-<!-- - 1. The gender that borrows less **only borrows a little less** even though it is **able to pay a lot more** based on EFC. -->
-
-<!-- - 2. The gender that borrows less has more financial burden leaving college but has to pay less during studies (they finance more of their education). -->
-
-
-<!-- This is also summarized in the table below, with the first four entries representing "group 1" and the last four entries representing "group 2". -->
-
-```{r, echo=FALSE, include=FALSE}
-wider <- final %>%
-    pivot_wider(names_from=gender,values_from=c(efc,borr),values_fill=0,names_sort=TRUE)
-
-wider <- wider %>%
-  mutate(change_efc = (pmax(efc_f,efc_m)-pmin(efc_f,efc_m))/pmin(efc_f,efc_m),change_borr = (pmax(borr_f,borr_m)-pmin(borr_f,borr_m))/pmin(borr_f,borr_m))%>%
-    mutate(elasticity = change_efc/change_borr)%>%
-  mutate(borr_more = case_when(borr_m>borr_f ~ 'm',
-  borr_m<borr_f ~ 'f'))
-
-wider1 <- wider %>%
-  mutate(mid_efc=(efc_f+efc_m)/2,mid_borr=(borr_f+borr_m)/2) %>% mutate(elasticity=((efc_f-efc_m)/(mid_efc))/((borr_f-borr_m)/(mid_borr)))%>%
-  mutate(borr_more = case_when(borr_m>borr_f ~ 'm',
-  borr_m<borr_f ~ 'f'))%>%
-  arrange(elasticity)
-
-tab<-wider1%>%
-  select(field,elasticity,borr_more)
-```
-
-```{r table2, echo=FALSE, message=FALSE, warnings=FALSE, results='asis', include=FALSE}
-tabl <- "
-| Field         | Elasticity    | Who borrows more  |
-|---------------|:--------------|:--------------------------|
-Social Sciences |	-0.3247039 |	Males	 |	
-Bio and phys science, sci tech, math, agriculture |	-0.3528085 |	Females	|
-Humanities |	-0.3702545 |	Males	|	
-Health care fields |	-0.3794884 |	Males		|
-Computer and information sciences	| -0.8496284 |	Females	|	
-Business |	-1.3969944 |	Females		|
-Engineering and engineering technology |	-2.9719174 |	Females	|	
-| General studies and other |	-5.8112563 |	Females	|
-"
-cat(tabl)
-```
 
 
 ## Financial Well-being
@@ -436,9 +334,9 @@ ggplot(data = loanscumulative, aes(x = time, y = amountborrowed, group = field_o
 
 We also wanted to explore which majors were most worthwhile to go to college for financially, and provided the best salaries in the future. Below we did both both a short term and long term analysis of salaries by major.
 
-### Salary in 2012 based on field of study in 2008
+### Short-term Salary 
 
-Here we looked at the short-term value of college majors, and the average salary attained four years after graduation. Because this time frame is more recent after college, we included the most specific field of study descriptions for more clarity. 
+Here we looked at the short-term value of college majors, and the average salary attained four years after graduation. Specifically, we analyzed an individual's yearly salary in 2012 based on their field of study in 2008. Because this time frame is more recent after college, we included the most specific field of study descriptions for more clarity. 
 
 ```{r}
 salary_data %>% 
@@ -453,9 +351,9 @@ salary_data %>%
 We see that the top three majors from 2008 in terms of salary in 2012 are: engineering, computer science, and manufacturing/construction. 
 
 
-### Salary in 2018 based on field of study in 2008
+### Long-term Salary 
 
-Here we looked at the longer-term value of college majors, and the average salary attained ten years after graduation. Because this time frame is a bit longer after college, we grouped the majors into more general fields of study for easier analysis. 
+Here we looked at the longer-term value of college majors, and the average salary attained ten years after graduation. Specifically, we analyzed an individual's yearly salary in 2018 based on their field of study in 2008. Because this time frame is a bit longer after college, we grouped the majors into more general fields of study for easier analysis. 
 
 ```{r}
 #head(salary_by_major_2018)
