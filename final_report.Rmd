@@ -142,6 +142,13 @@ Cum_amt_borrowed_2016 %>%
 
 ## Amount Borrowed & EFC Distributions
 
+We began by exploring our first research question: who typically can afford to pay more, and who has to borrow more to finance their undergraduate studies. To do this we looked at both the average amount students borrowed for their undergraduate studies, and also the student's average EFC. We included data from 2008, 2012, and 2016 to see how these values changed and if the results were consistent over time.
+
+Each of the following grouped bar plots have the following characteristics. 
+
+  - Each field of study (major) is its own group consisting of three data bars, namely one for each year ('08, '12, '16).
+  - Each year is represented by a color, with darker shades representing more recent data.
+
 ```{r}
 efc_and_borr %>% 
   filter(`Field of study: undergraduate (10 categories)` != "General studies and other") %>% 
