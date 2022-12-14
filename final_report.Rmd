@@ -161,7 +161,9 @@ efc_and_borr %>%
   labs(x = "", y = "", fill = "", title = "Average Amount Borrowed for Undergrad")
 ```
 
-Two things stand out from this bar plot. First, the average amount borrowed for undergrad has increased drastically from 2008 across the board. This coincides with our previous findings that tuition rates have been rising. The other thing that stands out is that borrowing does differ across fields of study. Some, like health care and social sciences, have students borrowing a bit more money to finance their education compared to other degrees.
+Two things stand out from this bar plot. First, the average amount borrowed for undergrad has increased drastically from 2008 across the board. This coincides with our previous findings that tuition rates have been rising. However, from 2012-2016 the average remained similar, potentially indicating increases in financial aid being given out or other external economic factors playing a role in keeping this value steady. 
+
+The other thing that stands out is that borrowing does differ across fields of study. Some, like health care and social sciences, have students borrowing a bit more money to finance their education. On the other end of the spectrum, students majoring in the physical sciences are borrowing less on average. This could be due to a few things, namely the demographic of students that these majors attract, and the quality & availability of some programs. For example, some majors may attract more males than females, who (as we will find out soon) may have different borrowing tendencies. Also, quality programs for a major like health care could be few and far between leading them to be more expensive and students borrowing more. Overall though, it appears that borrowing varies by field of study.
 
 
 ```{r} 
