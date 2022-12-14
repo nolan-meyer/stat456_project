@@ -227,6 +227,13 @@ efc_and_borr %>%
   labs(x = "", y = "", fill = "", title = "Average Expected Family Contribution")
 ```
 
+In a similar vain to borrowing amount, EFC does differ across fields of study. In particular students majoring in physical sciences/sci. tech./math/agriculture have higher EFCs on average. On the other hand, students majoring in the likes of computer science and health care fields have lower EFCs on average. Again, the demographic of students that these majors attract is likely the main contributing factor to these results. For example, majors like computer science and health care can often lead to lucrative careers and may attract students from poorer backgrounds who are looking to go into a field mainly for the financial benefits. Overall, it seems fair to say that **EFC varies by field of study** too.
+
+<br/><br/>
+
+Talk about next plot here...
+
+
 ```{r}
 males <- efc_and_borr %>% 
   filter(Gender == "Male")
