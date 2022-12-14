@@ -148,6 +148,10 @@ Each of the following grouped bar plots have the following characteristics.
 
   - Each field of study (major) is its own group consisting of three data bars, namely one for each year ('08, '12, '16).
   - Each year is represented by a color, with darker shades representing more recent data.
+  
+<br/>
+  
+Beginning with who tends has to borrow more, we analyzed the average amount borrowed for undergraduate by major for the selected time periods.
 
 ```{r}
 efc_and_borr %>% 
@@ -206,8 +210,7 @@ Considering the previous analysis, the main learning from this plot is that on a
 
 <br/><br/>
 
-EFC intro...
-
+To get at the other part of our first research question, we next analyzed who tends to be able to afford paying more for college, based on EFC. To reiterate, EFC is basically how much money a student & their family should be able to pay towards their education. We created very similar plots, looking at the average expected family contribution for each major first.
 
 ```{r}
 #head(efc_and_borr)
