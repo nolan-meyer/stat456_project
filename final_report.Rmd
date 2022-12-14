@@ -70,7 +70,7 @@ tuition_cost %>%
   labs(title = "Average undergraduate cost of fees, room, and board rates in current USD", x = "", y = "")
 ```
 
-Many students end up having to take out federal loans to help cover the up-front costs. This leads us to wonder: how are federal loans distributed, and who has to borrow the most for college? Which groups tend to borrow the most, and do they provide a good return on investment? Our research questions are stated below.
+Many students end up having to take out federal loans to help cover the up-front costs. This leads us to wonder: how are federal loans distributed, and who has to borrow the most for college? Which groups tend to borrow more, and which majors provide a good return on investment? Our research questions are stated below.
 
 
 ## Research Questions
@@ -160,6 +160,9 @@ efc_and_borr %>%
   scale_fill_brewer(palette = "Blues") +
   labs(x = "", y = "", fill = "", title = "Average Amount Borrowed for Undergrad")
 ```
+
+Two things stand out from this bar plot. First, the average amount borrowed for undergrad has increased drastically from 2008 across the board. This coincides with our previous findings that tuition rates have been rising. The other thing that stands out is that borrowing does differ across fields of study. Some, like health care and social sciences, have students borrowing a bit more money to finance their education compared to other degrees.
+
 
 ```{r} 
 efc_and_borr2 <- efc_and_borr %>% 
