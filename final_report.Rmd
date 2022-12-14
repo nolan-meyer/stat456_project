@@ -167,7 +167,7 @@ efc_and_borr %>%
 
 Two things stand out from this bar plot. First, the average amount borrowed for undergrad has increased drastically from 2008 across the board. This coincides with our previous findings that tuition rates have been rising. However, from 2012-2016 the average remained similar, potentially indicating increases in financial aid being given out or other external economic factors playing a role in keeping this value steady. 
 
-The other thing that stands out is that borrowing does differ across fields of study. Some, like health care and social sciences, have students borrowing a bit more money to finance their education. On the other end of the spectrum, students majoring in the physical sciences are borrowing less on average. This could be due to a few things, namely the demographic of students that these majors attract, and the quality & availability of some programs. For example, some majors may attract more males than females, who (as we will find out soon) may have different borrowing tendencies. Also, quality programs for a major like health care could be few and far between, leading them to be more expensive and students borrowing more. Overall though, it appears that borrowing varies by field of study.
+The other thing that stands out is that borrowing does differ across fields of study. Some, like health care and social sciences, have students borrowing a bit more money to finance their education. On the other end of the spectrum, students majoring in the physical sciences are borrowing less on average. This could be due to a few things, namely the demographic of students that these majors attract, and the quality & availability of some programs. For example, some majors may attract more males than females, who (as we will find out soon) may have different borrowing tendencies. Also, quality programs for a major like health care could be few and far between, leading them to be more expensive and students borrowing more. Overall though, it appears that **borrowing varies by field of study**.
 
 <br/><br/>
 
@@ -206,7 +206,7 @@ plot +
              color = "orange")
 ```
 
-Considering the previous analysis, the main learning from this plot is that on average, males tend to be borrowing less to finance their undergraduate studies. For almost all majors, in 2016 males borrowed less money compared to females of the same field of study. It is hard to say with confidence what exactly could be causing this, as there are so many influential factors, however one factor to be aware of is that females do tend to go to private colleges more than men, which in turn cost more, and could thus lead them to borrowing more for their undergraduate studies. In general though, we found it evident that females are borrowing more than males for college.
+Considering the previous analysis, the main learning from this plot is that on average, males tend to be borrowing less to finance their undergraduate studies. For almost all majors, in 2016 males borrowed less money compared to females of the same field of study. It is hard to say with confidence what exactly could be causing this, as there are so many influential factors, however one factor to be aware of is that females do tend to go to private colleges more than men, which in turn cost more, and could thus lead them to borrowing more for their undergraduate studies. In general though, we found it evident that **females are borrowing more than males on average for college**.
 
 <br/><br/>
 
@@ -278,7 +278,7 @@ efc_and_borr %>%
   labs(x = "", y = "Amount borrwed / EFC", color = "")
 ```
 
-What we find it that by 2016, in every major **males** have an **equal or lower ratio** of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. In essence, **females** on average are **borrowingw more** even when accounting for EFC.  
+What we find it that by 2016, in every major **males** have an **equal or lower ratio** of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. In essence, **females** on average are **borrowing more** even when accounting for EFC.  
 
 
 
