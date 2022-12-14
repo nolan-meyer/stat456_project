@@ -238,7 +238,7 @@ plot +
 ```
 
 
-On average we see that:
+In summary, on average we see that:
 
 - **Males**: Higher EFC and lower amounts borrowed
 - **Females**: Lower EFC and higher amounts borrowed
@@ -246,6 +246,8 @@ On average we see that:
 
 
 ## Ratio of Amount Borrowed / EFC
+
+The previous plots gave us a better understanding of the general trends of borrowing and EFC by gender and major. However, given the groups have varying EFC's, those plots can not yet answer the question: who is borrowing more even when they can afford to pay the same amount for college. We want to know if a gender or major tends to borrow more while **accounting for EFC**, and we do this by analyzing the **ratio** of amount borrowed / EFC across major and gender. This plot is shown below.
 
 ```{r, fig.width=10, fig.height=7}
 efc_and_borr %>% 
@@ -258,7 +260,7 @@ efc_and_borr %>%
   labs(x = "", y = "Amount borrwed / EFC", color = "")
 ```
 
-By 2016, in every major **males** have an equal or lower ratio of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. In essence, **females** on average are having to borrow more even when accounting for EFC.  A ratio of 1 means one borrowed the same amount of money as their expected family contribution.
+What we find it that by 2016, in every major **males** have an **equal or lower ratio** of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. In essence, **females** on average are **borrowingw more** even when accounting for EFC.  
 
 
 
