@@ -285,7 +285,7 @@ efc_and_borr %>%
   labs(x = "", y = "Amount borrwed / EFC", color = "")
 ```
 
-What we find it that by 2016, in every major **males** have an **equal or lower ratio** of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. In essence, **females** on average are **borrowing more** even when accounting for EFC.  
+What we find it that by 2016, in every major males have an equal or lower ratio of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. Put another way, **females on average are borrowing more even when accounting for EFC**.  
 
 
 
