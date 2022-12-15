@@ -231,8 +231,7 @@ In a similar vain to borrowing amount, EFC does differ across fields of study. I
 
 <br/><br/>
 
-Talk about next plot here...
-
+Lastly, we will analyze if gender has any affect on EFC, using the same data. We faceted the previous graph into the two gender categories coded in the data set, male and female, and also added an orange horizontal line indicating the average EFC across all majors for each gender.
 
 ```{r}
 males <- efc_and_borr %>% 
@@ -262,11 +261,22 @@ plot +
              color = "orange")
 ```
 
+By comparing the orange lines, on average males tend to have higher EFCs than females. This means that male students and their family are expected to be able to afford to pay for more of their undergraduate degree. This is the case for nearly every major (the caveat being engineering); in 2016 males had higher EFCs compared to females in the same field of study. It's very hard to pinpoint one single explanation for why we see this trend, but it is consistent across almost every major and must be pointed out. In summary, our main observation is that  **males have higher EFCs on average than females**.
 
-In summary, on average we see that:
+<br/>
 
-- **Males**: Higher EFC and lower amounts borrowed
-- **Females**: Lower EFC and higher amounts borrowed
+The biggest takeaways from these four previous plots are as follows. On average we see that:
+
+- **Males**: 
+  - Higher EFC 
+  - Lower amounts borrowed 
+  
+- **Females**: 
+  - Lower EFC 
+  - Higher amounts borrowed (possibly a result of being more likely to go to private schools)
+
+- **Amount borrowed**: Varies by major, possibly due to program characteristics (i.e. selective) and student demographics
+- **EFC**: Varies by major, likely due to student demographics
 
 
 
