@@ -77,9 +77,9 @@ Many students end up having to take out federal loans to help cover the up-front
 
 Our two groups of interest that we analyzed across were gender (m/f) and field of study.
 
-  - On average, who can afford to pay more, and who borrows more to finance their undergraduate studies? (based on EFC) 
+  - On average, who can afford to pay more, and who borrows more to finance their undergraduate studies?
   
-  - Are there any differences in borrowing between these groups, for those with similar EFC's? Is one group borrowing more/less than the other?
+  - Are there any differences in borrowing between these groups, for those with similar EFCs? Is one group borrowing more/less than the other?
 
   - What major(s) provide the biggest increase in financial well-being post graduation?
   
@@ -341,6 +341,12 @@ There are several exciting outtakes from this graph:
 
 
 
+### Debt Borrowing Trends by Academic Fields
+
+As seen earlier, some fields of study, on average, lead to a significant financial uplift, while others, on average, lead to the lower end of the distribution of wages.
+
+However, the burden of debt borrowed in a career in a given field of study may lead to a different financial status outcome than previously presented. The plot below examines changes in cumulative debt borrowed for education in the years 2008, 2012, and 2019.
+
 ```{r}
 loansdata <- statusdata %>%
   select(`Cumulative.amount.borrowed.for.education.as.of.2012`,`Amount.owed.in.2009`,`Cumulative.amount.borrowed.in.federal.and.private.student.loans`,`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,field_of_study)
@@ -380,6 +386,17 @@ ggplot(data = loanscumulative, aes(x = time, y = amountborrowed, group = field_o
                   segment.size = 0.25,
                   color = "black") 
 ```
+
+The graph findings can be summarized as follows:
+
+1. Healthcare fields accumulate most short- and long-term debt, as they often require more years of education than other fields. This debt burden arguably lowers the money healthcare field specialists have to spend.
+
+2. Students with Humanities, Education, and General Studies degrees hold ranks 2-4 in short- and long-term cumulative borrowing, possibly due to their lesser ability to afford the stages of their education upfront.
+
+3. Students with Bio and Phys sciences, sci tech, math and agriculture and Social Sciences do not seem to borrow new debt from 2012 to 2019. This could be explained by being able to afford the entire cost of education upfront or not pursuing further education through those years.
+
+4. Out of the cumulative debt borrowed by 2019, a large portion of the debt was borrowed by 2008 (during the undergraduate years), and most of the debt was borrowed within four years after receiving a bachelor's degree (likely during graduate school).
+
 
 
 
@@ -447,13 +464,14 @@ Our three research questions along with our main findings are:
 <br/>
 
   - What major(s) provide the biggest increase in financial well-being post graduation?
-    - Computer science and health care provided the greatest financial uplift for students.
+    - Computer science and health care provided the greatest financial uplift in terms of salary for students, while social sciences and humanities had the greatest decline.
+    - Those who majored in health care, humanities, and education accumulated the most debt (borrowed the most) overall.
     - STEM fields provided the best short and long-term salaries after graduation.
     
 
 ## Limitations
 
-While there are some valuable things we can learn and takeaway from this work, it would be naive to not mention some of the limitations of our analysis. First, we were only able to gather aggregate data from NCES. Obviously, individual student financial data is very sensitive and private information which we don't have access to, so we have to resort to the aggregate data we could pull from DataLab. This leads to limited  set of data points to analyze, which can lead to more variation in our conclusions. Second, as mentioned previously, this does not include all college students. In order to have financial information like EFC, the student had to have filled out the FAFSA and considered receiving federal aid to be included in this subset of data. Thus, those students that did not fill out the FAFSA are not present in this data. Finally, as it was apparent in some of our conclusions, there are so many external factors at play here that it can be difficult to pinpoint the causes of some of the trends we saw. We can only really hypothesize why we potentially saw the results that came from our analyses. Therefore, it is important to keep these limitations in mind when considering the trends and conclusions we presented, and remember that this is only one study on a subset of data.
+While there are some valuable things we can learn and takeaway from this work, it would be naive to not mention some of the limitations of our analysis. First, we were only able to gather aggregate data from NCES. Obviously, individual student financial data is very sensitive and private information which we don't have access to, so we had to resort to the aggregate data we could pull from the DataLab portal. This leads to limited  set of data points to analyze, which can lead to more variation in our conclusions. Second, as mentioned previously, this does not include all college students. In order to have financial information like EFC, the student had to have filled out the FAFSA and considered receiving federal aid to be included in this subset of data. Thus, those students that did not fill out the FAFSA are not present in this data. Finally, as it was apparent in some of our conclusions, there are so many external factors at play here that it can be difficult to pinpoint the causes of some of the trends we saw. We can only really hypothesize why we potentially saw the results that came from our analyses. Therefore, it is important to keep these limitations in mind when considering the trends and conclusions we presented, and remember that this is only one study on a subset of data.
 
 
 
