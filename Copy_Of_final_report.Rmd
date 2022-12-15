@@ -336,9 +336,9 @@ ggplot(data = efc_sal, aes(x = time, y = index, group = field_of_study)) +
 ```{r}
 loansdata <- statusdata %>%
   select(`Cumulative.amount.borrowed.for.education.as.of.2012`,`Amount.owed.in.2009`,`Cumulative.amount.borrowed.in.federal.and.private.student.loans`,`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,field_of_study)
-```
 
-```{r}
+
+
 rank2008 <- loansdata[order(loansdata$`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,decreasing=TRUE),]
 rank2008$amountborrowed <-loansdata$`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`
 rank2008$index <- 1:nrow(rank2008)
@@ -355,8 +355,9 @@ rank2019$index <- 1:nrow(rank2019)
 rank2019$time <- 2019
 
 loanscumulative <- rbind(rank2008,rank2012,rank2019)
-```
-```{r}
+
+
+
 ggplot(data = loanscumulative, aes(x = time, y = amountborrowed, group = field_of_study)) +
   geom_line(aes(color = field_of_study, alpha = 1), size = 2) +
   geom_point(aes(color = field_of_study, alpha = 1), size = 4) +
@@ -392,7 +393,7 @@ salary_data %>%
   labs(x = "Undergraduate Field of Study, 2008", y = "Salary, 2012")
 ```
 
-We see that the top three majors from 2008 in terms of salary in 2012 are: engineering, computer science, and manufacturing/construction. 
+We see that the top three majors from 2008 in terms of salary in 2012 are: engineering, computer science, and manufacturing/construction. Generalizing, STEM and trade fields provided the best ROI's in the short term after college.
 
 
 ### Long-term Salary 
@@ -412,8 +413,7 @@ salary_by_major_2018 %>%
   labs(x = "Undergraduate Field of Study, 2008", y = "Current Salary in 2018", title = "")
 ```
 
-We see that the top two majors from 2008 in terms of salary in 2018 are engineering and computer science, followed by business and physical sciences in third and fourth respectively.
-
+We see that the top two majors from 2008 in terms of salary in 2018 are engineering and computer science, followed by business and physical sciences in third and fourth respectively. STEM majors lead the way by far, with the top two fields of study earning nearly $100,000 on average in 2018. This suggests that one looking for a well paying career should consider majoring in one of these fields.
 
 
 # Conclusion
