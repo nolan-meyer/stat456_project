@@ -322,13 +322,17 @@ ggplot(data = efc_sal, aes(x = time, y = index, group = field_of_study)) +
                   color = "black") 
 ```
 
-The graph above supports our hypothesis.
-Y-axis values are ranked among fields of study of the following variables:
+The graph above supports our hypothesis. Y-axis values are ranked among fields of study of the following variables:
+
 1. in 2006, the fields were ranked by their average total income for independent students or parents of dependent students,
+
 2. in 2012, the fields were ranked by their annualized salary for all jobs,
+
 3. in 2017, the field was ranked by their average gross incomes in 2017.
+
 All three variables, in our opinion, are valid estimates of a student's well-being at the time of observation.
 There are several exciting outtakes from this graph:
+
 1. We see a significant drop in Social Sciences and Humanities students from the 2006 observation to 2012. This suggests that students are pursuing degrees that arguably promise few job opportunities to come from families of the highest level of well-being out of all fields.
 
 2. Long-term, we see that Computer and Information Sciences, Healthcare Fields, and Engineering and Engineering technologies provide the most significant uplift in financial well-being and tend to attract students from families with a lower level of financial well-being.
