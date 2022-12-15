@@ -457,7 +457,7 @@ Our three research questions along with our main findings are:
   
 <br/>  
   
-  - Are there any differences in borrowing between these groups, for those with similar EFC's? Is one group borrowing more/less than the other?
+  - Are there any differences in borrowing between these groups, for those with similar EFCs? Is one group borrowing more/less than the other?
     - When accounting for EFC, in 2016 females borrowed as much or more than males across all fields of study even while accounting for EFC.
     - Health care also had the highest ratio of amount borrowed / EFC.
 
@@ -465,7 +465,7 @@ Our three research questions along with our main findings are:
 
   - What major(s) provide the biggest increase in financial well-being post graduation?
     - Computer science and health care provided the greatest financial uplift in terms of salary for students, while social sciences and humanities had the greatest decline.
-    - Those who majored in health care, humanities, and education accumulated the most debt (borrowed the most) overall.
+    - Those who majored in health care, humanities, and education accumulated the most debt (i.e. borrowed the most) overall.
     - STEM fields provided the best short and long-term salaries after graduation.
     
 
