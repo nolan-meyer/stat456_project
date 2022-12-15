@@ -282,7 +282,7 @@ The biggest takeaways from these four previous plots are as follows. On average 
 
 ## Ratio of Amount Borrowed / EFC
 
-The previous plots gave us a better understanding of the general trends of borrowing and EFC by gender and major. However, given the groups have varying EFC's, those plots can not yet answer the question: who is borrowing more even when they can afford to pay the same amount for college. We want to know if a gender or major tends to borrow more while **accounting for EFC**, and we do this by analyzing the **ratio** of amount borrowed / EFC across major and gender. This plot is shown below.
+The previous plots gave us a better understanding of the general trends of borrowing and EFC by gender and major. However, given the groups have varying EFCs, those plots can not address our second question: are there differences in borrowing between these groups, for those with similar EFCs? We want to know if a gender or major tends to borrow more while **accounting for EFC**, and we do this by analyzing the **ratio** of amount borrowed / EFC across major and gender. This plot is shown below.
 
 ```{r, fig.width=10, fig.height=7}
 efc_and_borr %>% 
@@ -295,7 +295,7 @@ efc_and_borr %>%
   labs(x = "", y = "Amount borrwed / EFC", color = "")
 ```
 
-What we find it that by 2016, in every major males have an equal or lower ratio of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. Put another way, **females on average are borrowing more even when accounting for EFC**.  
+What we find it that by 2016, in every major males have an equal or lower ratio of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. Put another way, **females on average are borrowing more even when accounting for EFC**. While some of this could be due to personal choice -- that females may just prefer to borrow  more money to finance college and pay less out of pocket up front -- it seems quite unlikely that we would see such a strong, consistent trend due to personal choice. It seems more plausible that something could be occurring systematically to produce these results. By identifying this, we hope that individuals in this area of expertise can investigate this phenomenon further and uncover what is causing this stark difference. Again, our main finding here is that even when accounting for EFC, females are borrowing more to finance their undergraduate studies than males.
 
 
 
