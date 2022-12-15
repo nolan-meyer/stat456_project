@@ -119,26 +119,6 @@ We manually pulled and cleaned data sets relating to particular variables of int
 
 # Analyses
 
-<!-- ## Cumulative amount borrowed for college -->
-
-<!-- We began by first exploring who typically has to borrow the most to pay for college. To do this we looked at the total amount students borrowed for their undergraduate studies, and differentiated by race and gender. -->
-
-```{r, include=FALSE}
-Cum_amt_borrowed_2016 %>% 
-  ggplot(aes(x = fct_reorder(Race, Amount, .desc = T), y = Amount, fill = Gender)) +
-  geom_bar(stat="identity", position = position_dodge()) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
-  scale_fill_brewer(palette = "Paired") +
-  labs(x = "", y = "", fill = "", title = "Average cumulative amount borrowed for undergrad (2016, USD)")
-```
-
-<!-- This plot clearly shows that across the board, on average female students had to borrow more than male students. This could be partly due to the fact that female students represent a slight majority in college enrollment, which extends to private enrollment that is generally more expensive. Still, this plot shows a stark difference between the two genders in the amount borrowed for undergrad. -->
-
-<!-- From this data we also observe that those who identify as "Black or African American" have the highest average amount borrowed, followed by those who identify as "White".  -->
-
-
-
 
 ## Amount Borrowed & EFC Distributions
 
@@ -231,8 +211,7 @@ In a similar vain to borrowing amount, EFC does differ across fields of study. I
 
 <br/><br/>
 
-Talk about next plot here...
-
+Lastly, we will analyze if gender has any affect on EFC, using the same data. We faceted the previous graph into the two gender categories coded in the data set, male and female, and also added an orange horizontal line indicating the average EFC across all majors for each gender.
 
 ```{r}
 males <- efc_and_borr %>% 
@@ -262,17 +241,28 @@ plot +
              color = "orange")
 ```
 
+By comparing the orange lines, on average males tend to have higher EFCs than females. This means that male students and their family are expected to be able to afford to pay for more of their undergraduate degree. This is the case for nearly every major (the caveat being engineering); in 2016 males had higher EFCs compared to females in the same field of study. It's very hard to pinpoint one single explanation for why we see this trend, but it is consistent across almost every major and must be pointed out. In summary, our main observation is that  **males have higher EFCs on average than females**.
 
-In summary, on average we see that:
+<br/>
 
-- **Males**: Higher EFC and lower amounts borrowed
-- **Females**: Lower EFC and higher amounts borrowed
+The biggest takeaways from these four previous plots are as follows. On average we see that:
+
+- **Males**: 
+  - Higher EFC 
+  - Lower amounts borrowed 
+  
+- **Females**: 
+  - Lower EFC 
+  - Higher amounts borrowed (possibly a result of being more likely to go to private schools)
+
+- **Amount borrowed**: Varies by major, possibly due to program characteristics (i.e. selective) and student demographics
+- **EFC**: Varies by major, likely due to student demographics
 
 
 
 ## Ratio of Amount Borrowed / EFC
 
-The previous plots gave us a better understanding of the general trends of borrowing and EFC by gender and major. However, given the groups have varying EFC's, those plots can not yet answer the question: who is borrowing more even when they can afford to pay the same amount for college. We want to know if a gender or major tends to borrow more while **accounting for EFC**, and we do this by analyzing the **ratio** of amount borrowed / EFC across major and gender. This plot is shown below.
+The previous plots gave us a better understanding of the general trends of borrowing and EFC by gender and major. However, given the groups have varying EFCs, those plots can not address our second question: are there differences in borrowing between these groups, for those with similar EFCs? We want to know if a gender or major tends to borrow more while **accounting for EFC**, and we do this by analyzing the **ratio** of amount borrowed / EFC across major and gender. This plot is shown below.
 
 ```{r, fig.width=10, fig.height=7}
 efc_and_borr %>% 
@@ -285,11 +275,20 @@ efc_and_borr %>%
   labs(x = "", y = "Amount borrwed / EFC", color = "")
 ```
 
-What we find it that by 2016, in every major males have an equal or lower ratio of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. Put another way, **females on average are borrowing more even when accounting for EFC**.  
+What we find it that by 2016, in every major males have an equal or lower ratio of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. Put another way, **females on average are borrowing more even when accounting for EFC**. While some of this could be due to personal choice -- that females may just prefer to borrow  more money to finance college and pay less out of pocket up front -- it seems quite unlikely that we would see such a strong, consistent trend due to personal choice. It seems more plausible that something could be occurring systematically to produce these results. By identifying this, we hope that individuals in this area of expertise can investigate this phenomenon further and uncover what is causing this stark difference. Again, our main finding here is that even when accounting for EFC, females are borrowing more to finance their undergraduate studies than males.
 
 
 
 ## Financial Well-being
+
+As students go off to college and begin to choose their courses and consider what major they want to study, earning potential of their degree plays a significant role in their decision-making. Increasing the earning potential is among the most significant reasons people go to college. It allows them to choose a field they enjoy and make a good living.
+Understandably, due to the high cost of education, many students aim to pick a field that promises them the most lucrative career opportunities. Further visualizations investigate students' financial well-being in terms of income and cumulative debt to see whether family well-being before graduating affects career decision-making and borrowing tendencies.
+
+The data used in the visualizations aggregates survey responses from students who received a bachelor's degree between July 2007 and June 2008, responded to all interviews (2007-2008, 2009, 2012, 2018), and for whom an undergraduate transcript was collected. The sample includes approximately 11,500 graduates.
+
+### Income Effects of Academic Fields
+
+As mentioned earlier, anecdotally, many students pursue degrees that offer them the best career opportunities. We hypothesize that career choice is closely tied to the financial well-being of a student's family, where students from lower economic statuses pursue degrees that offer them the highest earnings. In contrast, those coming from wealthier families may have a greater ability to pursue a variety of majors, irrespective of their earning potential.
 
 ```{r}
 prerank <- statusdata[order(statusdata$`Total.income..Parents.and.independent`,decreasing=TRUE),]
@@ -323,12 +322,31 @@ ggplot(data = efc_sal, aes(x = time, y = index, group = field_of_study)) +
                   color = "black") 
 ```
 
+The graph above supports our hypothesis. Y-axis values are ranked among fields of study of the following variables:
+
+1. in 2006, the fields were ranked by their average total income for independent students or parents of dependent students,
+
+2. in 2012, the fields were ranked by their annualized salary for all jobs,
+
+3. in 2017, the field was ranked by their average gross incomes in 2017.
+
+All three variables, in our opinion, are valid estimates of a student's well-being at the time of observation.
+There are several exciting outtakes from this graph:
+
+1. We see a significant drop in Social Sciences and Humanities students from the 2006 observation to 2012. This suggests that students are pursuing degrees that arguably promise few job opportunities to come from families of the highest level of well-being out of all fields.
+
+2. Long-term, we see that Computer and Information Sciences, Healthcare Fields, and Engineering and Engineering technologies provide the most significant uplift in financial well-being and tend to attract students from families with a lower level of financial well-being.
+
+3. We do not see significant long-term changes in the ranks of the financial well-being of students pursuing Business, Education, and Bio and Phys sciences, sci-tech, math and agriculture.
+
+
+
 ```{r}
 loansdata <- statusdata %>%
   select(`Cumulative.amount.borrowed.for.education.as.of.2012`,`Amount.owed.in.2009`,`Cumulative.amount.borrowed.in.federal.and.private.student.loans`,`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,field_of_study)
-```
 
-```{r}
+
+
 rank2008 <- loansdata[order(loansdata$`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,decreasing=TRUE),]
 rank2008$amountborrowed <-loansdata$`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`
 rank2008$index <- 1:nrow(rank2008)
@@ -345,8 +363,9 @@ rank2019$index <- 1:nrow(rank2019)
 rank2019$time <- 2019
 
 loanscumulative <- rbind(rank2008,rank2012,rank2019)
-```
-```{r}
+
+
+
 ggplot(data = loanscumulative, aes(x = time, y = amountborrowed, group = field_of_study)) +
   geom_line(aes(color = field_of_study, alpha = 1), size = 2) +
   geom_point(aes(color = field_of_study, alpha = 1), size = 4) +
@@ -382,7 +401,7 @@ salary_data %>%
   labs(x = "Undergraduate Field of Study, 2008", y = "Salary, 2012")
 ```
 
-We see that the top three majors from 2008 in terms of salary in 2012 are: engineering, computer science, and manufacturing/construction. 
+We see that the top three majors from 2008 in terms of salary in 2012 are: engineering, computer science, and manufacturing/construction. Generalizing, STEM and trade fields provided the best ROI's in the short term after college.
 
 
 ### Long-term Salary 
@@ -402,14 +421,39 @@ salary_by_major_2018 %>%
   labs(x = "Undergraduate Field of Study, 2008", y = "Current Salary in 2018", title = "")
 ```
 
-We see that the top two majors from 2008 in terms of salary in 2018 are engineering and computer science, followed by business and physical sciences in third and fourth respectively.
-
+We see that the top two majors from 2008 in terms of salary in 2018 are engineering and computer science, followed by business and physical sciences in third and fourth respectively. STEM majors lead the way by far, with the top two fields of study earning nearly $100,000 on average in 2018. This suggests that one looking for a well paying career should consider majoring in one of these fields.
 
 
 # Conclusion
 
 ## Summary
 
+We were initially motivated by rising tuition costs and wanting to understand financial questions surrounding going to college. By identifying and understanding these trends, we hope to educate and provide useful analysis to students to better prepare them for financing college, and to those who work with federal and financial aid to help mitigate biases and inequalities that may exist in this space.
+
+Our three research questions along with our main findings are:
+
+  - On average, who can afford to pay more, and who borrows more to finance their undergraduate studies?
+    - On average, males tended to have higher EFCs and could afford to pay more for college.
+    - Those pursuing physical science degrees had higher EFCs on average, while those pursuing lucrative fields like computer science had the lowest EFCs.  
+    - On average, females tended to borrow more money for college, across almost every major.
+    - Those who pursued fields like health care often borrowed more money.
+  
+<br/>  
+  
+  - Are there any differences in borrowing between these groups, for those with similar EFC's? Is one group borrowing more/less than the other?
+    - When accounting for EFC, in 2016 females borrowed as much or more than males across all fields of study even while accounting for EFC.
+    - Health care also had the highest ratio of amount borrowed / EFC.
+
+<br/>
+
+  - What major(s) provide the biggest increase in financial well-being post graduation?
+    - Computer science and health care provided the greatest financial uplift for students.
+    - STEM fields provided the best short and long-term salaries after graduation.
+    
+
 ## Limitations
+
+While there are some valuable things we can learn and takeaway from this work, it would be naive to not mention some of the limitations of our analysis. First, we were only able to gather aggregate data from NCES. Obviously, individual student financial data is very sensitive and private information which we don't have access to, so we have to resort to the aggregate data we could pull from DataLab. This leads to limited  set of data points to analyze, which can lead to more variation in our conclusions. Second, as mentioned previously, this does not include all college students. In order to have financial information like EFC, the student had to have filled out the FAFSA and considered receiving federal aid to be included in this subset of data. Thus, those students that did not fill out the FAFSA are not present in this data. Finally, as it was apparent in some of our conclusions, there are so many external factors at play here that it can be difficult to pinpoint the causes of some of the trends we saw. We can only really hypothesize why we potentially saw the results that came from our analyses. Therefore, it is important to keep these limitations in mind when considering the trends and conclusions we presented, and remember that this is only one study on a subset of data.
+
 
 
