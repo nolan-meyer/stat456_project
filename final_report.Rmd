@@ -453,7 +453,7 @@ Our three research questions along with our main findings are:
     - On average, males tended to have higher EFCs and could afford to pay more for college.
     - Those pursuing physical science degrees had higher EFCs on average, while those pursuing lucrative fields like computer science had the lowest EFCs.  
     - On average, females tended to borrow more money for college, across almost every major.
-    - Those who pursued fields like health care often borrowed more money.
+    - Those who pursued fields like health care often borrowed more money. 
   
 <br/>  
   
@@ -464,7 +464,7 @@ Our three research questions along with our main findings are:
 <br/>
 
   - What major(s) provide the biggest increase in financial well-being post graduation?
-    - Computer science and health care provided the greatest financial uplift in terms of salary for students, while social sciences and humanities had the greatest decline.
+    - Computer science, health care, and engineering provided the greatest financial uplift in terms of salary for students, while social sciences and humanities had the greatest decline.
     - Those who majored in health care, humanities, and education accumulated the most debt (i.e. borrowed the most) overall.
     - STEM fields provided the best short and long-term salaries after graduation.
     
