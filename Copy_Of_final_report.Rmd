@@ -422,4 +422,7 @@ We see that the top two majors from 2008 in terms of salary in 2018 are engineer
 
 ## Limitations
 
+While there are some valuable things we can learn and takeaway from this work, it would be naive to not mention some of the limitations of our analysis. First, we were only able to gather aggregate data from NCES. Obviously, individual student financial data is very sensitive and private information which we don't have access to, so we have to resort to the aggregate data we could pull from DataLab. This leads to limited  set of data points to analyze, which can lead to more variation in our conclusions. Second, as mentioned previously, this does not include all college students. In order to have financial information like EFC, the student had to have filled out the FAFSA and considered receiving federal aid to be included in this subset of data. Thus, those students that did not fill out the FAFSA are not present in this data. Finally, as it was apparent in some of our conclusions, there are so many external factors at play here that it can be difficult to pinpoint the causes of some of the trends we saw. We can only really hypothesize why we potentially saw the results that came from our analyses. Therefore, it is important to keep these limitations in mind when considering the trends and conclusions we presented, and remember that this is only one study on a subset of data.
+
+
 
