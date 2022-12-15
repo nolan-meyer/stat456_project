@@ -404,7 +404,7 @@ We were initially motivated by rising tuition costs and wanting to understand fi
 
 Our three research questions along with our main findings are:
 
-  - On average, who can afford to pay more, and who borrows more to finance their undergraduate studies? (based on EFC) 
+  - On average, who can afford to pay more, and who borrows more to finance their undergraduate studies?
     - On average, males tended to have higher EFCs and could afford to pay more for college.
     - Those pursuing physical science degrees had higher EFCs on average, while those pursuing lucrative fields like computer science had the lowest EFCs.  
     - On average, females tended to borrow more money for college, across almost every major.
@@ -419,7 +419,9 @@ Our three research questions along with our main findings are:
 <br/>
 
   - What major(s) provide the biggest increase in financial well-being post graduation?
+    - Computer science and health care provided the greatest financial uplift for students.
     - STEM fields provided the best short and long-term salaries after graduation.
+    
 
 ## Limitations
 
