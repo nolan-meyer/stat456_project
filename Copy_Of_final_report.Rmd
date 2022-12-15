@@ -281,6 +281,15 @@ What we find it that by 2016, in every major males have an equal or lower ratio 
 
 ## Financial Well-being
 
+As students go off to college and begin to choose their courses and consider what major they want to study, earning potential of their degree plays a significant role in their decision-making. Increasing the earning potential is among the most significant reasons people go to college. It allows them to choose a field they enjoy and make a good living.
+Understandably, due to the high cost of education, many students aim to pick a field that promises them the most lucrative career opportunities. Further visualizations investigate students' financial well-being in terms of income and cumulative debt to see whether family well-being before graduating affects career decision-making and borrowing tendencies.
+
+The data used in the visualizations aggregates survey responses from students who received a bachelor's degree between July 2007 and June 2008, responded to all interviews (2007-2008, 2009, 2012, 2018), and for whom an undergraduate transcript was collected. The sample includes approximately 11,500 graduates.
+
+### Income Effects of Academic Fields
+
+As mentioned earlier, anecdotally, many students pursue degrees that offer them the best career opportunities. We hypothesize that career choice is closely tied to the financial well-being of a student's family, where students from lower economic statuses pursue degrees that offer them the highest earnings. In contrast, those coming from wealthier families may have a greater ability to pursue a variety of majors, irrespective of their earning potential.
+
 ```{r}
 prerank <- statusdata[order(statusdata$`Total.income..Parents.and.independent`,decreasing=TRUE),]
 prerank$index <- 1:nrow(prerank)
@@ -312,6 +321,21 @@ ggplot(data = efc_sal, aes(x = time, y = index, group = field_of_study)) +
                   segment.size = 0.25,
                   color = "black") 
 ```
+
+The graph above supports our hypothesis.
+Y-axis values are ranked among fields of study of the following variables:
+1. in 2006, the fields were ranked by their average total income for independent students or parents of dependent students,
+2. in 2012, the fields were ranked by their annualized salary for all jobs,
+3. in 2017, the field was ranked by their average gross incomes in 2017.
+All three variables, in our opinion, are valid estimates of a student's well-being at the time of observation.
+There are several exciting outtakes from this graph:
+1. We see a significant drop in Social Sciences and Humanities students from the 2006 observation to 2012. This suggests that students are pursuing degrees that arguably promise few job opportunities to come from families of the highest level of well-being out of all fields.
+
+2. Long-term, we see that Computer and Information Sciences, Healthcare Fields, and Engineering and Engineering technologies provide the most significant uplift in financial well-being and tend to attract students from families with a lower level of financial well-being.
+
+3. We do not see significant long-term changes in the ranks of the financial well-being of students pursuing Business, Education, and Bio and Phys sciences, sci-tech, math and agriculture.
+
+
 
 ```{r}
 loansdata <- statusdata %>%
