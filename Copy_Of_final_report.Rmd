@@ -119,26 +119,6 @@ We manually pulled and cleaned data sets relating to particular variables of int
 
 # Analyses
 
-<!-- ## Cumulative amount borrowed for college -->
-
-<!-- We began by first exploring who typically has to borrow the most to pay for college. To do this we looked at the total amount students borrowed for their undergraduate studies, and differentiated by race and gender. -->
-
-```{r, include=FALSE}
-Cum_amt_borrowed_2016 %>% 
-  ggplot(aes(x = fct_reorder(Race, Amount, .desc = T), y = Amount, fill = Gender)) +
-  geom_bar(stat="identity", position = position_dodge()) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
-  scale_fill_brewer(palette = "Paired") +
-  labs(x = "", y = "", fill = "", title = "Average cumulative amount borrowed for undergrad (2016, USD)")
-```
-
-<!-- This plot clearly shows that across the board, on average female students had to borrow more than male students. This could be partly due to the fact that female students represent a slight majority in college enrollment, which extends to private enrollment that is generally more expensive. Still, this plot shows a stark difference between the two genders in the amount borrowed for undergrad. -->
-
-<!-- From this data we also observe that those who identify as "Black or African American" have the highest average amount borrowed, followed by those who identify as "White".  -->
-
-
-
 
 ## Amount Borrowed & EFC Distributions
 
@@ -419,6 +399,27 @@ We see that the top two majors from 2008 in terms of salary in 2018 are engineer
 # Conclusion
 
 ## Summary
+
+We were initially motivated by rising tuition costs and wanting to understand financial questions surrounding going to college. By identifying and understanding these trends, we hope to educate and provide useful analysis to students to better prepare them for financing college, and to those who work with federal and financial aid to help mitigate biases and inequalities that may exist in this space.
+
+Our three research questions along with our main findings are:
+
+  - On average, who can afford to pay more, and who borrows more to finance their undergraduate studies? (based on EFC) 
+    - On average, males tended to have higher EFCs and could afford to pay more for college.
+    - Those pursuing physical science degrees had higher EFCs on average, while those pursuing lucrative fields like computer science had the lowest EFCs.  
+    - On average, females tended to borrow more money for college, across almost every major.
+    - Those who pursued fields like health care often borrowed more money.
+  
+<br/>  
+  
+  - Are there any differences in borrowing between these groups, for those with similar EFC's? Is one group borrowing more/less than the other?
+    - When accounting for EFC, in 2016 females borrowed as much or more than males across all fields of study even while accounting for EFC.
+    - Health care also had the highest ratio of amount borrowed / EFC.
+
+<br/>
+
+  - What major(s) provide the biggest increase in financial well-being post graduation?
+    - STEM fields provided the best short and long-term salaries after graduation.
 
 ## Limitations
 
