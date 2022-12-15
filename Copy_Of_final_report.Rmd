@@ -1,0 +1,415 @@
+---
+title: "Paying For College: Analyzing how Students Finance their Education"
+author: "Nolan Meyer & Anton Korolev"
+date: "12/15/2022"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(lubridate)
+library(ggrepel)
+library(readxl)
+library(gganimate)
+library(gapminder)
+library(gifski)
+library(png)
+library(directlabels)
+```
+
+
+
+# Introduction
+
+As college students, we are well aware of the phenomenon of rising tuition costs. In recent years, the cost of attending college has skyrocketed at a rate quicker than inflation, outpacing most other CPI's (Consumer Price Indices) and leaving many to wonder how they will afford to finance their education. 
+
+
+```{r}
+cpidata <- read_csv("Data/cpi.csv")
+
+colnames(cpidata) <- c("date","TUITION","ALL_ITEMS","ENERGY","HOUSING","MEDICAL","FOOD_BEV","REC","TRANSPORT","EDUCATION","APPAREL")
+
+cpi <- cpidata %>%
+  select(-REC,-EDUCATION)%>%
+  pivot_longer(cols=c("TUITION","ALL_ITEMS","ENERGY","HOUSING","MEDICAL",  "FOOD_BEV","TRANSPORT","APPAREL"),names_to='cpi_type',values_to = "cpi_value")
+cpi$date <- as.Date(cpi$date,"%m/%d/%Y")
+
+
+
+cpigraph <- cpi %>% 
+  ggplot(aes(x = date, y = cpi_value, group = cpi_type, color = cpi_type)) +
+  geom_line() +
+  labs(x = "Time", y = "CPI Value",title="Values of Major CPI Groups", subtitle = "Date: {frame_along}",caption="Data source: FRED, Federal Reserve Bank of St. Louis") +
+  theme_classic() +
+  theme(legend.position = "none") +
+  transition_reveal(date)+
+  geom_dl(aes(label = cpi_type,size=2), method = list(dl.trans(x = x + .2), "last.points"))
+animate(cpigraph, width = 700, height = 425, fps = 15, duration = 35, rewind = FALSE, start_pause = 25, end_pause = 250)
+```
+
+The average cost of attending a 4-year university has climbed to over \$20,000 for public colleges, and near \$50,000 for private ones.
+
+```{r}
+tuition_cost <- read_excel("Data/college_cost_over_time.xls", sheet = "Sheet1")
+#head(tuition_cost)
+
+tuition_cost %>% 
+  ggplot(aes(x = Year, y = Amount, color = Length)) +
+  geom_line() +
+  facet_wrap(~Type) +
+  theme_classic() +
+  labs(title = "Average undergraduate cost of fees, room, and board rates in current USD", x = "", y = "")
+```
+
+Many students end up having to take out federal loans to help cover the up-front costs. This leads us to wonder: how are federal loans distributed, and who has to borrow the most for college? Which groups tend to borrow more, and which majors provide a good return on investment? Our research questions are stated below.
+
+
+## Research Questions
+
+Our two groups of interest that we analyzed across were gender (m/f) and field of study.
+
+  - On average, who can afford to pay more, and who borrows more to finance their undergraduate studies? (based on EFC) 
+  
+  - Are there any differences in borrowing between these groups, for those with similar EFC's? Is one group borrowing more/less than the other?
+
+  - What major(s) provide the biggest increase in financial well-being post graduation?
+  
+
+## Definitions
+
+- **Free Application for Federal Student Aid (FAFSA):** The [College Board](https://blog.collegeboard.org/what-is-the-fafsa) states that, "The Free Application for Federal Student Aid is a form completed by current and prospective college students in the United States to determine their eligibility for student financial aid. It is the form you need to fill out to get any financial aid from the federal government to help pay for college. Each year, over 13 million students who file the FAFSA get more than $120 billion in grants, work-study, and low-interest loans from the U.S. Department of Education."
+
+- **Expected Family Contribution (EFC):** According to the [Federal Student Aid website](https://fsapartners.ed.gov/sites/default/files/2021-08/2223EFCFormulaGuide.pdf), "The Expected Family Contribution (EFC) is a number that determines students’ eligibility for certain types of federal student aid. This number is calculated with the EFC formulas, which use the information that students provide on the FAFSA. Financial aid administrators (FAAs) subtract the EFC from students’ cost of attendance to determine their need for...federal student financial assistance offered by the U.S. Department of Education". Among other things, two main factors that go into an EFC calculation are the student's income and parent's income.
+
+
+## Data
+
+```{r}
+uplift <- read_csv("Data/statuschanges.csv")
+explorerace <- read_csv("Data/10_efc_borrow_race.csv")
+exploregender <- read_csv("Data/10_efc_borrow_gender.csv")
+Cum_amt_borrowed_2016 <- read_excel("Data/amt_borrowed.xlsx", sheet = "Sheet1")
+efc_and_borr <- readxl::read_xlsx("Data/efc_and_amt_borrowed_over_time.xlsx")
+salary_data <- readxl::read_xlsx("Data/11_8_data.xlsx", sheet = "salary")
+salary_by_major_2018 <- read_excel("Data/salary_by_major_0818.xlsx")
+statusdata <- read.csv("Data/morevarsupd.csv")
+```
+
+Our data files are compiled from the National Center for Education Statistics, which can be found here: [NCES DataLab](https://nces.ed.gov/datalab/). The two studies we used separately in our work are:
+
+- "Baccalaureate & Beyond" (2008-2018)
+- "National Post-secondary Student Aid Study, Undergraduate" ('08, '12, '16)
+
+In general, both studies compile various data on undergraduate students like demographics, undergraduate field of study, financial aid received, cumulative amount borrowed, student loan amount, and much more. The B&B study also includes data *beyond* the undergraduate level and tracks data like future salary post graduation.
+
+We manually pulled and cleaned data sets relating to particular variables of interest, which are loaded in below. This was done using the [NCES DataLab](https://nces.ed.gov/datalab/). Here you can select a study and analysis type (averages/medians/percents), and then select variables of interest and filters to generate a data table. We then downloaded this data as a .csv or .xlsx and cleaned it, leaving just the raw data for us to analyze. These files can be found and downloaded from our [GitHub repository](https://github.com/nolan-meyer/stat456_project).
+
+**Note:** When considering loans, aid, and EFC in our research, our sample size only includes undergraduate students who applied for or received federal loans to help finance college in the given years. This is only a subset of the total population that goes to college, and does not include those students who did not fill out the FAFSA. Thus, our findings should only be considered for this smaller subset of students reflected in our project.
+
+
+
+# Analyses
+
+<!-- ## Cumulative amount borrowed for college -->
+
+<!-- We began by first exploring who typically has to borrow the most to pay for college. To do this we looked at the total amount students borrowed for their undergraduate studies, and differentiated by race and gender. -->
+
+```{r, include=FALSE}
+Cum_amt_borrowed_2016 %>% 
+  ggplot(aes(x = fct_reorder(Race, Amount, .desc = T), y = Amount, fill = Gender)) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust=1, size = 8.5, color = "black")) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(x = "", y = "", fill = "", title = "Average cumulative amount borrowed for undergrad (2016, USD)")
+```
+
+<!-- This plot clearly shows that across the board, on average female students had to borrow more than male students. This could be partly due to the fact that female students represent a slight majority in college enrollment, which extends to private enrollment that is generally more expensive. Still, this plot shows a stark difference between the two genders in the amount borrowed for undergrad. -->
+
+<!-- From this data we also observe that those who identify as "Black or African American" have the highest average amount borrowed, followed by those who identify as "White".  -->
+
+
+
+
+## Amount Borrowed & EFC Distributions
+
+We began by exploring our first research question: who typically can afford to pay more, and who has to borrow more to finance their undergraduate studies. To do this we looked at both the average amount students borrowed for their undergraduate studies, and also the student's average EFC. We included data from 2008, 2012, and 2016 to see how these values changed and if the results were consistent over time.
+
+Each of the following grouped bar plots have the following characteristics. 
+
+  - Each field of study (major) is its own group consisting of three data bars, namely one for each year ('08, '12, '16).
+  - Each year is represented by a color, with darker shades representing more recent data.
+  
+<br/>
+  
+Beginning with who tends has to borrow more, we analyzed the average amount borrowed for undergraduate by major for the selected time periods.
+
+```{r}
+efc_and_borr %>% 
+  filter(`Field of study: undergraduate (10 categories)` != "General studies and other") %>% 
+  filter(`Field of study: undergraduate (10 categories)` != "Undecided") %>% 
+  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Cumulative amount borrowed for undergrad`, .desc = T), y = `Cumulative amount borrowed for undergrad`, fill = factor(Year))) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 55, vjust = 1, hjust=1, size = 8, color = "black")) +
+  scale_fill_brewer(palette = "Blues") +
+  labs(x = "", y = "", fill = "", title = "Average Amount Borrowed for Undergrad")
+```
+
+Two things stand out from this bar plot. First, the average amount borrowed for undergrad has increased drastically from 2008 across the board. This coincides with our previous findings that tuition rates have been rising. However, from 2012-2016 the average remained similar, potentially indicating increases in financial aid being given out or other external economic factors playing a role in keeping this value steady. 
+
+The other thing that stands out is that borrowing does differ across fields of study. Some, like health care and social sciences, have students borrowing a bit more money to finance their education. On the other end of the spectrum, students majoring in the physical sciences are borrowing less on average. This could be due to a few things, namely the demographic of students that these majors attract, and the quality & availability of some programs. For example, some majors may attract more males than females, who (as we will find out soon) may have different borrowing tendencies. Also, quality programs for a major like health care could be few and far between, leading them to be more expensive and students borrowing more. Overall though, it appears that **borrowing varies by field of study**.
+
+<br/><br/>
+
+Next, we will analyze the affect gender may have, using the same data. We facet the graph from above into the two gender categories coded in the data set, male and female. Also included is an orange horizontal line, indicating the average amount borrowed across all majors for each gender.
+
+
+```{r} 
+efc_and_borr2 <- efc_and_borr %>% 
+  filter(`Field of study: undergraduate (10 categories)` != "General studies and other") %>% 
+  filter(`Field of study: undergraduate (10 categories)` != "Undecided")
+
+males2 <- efc_and_borr2 %>% 
+  filter(Gender == "Male")
+females2 <- efc_and_borr2 %>% 
+  filter(Gender == "Female")
+
+males_ave_borr <- mean(males2$`Cumulative amount borrowed for undergrad`)
+females_ave_borr <- mean(females2$`Cumulative amount borrowed for undergrad`)
+
+data_hline1 <- data.frame(Gender = unique(efc_and_borr$Gender),
+                         hline = c(males_ave_borr, females_ave_borr))
+
+
+plot <- efc_and_borr2 %>% 
+  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Cumulative amount borrowed for undergrad`, .desc = T), y = `Cumulative amount borrowed for undergrad`, fill = factor(Year))) +
+  geom_bar(stat="identity", position = position_dodge(), width = 0.8) +
+  facet_grid(. ~Gender) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 7, color = "black")) +
+  scale_fill_brewer(palette = "Blues") +
+  labs(x = "", y = "", fill = "", title = "Average Amount Borrowed for Undergrad")
+
+plot +
+  geom_hline(data = data_hline1,
+             aes(yintercept = hline),
+             color = "orange")
+```
+
+Considering the previous analysis, the main learning from this plot is that on average, males tend to be borrowing less to finance their undergraduate studies. For almost all majors, in 2016 males borrowed less money compared to females of the same field of study. It is hard to say with confidence what exactly could be causing this, as there are so many influential factors, however one factor to be aware of is that females do tend to go to private colleges more than men, which in turn cost more, and could thus lead them to borrowing more for their undergraduate studies. In general though, we found it evident that **females are borrowing more than males on average for college**.
+
+<br/><br/>
+
+To get at the other part of our first research question, we next analyzed who tends to be able to afford paying more for college, based on EFC. To reiterate, EFC is basically how much money a student & their family should be able to pay towards their education. We created very similar plots, looking at the average expected family contribution for each major first.
+
+```{r}
+#head(efc_and_borr)
+efc_and_borr <- efc_and_borr %>% 
+  mutate(ratio = `Cumulative amount borrowed for undergrad`/`Expected Family Contribution`)
+
+
+efc_and_borr %>% 
+  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Expected Family Contribution`, .desc = T), y = `Expected Family Contribution`, fill = factor(Year))) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 55, vjust = 1, hjust=1, size = 8, color = "black")) +
+  scale_fill_brewer(palette = "Purples") +
+  labs(x = "", y = "", fill = "", title = "Average Expected Family Contribution")
+```
+
+In a similar vain to borrowing amount, EFC does differ across fields of study. In particular students majoring in physical sciences/sci. tech./math/agriculture have higher EFCs on average. On the other hand, students majoring in the likes of computer science and health care fields have lower EFCs on average. Again, the demographic of students that these majors attract is likely the main contributing factor to these results. For example, majors like computer science and health care can often lead to lucrative careers and may attract students from poorer backgrounds who are looking to go into a field mainly for the financial benefits. Overall, it seems fair to say that **EFC varies by field of study** too.
+
+<br/><br/>
+
+Talk about next plot here...
+
+
+```{r}
+males <- efc_and_borr %>% 
+  filter(Gender == "Male")
+females <- efc_and_borr %>% 
+  filter(Gender == "Female")
+
+males_ave_efc <- mean(males$`Expected Family Contribution`)
+females_ave_efc <- mean(females$`Expected Family Contribution`)
+
+data_hline <- data.frame(Gender = unique(efc_and_borr$Gender),
+                         hline = c(males_ave_efc, females_ave_efc))
+
+
+plot <- efc_and_borr %>% 
+  ggplot(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Expected Family Contribution`, .desc = T), y = `Expected Family Contribution`, fill = factor(Year))) +
+  geom_bar(stat="identity", position = position_dodge(), width = 0.8) +
+  facet_grid(. ~Gender) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 7, color = "black")) +
+  scale_fill_brewer(palette = "Purples") +
+  labs(x = "", y = "", fill = "", title = "Average Expected Family Contribution")
+
+plot +
+  geom_hline(data = data_hline,
+             aes(yintercept = hline),
+             color = "orange")
+```
+
+
+In summary, on average we see that:
+
+- **Males**: Higher EFC and lower amounts borrowed
+- **Females**: Lower EFC and higher amounts borrowed
+
+
+
+## Ratio of Amount Borrowed / EFC
+
+The previous plots gave us a better understanding of the general trends of borrowing and EFC by gender and major. However, given the groups have varying EFC's, those plots can not yet answer the question: who is borrowing more even when they can afford to pay the same amount for college. We want to know if a gender or major tends to borrow more while **accounting for EFC**, and we do this by analyzing the **ratio** of amount borrowed / EFC across major and gender. This plot is shown below.
+
+```{r, fig.width=10, fig.height=7}
+efc_and_borr %>% 
+  ggplot(aes(x = Year, y = ratio, color = Gender)) +
+  geom_line() +
+  geom_point() +
+  theme_classic() +
+  scale_x_discrete(limits=2008:2016, labels=c(2008,"","","",2012,"","","",2016)) +
+  facet_wrap(nrow = 4, ncol = 3, facets = vars(`Field of study: undergraduate (10 categories)`)) +
+  labs(x = "", y = "Amount borrwed / EFC", color = "")
+```
+
+What we find it that by 2016, in every major males have an equal or lower ratio of amount borrowed for undergrad compared to their EFC. This means that they are borrowing less money for college in relation to the amount their family was expected to pay for. Put another way, **females on average are borrowing more even when accounting for EFC**.  
+
+
+
+## Financial Well-being
+
+```{r}
+prerank <- statusdata[order(statusdata$`Total.income..Parents.and.independent`,decreasing=TRUE),]
+prerank$index <- 1:nrow(prerank)
+prerank$time <- 2006
+
+salaryrank2012 <- statusdata[order(statusdata$`Annualized.total.salary.for.all.jobs.in.2012`,decreasing=TRUE),]
+salaryrank2012$index <- 1:nrow(salaryrank2012)
+salaryrank2012$time <- 2012
+
+salaryrank2017 <- statusdata[order(statusdata$`Gross.income.in.2017`,decreasing=TRUE),]
+salaryrank2017$index <- 1:nrow(salaryrank2017)
+salaryrank2017$time <- 2017
+
+efc_sal <- rbind(prerank,salaryrank2012,salaryrank2017)
+
+
+
+ggplot(data = efc_sal, aes(x = time, y = index, group = field_of_study)) +
+  geom_line(aes(color = field_of_study, alpha = 1), size = 2) +
+  geom_point(aes(color = field_of_study, alpha = 1), size = 4) +
+  scale_y_reverse(breaks = 1:nrow(efc_sal))+
+  theme_classic() +
+  labs(x = "Time", y = "Rank") +
+  theme(legend.position = "none") +
+  scale_x_discrete(limits=2006:2017, labels=c(2006,"","","","","",2012,"","","","",2017)) +
+  geom_text_repel(aes(label=field_of_study),
+                  size=2.25,
+                  box.padding = 0.5,
+                  segment.size = 0.25,
+                  color = "black") 
+```
+
+```{r}
+loansdata <- statusdata %>%
+  select(`Cumulative.amount.borrowed.for.education.as.of.2012`,`Amount.owed.in.2009`,`Cumulative.amount.borrowed.in.federal.and.private.student.loans`,`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,field_of_study)
+```
+
+```{r}
+rank2008 <- loansdata[order(loansdata$`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`,decreasing=TRUE),]
+rank2008$amountborrowed <-loansdata$`Cumulative.loan.amount.borrowed.for.undergraduate.through.2007.08`
+rank2008$index <- 1:nrow(rank2008)
+rank2008$time <- 2008
+
+rank2012 <- loansdata[order(loansdata$`Cumulative.amount.borrowed.for.education.as.of.2012`,decreasing=TRUE),]
+rank2012$amountborrowed <-loansdata$`Cumulative.amount.borrowed.for.education.as.of.2012`
+rank2012$index <- 1:nrow(rank2012)
+rank2012$time <- 2012
+
+rank2019 <- loansdata[order(loansdata$`Cumulative.amount.borrowed.in.federal.and.private.student.loans`,decreasing=TRUE),]
+rank2019$amountborrowed <-loansdata$`Cumulative.amount.borrowed.in.federal.and.private.student.loans`
+rank2019$index <- 1:nrow(rank2019)
+rank2019$time <- 2019
+
+loanscumulative <- rbind(rank2008,rank2012,rank2019)
+```
+```{r}
+ggplot(data = loanscumulative, aes(x = time, y = amountborrowed, group = field_of_study)) +
+  geom_line(aes(color = field_of_study, alpha = 1), size = 2) +
+  geom_point(aes(color = field_of_study, alpha = 1), size = 4) +
+  # scale_y_reverse(breaks = 1:nrow(loanscumulative))+
+  theme_classic() +
+  labs(x = "Time", y = "Cumulative Amount Borrowed") +
+  theme(legend.position = "none") +
+  scale_x_discrete(limits=2008:2019, labels=c(2008,"","","",2012,"","","","","","",2019)) +
+  geom_text_repel(aes(label=field_of_study),
+                  size=2.25,
+                  box.padding = 0.5,
+                  segment.size = 0.25,
+                  color = "black") 
+```
+
+
+
+## Future Salary
+
+We also wanted to explore which majors were most worthwhile to go to college for financially, and provided the best salaries in the future. Below we did both both a short term and long term analysis of salaries by major.
+
+### Short-term Salary 
+
+Here we looked at the short-term value of college majors, and the average salary attained four years after graduation. Specifically, we analyzed an individual's yearly salary in 2012 based on their field of study in 2008. Because this time frame is more recent after college, we included the most specific field of study descriptions for more clarity. 
+
+```{r}
+salary_data %>% 
+  ggplot() +
+  geom_bar(aes(x = fct_reorder(`Field of study: undergraduate (23 categories)`, `Primary job: Annualized salary, 2012`, .desc = T), y = `Primary job: Annualized salary, 2012`), stat = "identity", fill = "skyblue", alpha = 0.7) +
+  geom_errorbar(aes(x = `Field of study: undergraduate (23 categories)`, ymin=`CI_low`, ymax=`CI_high`), width=0.4, colour="orange", alpha=0.9, size=1) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 52, vjust = 1, hjust=1, size = 5.5, color = "black")) +
+  labs(x = "Undergraduate Field of Study, 2008", y = "Salary, 2012")
+```
+
+We see that the top three majors from 2008 in terms of salary in 2012 are: engineering, computer science, and manufacturing/construction. 
+
+
+### Long-term Salary 
+
+Here we looked at the longer-term value of college majors, and the average salary attained ten years after graduation. Specifically, we analyzed an individual's yearly salary in 2018 based on their field of study in 2008. Because this time frame is a bit longer after college, we grouped the majors into more general fields of study for easier analysis. 
+
+```{r}
+#head(salary_by_major_2018)
+
+salary_by_major_2018 %>% 
+  filter(`Field of study: undergraduate (10 categories)` != "Undeclared") %>% 
+  ggplot() +
+  geom_bar(aes(x = fct_reorder(`Field of study: undergraduate (10 categories)`, `Current job, as of B&B:08/18 interview: Annualized salary`, .desc = T), y = `Current job, as of B&B:08/18 interview: Annualized salary`), stat="identity", fill = "#69b3a2", alpha = 0.7) +
+  geom_errorbar(aes(x = `Field of study: undergraduate (10 categories)`, ymin=`CI_low`, ymax=`CI_high`), width=0.4, colour="orange", alpha=0.9, size=1) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1, size = 7, color = "black")) +
+  labs(x = "Undergraduate Field of Study, 2008", y = "Current Salary in 2018", title = "")
+```
+
+We see that the top two majors from 2008 in terms of salary in 2018 are engineering and computer science, followed by business and physical sciences in third and fourth respectively.
+
+
+
+# Conclusion
+
+## Summary
+
+## Limitations
+
+
